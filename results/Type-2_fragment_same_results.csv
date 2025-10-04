@@ -1,0 +1,263 @@
+﻿Pair ID (Jfreechart),Clone Type (GPT-4o),Free from compilation error?,Pass the test cases?,Can GPT-4o refactor it?,Can JDeodorant refactor it?,Notes
+4-1-2,Type-3,Yes,Yes,Yes,Yes,
+37-2-3,Type-3,Yes,Yes,Yes,No,
+51-1-2,Type-3,Yes,Yes,Yes,Yes,
+52-1-2,Type-3,Yes,Yes,Yes,Yes,
+52-1-3,Type-3,Yes,Yes,No,Yes,"The clones contain lots of if else, GPT extract the common logic within each if, else condition, while JDeodorant extract the common logic in the whole if else"
+52-2-3,Type-3,Yes,Yes,No,Yes,"GPT did not find common logic, still have clones in the extaction"
+52-2-4,Type-3,Yes,Yes,No,No,"GPT did not find common logic, still have clones in the extaction"
+52-3-4,Type-3,Yes,Yes,Yes,No,
+85-1-2,Type-3,Yes,Yes,Yes,Yes,gpt refactor the whole method
+95-1-2,Type-3,compilation error,compilation error,No,Yes,
+121-1-2,Type-3,Yes,Yes,Yes,Yes,
+177-1-2,Type-3,Yes,tests fail,No,No,
+189-1-2,Type-3,Yes,Yes,No,No,"GPT did not find common logic, still have clones in the extaction"
+202-1-2,Type-2,compilation error,compilation error,No,No,
+203-1-2,Type-2,Yes,Yes,Yes,Yes,
+218-1-2,Type-2,Yes,Yes,Yes,Yes,
+240-1-2,Type-2,Yes,Yes,Yes,No,gpt refactor the whole method
+240-3-4,Type-2,Yes,Yes,Yes,No,
+245-1-2,Type-3,compilation error,compilation error,No,Yes,
+253-1-2,Type-3,Yes,Yes,No,Yes,gpt did not find common logic of whole clones. The extracted method still contain part of clones
+254-1-2,Type-3,compilation error,compilation error,No,Yes,
+263-1-2,Type-2,Yes,Yes,No,No,"GPT did not find common logic, still have clones in the extaction"
+263-1-3,Type-3,Yes,Yes,Yes,Yes,
+263-1-4,Type-3,compilation error,compilation error,No,No,
+263-2-3,Type-3,compilation error,compilation error,No,No,
+263-2-4,Type-2,compilation error,compilation error,No,Yes,
+263-3-4,Type-2,compilation error,compilation error,No,No,
+273-1-2,Type-3,Yes,Yes,Yes,Yes,gpt refactor the whole method
+285-1-2,Type-3,Yes,Yes,No,Yes,gpt did not find common logic of whole clones. The extracted method still contain part of clones
+287-2-3,Type-1,Yes,Yes,Yes,Yes,
+300-2-3,Type-1,Yes,Yes,Yes,Yes,
+318-1-2,Type-2,Yes,Yes,Yes,No,gpt refactor almost the whole method
+327-1-2,Type-2,Yes,Yes,Yes,No,gpt refactor more lines than the clones
+334-1-2,Type-2,Yes,Yes,Yes,Yes,
+351-1-2,Type-1,Yes,Yes,Yes,Yes,
+377-1-2,Type-2,Yes,Yes,Yes,Yes,
+400-1-2,Type-2,Yes,Yes,Yes,Yes,gpt refactor the whole method
+419-1-2,Type-2,Yes,Yes,No,Yes,"GPT did not find common logic, still have clones in the extaction"
+431-1-2,Type-2,Yes,Yes,Yes,Yes,gpt refactor the whole method
+454-1-2,Type-3,Yes,Yes,Yes,Yes,gpt refactor the whole method
+471-1-2,Type-3,Yes,tests fail,No,Yes,
+495-2-3,Type-2,Yes,tests fail,No,Yes,
+505-1-2,Type-2,Yes,Yes,Yes,No,
+509-1-2,Type-2,Yes,Yes,Yes,Yes,
+531-1-2,Type-3,Yes,Yes,Yes,Yes,
+550-1-2,Type-3,Yes,Yes,Yes,No,
+571-1-2,Type-2,Yes,Yes,Yes,Yes,
+572-1-2,Type-2,compilation error,compilation error,No,Yes,
+574-1-2,Type-3,Yes,Yes,Yes,Yes,
+594-1-2,Type-2,Yes,Yes,Yes,No,
+602-1-2,Type-2,Yes,Yes,Yes,Yes,
+603-1-2,Type-3,compilation error,compilation error,No,No,
+603-4-5,Type-3,Yes,Yes,Yes,No,
+605-1-2,Type-2,Yes,Yes,Yes,No,
+620-1-2,Type-3,Yes,Yes,No,No,just refactor part of the clones
+621-1-2,Type-2,Yes,Yes,Yes,Yes,gpt refactor the whole method
+635-1-2,Type-3,Yes,Yes,Yes,Yes,
+643-1-2,Type-2,Yes,Yes,Yes,Yes,
+643-3-4,Type-2,Yes,Yes,Yes,Yes,
+648-1-2,Type-3,compilation error,compilation error,No,Yes,
+658-1-2,Type-3,Yes,Yes,Yes,No,
+661-1-2,Type-3,Yes,Yes,Yes,No,gpt refactor more lines than the clones
+666-1-2,Type-3,Yes,Yes,No,No,"GPT did not find common logic, still have clones in the extaction"
+669-1-2,Type-3,Yes,Yes,No,Yes,"GPT did not find common logic, still have clones in the extaction"
+684-1-2,Type-2,Yes,Yes,Yes,No,
+687-1-2,Type-3,Yes,Yes,No,No,"GPT did not find common logic, still have clones in the extaction"
+723-1-2,Type-2,Yes,Yes,No,No,gpt did not find common logic of whole clones. The extracted method still contain part of clones
+724-1-2,Type-2,compilation error,compilation error,No,No,
+725-1-2,Type-3,Yes,Yes,No,No,gpt did not find common logic of whole clones. The extracted method still contain part of clones
+740-1-2,Type-2,Yes,Yes,Yes,Yes,
+743-1-2,Type-2,Yes,Yes,Yes,Yes,
+749-1-2,Type-2,Yes,Yes,Yes,Yes,
+750-1-2,Type-2,Yes,Yes,Yes,No,
+754-2-3,Type-3,Yes,Yes,Yes,Yes,
+761-2-3,Type-2,Yes,Yes,Yes,Yes,
+763-1-2,Type-2,Yes,Yes,Yes,Yes,
+771-1-2,Type-3,Yes,Yes,No,No,gpt didn't refactor the whole clones
+773-1-2,Type-3,Yes,Yes,No,No,"GPT did not find common logic, still have clones in the extaction"
+774-1-2,Type-2,Yes,Yes,Yes,Yes,
+775-1-2,Type-2,Yes,Yes,Yes,Yes,
+778-1-2,Type-3,Yes,Yes,Yes,No,
+779-1-2,Type-3,compilation error,compilation error,No,No,
+797-1-2,Type-2,Yes,Yes,Yes,No,
+797-3-4,Type-3,Yes,Yes,No,No,"GPT did not find common logic, still have clones in the extaction"
+827-1-2,Type-2,Yes,Yes,Yes,No,
+830-1-2,Type-3,Yes,Yes,Yes,Yes,
+836-1-2,Type-2,Yes,Yes,Yes,No,
+850-1-2,Type-2,Yes,Yes,Yes,Yes,
+852-2-3,Type-2,Yes,Yes,Yes,Yes,
+865-1-2,Type-3,compilation error,compilation error,No,No,
+865-3-4,Type-3,Yes,Yes,Yes,No,
+868-2-3,Type-3,Yes,Yes,Yes,No,
+872-1-2,Type-2,Yes,Yes,Yes,Yes,
+872-1-3,Type-2,Yes,Yes,Yes,Yes,
+872-1-4,Type-2,Yes,Yes,Yes,Yes,
+872-2-3,Type-2,Yes,Yes,Yes,Yes,
+872-2-4,Type-2,Yes,Yes,Yes,Yes,
+872-3-4,Type-2,Yes,Yes,Yes,Yes,
+884-2-3,Type-2,Yes,Yes,Yes,Yes,
+893-1-2,Type-2,compilation error,compilation error,No,No,
+901-1-2,Type-2,Yes,Yes,Yes,Yes,
+904-1-2,Type-3,Yes,Yes,Yes,Yes,
+904-1-3,Type-3,Yes,Yes,Yes,Yes,
+904-1-4,Type-2,compilation error,compilation error,No,Yes,
+904-1-5,Type-2,compilation error,compilation error,No,Yes,
+904-1-6,Type-2,compilation error,compilation error,No,Yes,
+904-1-7,Type-2,compilation error,compilation error,No,Yes,
+904-2-3,Type-2,compilation error,compilation error,No,Yes,
+904-2-4,Type-2,compilation error,compilation error,No,Yes,
+904-2-5,Type-2,compilation error,compilation error,No,Yes,
+904-2-6,Type-2,compilation error,compilation error,No,Yes,
+904-2-7,Type-3,compilation error,compilation error,No,Yes,
+904-3-4,Type-2,compilation error,compilation error,No,Yes,
+904-3-5,Type-2,compilation error,compilation error,No,Yes,
+904-3-6,Type-2,compilation error,compilation error,No,Yes,
+904-3-7,Type-2,compilation error,compilation error,No,Yes,
+915-1-2,Type-2,compilation error,compilation error,No,Yes,
+925-1-2,Type-3,Yes,tests fail,No,Yes,
+926-1-2,Type-3,Yes,Yes,Yes,No,
+926-3-4,Type-3,Yes,Yes,Yes,No,
+932-1-2,Type-2,Yes,Yes,Yes,No,
+934-1-2,Type-3,Yes,Yes,Yes,Yes,
+934-1-3,Type-3,Yes,Yes,Yes,Yes,
+934-1-4,Type-2,Yes,Yes,Yes,Yes,
+934-2-3,Type-2,compilation error,compilation error,No,Yes,
+934-2-4,Type-3,Yes,Yes,Yes,Yes,
+934-3-4,Type-3,compilation error,compilation error,No,Yes,
+943-1-2,Type-2,Yes,Yes,Yes,Yes,
+947-1-2,Type-3,Yes,Yes,Yes,Yes,
+947-1-3,Type-2,Yes,Yes,Yes,Yes,
+947-1-4,Type-3,Yes,Yes,Yes,Yes,
+947-2-3,Type-2,Yes,Yes,Yes,Yes,
+947-2-4,Type-2,Yes,Yes,Yes,Yes,
+947-3-4,Type-3,Yes,Yes,Yes,Yes,
+952-1-2,Type-2,Yes,Yes,Yes,No,
+953-1-2,Type-3,Yes,tests fail,No,Yes,
+961-1-2,Type-3,Yes,Yes,Yes,Yes,gpt refactor the whole method
+961-1-3,Type-3,compilation error,compilation error,No,No,
+961-2-3,Type-3,compilation error,compilation error,No,No,
+965-2-3,Type-2,Yes,Yes,Yes,No,gpt refactor more lines than the clones
+966-1-2,Type-3,compilation error,compilation error,No,No,
+973-1-2,Type-3,Yes,Yes,Yes,No,
+1009-1-2,Type-2,Yes,Yes,Yes,Yes,
+1010-1-2,Type-2,Yes,Yes,No,No,"GPT did not find common logic, still have clones in the extaction"
+1010-3-4,Type-2,Yes,Yes,Yes,No,
+1010-5-6,Type-2,Yes,Yes,No,No,"GPT did not find common logic, still have clones in the extaction"
+1012-1-2,Type-2,Yes,Yes,No,No,"GPT did not find common logic, still have clones in the extaction"
+1023-1-2,Type-2,Yes,Yes,Yes,Yes,
+1023-3-4,Type-2,Yes,Yes,Yes,Yes,
+1035-2-3,Type-2,Yes,Yes,Yes,Yes,
+1036-1-2,Type-2,Yes,Yes,Yes,Yes,
+1037-1-2,Type-2,Yes,Yes,Yes,Yes,
+1039-1-2,Type-3,compilation error,compilation error,No,No,
+1039-1-3,Type-3,Yes,Yes,Yes,Yes,
+1039-2-3,Type-3,Yes,Yes,Yes,No,
+1039-5-6,Type-3,Yes,Yes,Yes,No,
+1039-5-7,Type-2,Yes,Yes,Yes,Yes,
+1039-5-8,Type-3,compilation error,compilation error,No,No,
+1039-6-7,Type-3,compilation error,compilation error,No,No,
+1039-6-8,Type-3,Yes,Yes,Yes,Yes,
+1039-7-8,Type-3,compilation error,compilation error,No,No,
+1040-1-2,Type-3,Yes,Yes,Yes,Yes,
+1042-1-2,Type-3,compilation error,compilation error,No,No,
+1043-1-2,Type-2,Yes,Yes,Yes,No,gpt refactor more lines than the clones
+1051-1-2,Type-3,Yes,Yes,Yes,Yes,
+1052-1-2,Type-3,compilation error,compilation error,No,No,
+1055-1-2,Type-3,Yes,Yes,Yes,Yes,
+1057-1-2,Type-2,Yes,Yes,Yes,Yes,
+1057-1-3,Type-2,Yes,Yes,No,Yes,"GPT extract one clone to a method, then extracted another clone to another method, which cause the clones are still there"
+1057-1-4,Type-2,Yes,Yes,Yes,Yes,
+1057-1-5,Type-2,Yes,Yes,Yes,Yes,
+1057-1-6,Type-3,Yes,Yes,Yes,Yes,
+1057-1-7,Type-3,Yes,Yes,Yes,Yes,
+1057-1-8,Type-3,Yes,Yes,Yes,Yes,
+1057-1-9,Type-3,Yes,Yes,Yes,Yes,
+1057-1-10,Type-2,Yes,Yes,Yes,Yes,
+1057-1-11,Type-2,Yes,Yes,No,Yes,gpt did not refactor the whole clones
+1057-1-12,Type-3,Yes,Yes,Yes,Yes,
+1057-2-3,Type-2,Yes,Yes,No,Yes,gpt did not refactor the whole clones
+1057-2-4,Type-2,Yes,Yes,Yes,Yes,
+1057-2-5,Type-3,Yes,Yes,Yes,Yes,
+1057-2-6,Type-3,Yes,Yes,No,Yes,gpt did not refactor the whole clones
+1057-2-7,Type-2,Yes,Yes,No,Yes,gpt did not refactor the whole clones
+1057-2-8,Type-3,Yes,Yes,Yes,Yes,
+1057-2-9,Type-2,Yes,Yes,No,Yes,gpt did not refactor the whole clones
+1057-2-10,Type-3,Yes,Yes,Yes,Yes,
+1057-2-11,Type-2,Yes,Yes,Yes,Yes,
+1057-2-12,Type-2,Yes,Yes,No,Yes,gpt did not refactor the whole clones
+1057-3-4,Type-2,Yes,Yes,No,Yes,gpt did not refactor the whole clones
+1057-3-5,Type-2,Yes,Yes,No,Yes,gpt did not refactor the whole clones
+1057-3-6,Type-3,Yes,Yes,Yes,Yes,
+1057-3-7,Type-3,Yes,Yes,Yes,Yes,
+1057-3-8,Type-3,Yes,Yes,No,Yes,gpt did not refactor the whole clones
+1057-3-9,Type-3,Yes,Yes,Yes,Yes,
+1057-3-10,Type-2,Yes,Yes,No,Yes,gpt did not refactor the whole clones
+1057-3-11,Type-2,Yes,Yes,No,Yes,gpt did not refactor the whole clones
+1057-3-12,Type-3,Yes,Yes,Yes,Yes,
+1057-4-5,Type-3,did not generate method calls,did not generate method calls,did not genearte method calls,Yes,
+1057-4-6,Type-3,Yes,Yes,Yes,Yes,
+1057-4-7,Type-2,compilation error,compilation error,No,Yes,
+1057-4-8,Type-3,Yes,Yes,Yes,Yes,
+1057-4-9,Type-2,Yes,Yes,No,Yes,gpt did not refactor the whole clones
+1057-4-10,Type-3,Yes,Yes,Yes,Yes,
+1057-4-11,Type-3,did not generate method calls,did not generate method calls,did not genearte method calls,Yes,
+1057-4-12,Type-2,Yes,Yes,No,Yes,gpt did not refactor the whole clones
+1057-5-6,Type-2,Yes,Yes,No,Yes,gpt did not refactor the whole clones
+1057-5-7,Type-3,compilation error,compilation error,No,Yes,
+1057-5-8,Type-2,Yes,Yes,Yes,Yes,
+1057-5-9,Type-2,Yes,Yes,No,Yes,gpt did not refactor the whole clones
+1057-5-10,Type-3,Yes,Yes,Yes,Yes,
+1057-5-11,Type-3,Yes,Yes,No,Yes,"GPT did not find common logic, still have clones in the extaction"
+1057-5-12,Type-2,Yes,Yes,No,Yes,gpt did not refactor the whole clones
+1057-6-7,Type-3,Yes,Yes,Yes,Yes,
+1057-6-8,Type-2,Yes,Yes,No,Yes,gpt did not refactor the whole clones
+1057-6-9,Type-2,Yes,Yes,Yes,Yes,
+1057-6-10,Type-3,Yes,Yes,No,Yes,gpt did not refactor the whole clones
+1057-6-11,Type-2,Yes,Yes,No,Yes,gpt did not refactor the whole clones
+1057-6-12,Type-3,Yes,Yes,Yes,Yes,
+1057-7-8,Type-2,Yes,Yes,No,Yes,gpt did not refactor the whole clones
+1057-7-9,Type-3,Yes,Yes,Yes,Yes,
+1057-7-10,Type-2,Yes,Yes,No,Yes,gpt did not refactor the whole clones
+1057-7-11,Type-2,Yes,Yes,No,Yes,gpt did not refactor the whole clones
+1057-7-12,Type-3,Yes,Yes,Yes,Yes,
+1057-8-9,Type-2,Yes,Yes,Yes,Yes,
+1057-8-10,Type-3,Yes,Yes,Yes,Yes,
+1057-8-11,Type-3,Yes,Yes,Yes,Yes,
+1057-8-12,Type-3,Yes,Yes,No,Yes,gpt did not refactor the whole clones
+1057-9-10,Type-3,Yes,Yes,Yes,Yes,
+1057-9-11,Type-3,compilation error,compilation error,No,Yes,
+1057-9-12,Type-3,Yes,Yes,Yes,Yes,
+1057-10-11,Type-2,Yes,Yes,No,Yes,"GPT did not find common logic, still have clones in the extaction"
+1057-10-12,Type-2,Yes,Yes,Yes,Yes,
+1057-11-12,Type-2,Yes,Yes,No,Yes,gpt did not refactor the whole clones
+1067-1-2,Type-2,compilation error,compilation error,No,Yes,
+1069-1-2,Type-2,compilation error,compilation error,No,No,
+1091-1-2,Type-3,Yes,Yes,Yes,Yes,
+1091-2-3,Type-3,Yes,Yes,Yes,Yes,
+1100-1-2,Type-3,Yes,Yes,Yes,No,
+1100-1-3,Type-3,compilation error,compilation error,No,No,
+1100-1-4,Type-3,compilation error,compilation error,No,No,
+1100-2-3,Type-3,compilation error,compilation error,No,No,
+1100-2-4,Type-3,compilation error,compilation error,No,No,
+1100-3-4,Type-3,Yes,tests fail,No,No,
+1108-1-2,Type-2,Yes,Yes,No,Yes,"GPT did not find common logic, still have clones in the extaction"
+1114-1-2,Type-3,Yes,Yes,No,Yes,"GPT did not find common logic, still have clones in the extaction"
+1115-1-2,Type-3,Yes,Yes,Yes,Yes,
+1119-1-2,Type-2,Yes,Yes,Yes,Yes,
+1119-1-3,Type-2,Yes,Yes,Yes,Yes,
+1119-1-4,Type-2,Yes,Yes,Yes,Yes,
+1119-2-3,Type-2,Yes,Yes,Yes,Yes,
+1119-2-4,Type-2,Yes,Yes,Yes,Yes,
+1119-3-4,Type-2,Yes,Yes,Yes,Yes,
+1119-5-6,Type-2,Yes,Yes,Yes,Yes,
+1119-5-7,Type-2,Yes,Yes,Yes,Yes,
+1119-5-8,Type-2,Yes,Yes,Yes,Yes,
+1119-6-7,Type-2,Yes,Yes,Yes,Yes,
+1119-6-8,Type-2,Yes,Yes,Yes,Yes,
+1119-7-8,Type-2,Yes,Yes,Yes,Yes,
+1121-1-2,Type-3,Yes,Yes,No,No,"GPT did not find common logic, still have clones in the extaction"
+1131-1-2,Type-3,Yes,Yes,No,Yes,"GPT did not find common logic, still have clones in the extaction"
+1142-1-2,Type-3,Yes,Yes,Yes,Yes,
+1143-1-2,Type-2,Yes,Yes,Yes,Yes,
