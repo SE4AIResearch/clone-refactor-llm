@@ -1,0 +1,42 @@
+Cochran's Q test: Q=80.925, p=0.0000
+
+Pairwise McNemar's tests (exact):
+--------------------------------------------------------------------------------
+gpt5                 vs claude_sonnet       : χ²= 2.667, p=0.2188, p_adj=1.0000
+gpt5                 vs claude_opus         : χ²= 3.571, p=0.1250, p_adj=1.0000
+gpt5                 vs jdeodorant          : χ²= 5.000, p=0.0625, p_adj=1.0000
+gpt5                 vs Gemini              : χ²=10.286, p=0.0018, p_adj=0.0659
+gpt5                 vs anticopypaster      : χ²= 5.000, p=0.0625, p_adj=1.0000
+gpt5                 vs deepseek            : χ²= 6.400, p=0.0215, p_adj=0.7734
+gpt5                 vs gpt4o               : χ²= 0.143, p=1.0000, p_adj=1.0000
+gpt5                 vs gpt3_5              : χ²=15.000, p=0.0001, p_adj=0.0022 *
+claude_sonnet        vs claude_opus         : χ²= 0.143, p=1.0000, p_adj=1.0000
+claude_sonnet        vs jdeodorant          : χ²= 9.000, p=0.0039, p_adj=0.1406
+claude_sonnet        vs Gemini              : χ²= 8.000, p=0.0078, p_adj=0.2812
+claude_sonnet        vs anticopypaster      : χ²= 9.000, p=0.0039, p_adj=0.1406
+claude_sonnet        vs deepseek            : χ²= 2.667, p=0.2188, p_adj=1.0000
+claude_sonnet        vs gpt4o               : χ²= 3.000, p=0.2500, p_adj=1.0000
+claude_sonnet        vs gpt3_5              : χ²=11.000, p=0.0010, p_adj=0.0352 *
+claude_opus          vs jdeodorant          : χ²=10.000, p=0.0020, p_adj=0.0703
+claude_opus          vs Gemini              : χ²= 4.455, p=0.0654, p_adj=1.0000
+claude_opus          vs anticopypaster      : χ²=10.000, p=0.0020, p_adj=0.0703
+claude_opus          vs deepseek            : χ²= 0.818, p=0.5488, p_adj=1.0000
+claude_opus          vs gpt4o               : χ²= 2.000, p=0.2891, p_adj=1.0000
+claude_opus          vs gpt3_5              : χ²=10.000, p=0.0020, p_adj=0.0703
+jdeodorant           vs Gemini              : χ²=17.000, p=0.0000, p_adj=0.0005 *
+jdeodorant           vs anticopypaster      : χ²= 0.000, p=1.0000, p_adj=1.0000
+jdeodorant           vs deepseek            : χ²=13.000, p=0.0002, p_adj=0.0088 *
+jdeodorant           vs gpt4o               : χ²= 6.000, p=0.0312, p_adj=1.0000
+jdeodorant           vs gpt3_5              : χ²=20.000, p=0.0000, p_adj=0.0001 *
+Gemini               vs anticopypaster      : χ²=17.000, p=0.0000, p_adj=0.0005 *
+Gemini               vs deepseek            : χ²= 2.000, p=0.2891, p_adj=1.0000
+Gemini               vs gpt4o               : χ²=11.000, p=0.0010, p_adj=0.0352 *
+Gemini               vs gpt3_5              : χ²= 3.000, p=0.2500, p_adj=1.0000
+anticopypaster       vs deepseek            : χ²=13.000, p=0.0002, p_adj=0.0088 *
+anticopypaster       vs gpt4o               : χ²= 6.000, p=0.0312, p_adj=1.0000
+anticopypaster       vs gpt3_5              : χ²=20.000, p=0.0000, p_adj=0.0001 *
+deepseek             vs gpt4o               : χ²= 5.444, p=0.0391, p_adj=1.0000
+deepseek             vs gpt3_5              : χ²= 7.000, p=0.0156, p_adj=0.5625
+gpt4o                vs gpt3_5              : χ²=14.000, p=0.0001, p_adj=0.0044 *
+
+* Significant after Bonferroni correction

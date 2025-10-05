@@ -13,3 +13,7 @@ code_fragment_clones_same_files.py: Contains code for running clone type classif
 code_fragment_clones_different_files.py: Contains code for running clone type classification and refactoring on code fragment clones in different files via Azure OpenAI.
 
 To run the code clone detection and refactoring scripts, replace the endpoint and api_key variables with your own Azure OpenAI credentials. Also update the file paths to match the directory structure on your machine.
+
+Statistical Scripts:
+
+rq1_analysis.py, rq2_analysis.py, rq3_analysis.py: Contains code for running McNemar tests on different research questions.

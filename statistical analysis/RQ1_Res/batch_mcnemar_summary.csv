@@ -1,0 +1,12 @@
+file,gpt_col,jdeodorant_col,b00,b01,b10,b11,chi2,p
+type_1_code_fragment_different.csv,GPT-4o,JDeodorant,0,0,0,151,0.0,1.0
+type_1_code_fragment_same.csv,GPT-4o,Jdeodorant,0,0,0,62,0.0,1.0
+type_1_whole_method_different.csv,GPT-4o,Jdeodorant,0,1,0,69,0.0,1.0
+type_2_code_fragment_different.csv,GPT-4o,JDeodorant,0,135,0,112,133.0074074074074,9.007507307597336e-31
+type_2_code_fragment_same.csv,GPT-4o,JDeodorant,0,128,0,134,126.0078125,3.062751628048221e-29
+type_2_whole_method_different.csv,GPT-4o,Jdeodorant,0,140,0,176,138.00714285714287,7.261513428684346e-32
+type_2_whole_method_same.csv,GPT-4o,Jdeodorant,0,96,0,93,94.01041666666667,3.1386774031298143e-22
+type_3_code_fragment_different.csv,GPT-4o,Jdeodorant,0,24,0,64,22.041666666666668,2.6679545936247915e-06
+type_3_code_fragment_same.csv,GPT-4o,Jdeodorant,0,8,0,47,6.125,0.013328328780817557
+type_3_whole_method_different.csv,GPT-4o,Jdeodorant,0,19,0,202,17.05263157894737,3.635795520299532e-05
+type_3_whole_method_same.csv,GPT-4o,Jdeodorant,0,5,0,19,3.2,0.07363827012030263

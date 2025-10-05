@@ -1,0 +1,1 @@
+Cochran's Q test: Q=80.925, p=0.0000

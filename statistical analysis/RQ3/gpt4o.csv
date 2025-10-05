@@ -1,0 +1,21 @@
+Class,Function,Clone type,Detect clones?,Free from compilation error?,Pass test?,Refactoring correct?
+DrawApplet,createAttributeChoices,Type 1(a),1,1,1,1
+FigureAttributeConstant,addConstant,Type 1(a),1,1,1,1
+DrawApplet,init,Type 1(a),1,1,1,1
+NothingApplet,createTools,Type 1(a),1,1,1,0
+CompositeFigureCreationTool,mouseDown,Type 1(b),1,1,1,1
+ChopDiamondConnector,chop,Type 1(b),1,1,1,1
+MiniMapDesktop,createLeftComponent,Type 1(b),1,1,1,1
+Animator,run,Type 1(b),1,1,1,0
+CTXWindowMenu,buildChildMenus,Type 1(c),1,1,1,0
+ColorMap,colorIndex,Type 1(c),1,1,1,1
+BouncingDrawing,animationStep,Type 1(c),1,1,1,1
+PertDependency,handleConnect,Type 1(c),1,1,1,1
+AutoscrollHelper,getAutoscrollInsets,Type 2(a),1,1,1,0
+Geom,direction,Type 2(a),1,1,1,1
+JHDDropTargetListener,dragOver,Type 2(a),1,1,1,1
+StandardLayouter,layout,Type 2(a),1,1,1,0
+LineConnection,basicMoveBy,Type 2(b),1,1,1,1
+Triangle Figure,rotate,Type 2(b),1,1,1,0
+SplitPaneDesktop,removeFromDesktop,Type 2(b),1,1,1,1
+Helper,getDrawingView,Type 2(b),1,1,1,1

@@ -1,0 +1,13 @@
+McNemar Test (GPT-4o vs JDeodorant)
+File: RQ1/type_2_whole_method_different.csv
+Columns: GPT-4o='GPT-4o', JDeodorant='Jdeodorant'
+
+2x2 Contingency (rows=GPT-4o, cols=JDeodorant):
+          JDeodorant=0  JDeodorant=1
+GPT-4o=0             0           140
+GPT-4o=1             0           176
+
+Discordant pairs: b10(1,0)=0, b01(0,1)=140
+chi2 (with continuity correction) = 138.0071
+p-value (df=1) = 7.26151e-32
+Interpretation: p < 0.05 => significant difference.
