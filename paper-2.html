@@ -25,6 +25,7 @@
         <a href="index.html">Home</a>
         <a href="#artifacts">Artifacts</a>
         <a href="#prompts">Prompts</a>
+        <a href="#usefulness-psi">PSI Checks</a>
         <a href="#reproduce">Reproduce</a>
         <a href="#results">Results</a>
         <button id="themeToggle" class="btn btn--ghost" type="button" aria-label="Toggle theme">
@@ -688,6 +689,358 @@ You must refactor ALL of these occurrences.
 - If an occurrence snippet includes a full method for location context, prefer returning only the updated cloned statements or helper call for that method body.
 - Include one replacement entry for every listed occurrence.
 - Do NOT include explanation text before or after the JSON.</code></pre>
+      </details>
+    </section>
+
+    <section id="usefulness-psi" class="section" aria-labelledby="usefulnessPsiTitle">
+      <div class="section__head">
+        <h2 id="usefulnessPsiTitle">Usefulness PSI Detection</h2>
+      </div>
+
+      <p class="muted">
+        This section documents how the PSI-based usefulness checker detects each not-useful refactoring category.
+        Each entry describes the structural signal used by the checker and gives the corresponding detection logic.
+      </p>
+
+      <details class="details" open>
+        <summary>Incomplete refactoring</summary>
+
+        <p>
+          In an incomplete refactoring failure mode, an attempt is made to refactor the code, but the duplicated code is
+          not effectively removed. In these instances, the output of the refactoring is structurally different but is
+          still very similar to both instances of code duplication. Therefore, the refactoring process did not accomplish
+          its primary objective: removing code duplication using a common abstraction.
+        </p>
+
+        <p>
+          In terms of practicality, an incomplete refactoring is a failure mode because it does not offer a structural
+          advantage. For instance, a model could add a new helper method and make method calls, but still leave both
+          clone bodies almost entirely intact.
+        </p>
+
+        <p>
+          To detect incomplete refactoring, we compare the similarity of the clone instances before and after
+          refactoring using normalized token-based Jaccard similarity. If the similarity in the after version remains
+          high, this means the clone is still present.
+        </p>
+
+        <p>
+          In our implementation, we use a similarity threshold of <span class="mono">0.7</span> for the after-version
+          normalized token Jaccard similarity, i.e., <span class="mono">simAfter &gt;= 0.7</span>. This threshold means
+          that at least 70% of the normalized tokens are shared between the two clone instances, suggesting that the
+          duplicated logic remains largely unchanged. A lower threshold would make the check more sensitive and may label
+          partially improved refactorings as incomplete. A much higher threshold, such as 0.9 or above, would mostly
+          detect near-identical fragments and could miss cases where duplication is still substantial. Overall,
+          <span class="mono">0.7</span> is a practical balance between sensitivity and strictness.
+        </p>
+
+        <p>
+          However, high similarity alone is not sufficient, since no refactoring may have been attempted at all.
+          Therefore, we additionally require evidence of a refactoring attempt derived from PSI analysis. Specifically,
+          we treat a refactoring attempt as having occurred if at least one of the following conditions holds:
+        </p>
+
+        <ul class="bullets">
+          <li>A new method is introduced in the after version.</li>
+          <li>At least one clone instance becomes a method call.</li>
+          <li>The clone instances share one or more method calls that did not exist before.</li>
+        </ul>
+
+        <p>
+          These signals indicate that the model tried to restructure the code, even if the result was ineffective. The
+          design is conservative because it does not penalize cases where no refactoring attempt is made, while still
+          filtering out structural refactoring attempts that fail to meaningfully eliminate duplication.
+        </p>
+
+        <pre class="code"><code>if (simAfter &gt;= cfg.cloneSimilarityAfterStill) {
+    boolean refactorAttempt =
+        (!addedKeys.isEmpty()) ||
+        aDel.isDelegate || bDel.isDelegate ||
+        (!sharedCalls.isEmpty());
+
+    if (refactorAttempt) {
+        return new PairOutcome(Strategy.INCOMPLETE_REFACTORING, false);
+    }
+}</code></pre>
+      </details>
+
+      <details class="details">
+        <summary>Excessive refactoring</summary>
+
+        <p>
+          Excessive refactoring refers to a situation where the extracted helper method is larger than the original
+          cloned fragments. This kind of refactoring may compile and run successfully, but it is not a proper Extract
+          Method refactoring because the helper pulls in more code than the duplicated fragment itself.
+        </p>
+
+        <p>
+          To identify this category, the checker first obtains the size of the original clone fragments by counting the
+          number of non-empty code lines in each clone fragment. It then uses the larger clone fragment as the baseline.
+        </p>
+
+        <p>
+          Next, the checker identifies the extracted helper method with PSI. It intersects the callees of the two clone
+          instances and checks whether any shared callee is a newly added method. Such a method is treated as the
+          extracted helper candidate.
+        </p>
+
+        <p>
+          Finally, the checker compares the size of the extracted helper method body with the baseline. It allows a
+          small tolerance of two lines to ignore trivial formatting differences. If the extracted method contains more
+          non-empty body lines than the baseline plus this tolerance, the refactoring is classified as
+          <span class="mono">EXCESSIVE_REFACTORING</span> and marked as not useful.
+        </p>
+
+        <pre class="code"><code>int baseLinesA = countNonEmptyCodeLines(beforeA);
+int baseLinesB = countNonEmptyCodeLines(beforeB);
+int baseLines = Math.max(baseLinesA, baseLinesB);
+
+// Identify extracted method: shared callee that is newly added
+Set&lt;String&gt; shared = new HashSet&lt;&gt;(evA.calleeKeys);
+shared.retainAll(evB.calleeKeys);
+
+String extractedKey = null;
+for (String k : shared) {
+    if (addedMethodKeys.contains(k)) {
+        extractedKey = k;
+        break;
+    }
+}
+
+if (extractedKey != null) {
+    PsiMethod extracted = afterMethods.get(extractedKey);
+    int extractedLines = countMethodBodyNonEmptyLines(extracted);
+
+    int tolerance = 2; // ignore trivial formatting differences
+    if (extractedLines &gt; baseLines + tolerance) {
+        return new UsefulnessResult(
+            false,
+            35,
+            Strategy.EXCESSIVE_REFACTORING,
+            List.of(Reason.EXCESSIVE_REFACTORING_DETECTED),
+            "extractedLines=" + extractedLines +
+            ", baseFragmentLines=" + baseLines
+        );
+    }
+}</code></pre>
+      </details>
+
+      <details class="details">
+        <summary>Post-extraction clone deletion</summary>
+
+        <p>
+          Post-extraction clone deletion refers to a refactoring pattern where a helper method is introduced, but the
+          duplicated code is not refactored symmetrically. Instead of replacing both clone instances with calls to the
+          extracted method, only one clone instance is replaced while the other clone instance is deleted. As a result,
+          the duplicated logic is not uniformly abstracted into a single method.
+        </p>
+
+        <p>
+          Although a new helper method exists, the refactoring does not preserve the structure expected from Extract
+          Method, where all duplicated instances should be replaced by calls to the same extracted method. Therefore,
+          even though a new method is added, this refactoring is not considered useful.
+        </p>
+
+        <p>
+          To detect this category, the checker combines three signals from the after version. First, it checks whether
+          each clone instance still exists by testing whether <span class="mono">aAfter</span> or
+          <span class="mono">bAfter</span> is <span class="mono">null</span>. It then uses an exclusive-or condition to
+          ensure that exactly one clone instance was deleted, preventing cases where both sides were removed from being
+          classified here.
+        </p>
+
+        <p>
+          Next, the checker retrieves the remaining clone instance from <span class="mono">afterMethods</span> and uses
+          <span class="mono">detectDelegate</span> to determine whether the remaining method has become a delegate,
+          meaning its body mainly consists of a method call. If new methods were introduced and the remaining method is
+          confirmed as a delegate, the refactoring is classified as
+          <span class="mono">POST_EXTRACTION_DELETION</span> and marked as not useful.
+        </p>
+
+        <pre class="code"><code>boolean aDeleted = (aAfter == null);
+boolean bDeleted = (bAfter == null);
+
+if (aDeleted ^ bDeleted) { // exactly one side deleted
+    String remainingKey = aDeleted ? bKey : aKey;
+    PsiMethod remaining = afterMethods.get(remainingKey);
+
+    DelegateInfo del = (remaining == null) ? null
+        : detectDelegate(remaining, afterPsi, cfg);
+
+    if (!addedKeys.isEmpty() &amp;&amp; del != null &amp;&amp; del.isDelegate) {
+        return new PairOutcome(Strategy.POST_EXTRACTION_DELETION, true);
+    }
+}</code></pre>
+      </details>
+
+      <details class="details">
+        <summary>Direct clone removal</summary>
+
+        <p>
+          Direct clone removal refers to cases where duplicated code is eliminated by simply deleting one or both clone
+          instances without introducing any shared abstraction. In other words, the refactoring removes code rather than
+          restructuring it. This pattern may reduce duplication, but it does not follow the Extract Method pattern.
+        </p>
+
+        <p>
+          From a refactoring perspective, direct clone removal is different from Extract Method because no helper method
+          is created to encapsulate the shared logic. As a result, there is no reusable abstraction that captures the
+          intent of the duplicated code. Therefore, although duplication may be reduced, such changes are not considered
+          useful in this workflow.
+        </p>
+
+        <p>
+          To detect direct clone removal, the checker compares the presence of clone instances between the before and
+          after versions. If a clone instance cannot be located in the after version, it is treated as deleted. This can
+          happen in two ways: either one side is removed, or both sides are completely removed.
+        </p>
+
+        <p>
+          Deleting one side after introducing a helper method corresponds to a different pattern,
+          <span class="mono">POST_EXTRACTION_DELETION</span>. Therefore, the checker first checks and excludes the
+          post-extraction case. If the removal cannot be explained by post-extraction deletion, it is classified as
+          <span class="mono">DIRECT_REMOVAL</span> and marked as not useful.
+        </p>
+
+        <pre class="code"><code>if (aDeleted ^ bDeleted) {
+    // if not classified as POST_EXTRACTION_DELETION above
+    return new PairOutcome(Strategy.DIRECT_REMOVAL, true);
+}
+if (aDeleted &amp;&amp; bDeleted) {
+    return new PairOutcome(Strategy.DIRECT_REMOVAL, true);
+}</code></pre>
+      </details>
+
+      <details class="details">
+        <summary>Call-based clone substitution</summary>
+
+        <p>
+          Call-based clone substitution refers to cases where both clone instances are replaced by calls to the same
+          existing method, rather than to a newly extracted helper method. In this situation, the duplicated logic is
+          removed from the two clone locations, but no new abstraction is introduced by the refactoring. Instead, the
+          refactoring redirects both clone sites to an already-existing implementation.
+        </p>
+
+        <p>
+          Although duplication is reduced, this pattern does not correspond to an Extract Method refactoring because the
+          refactoring does not create a new method that captures the shared logic. Therefore, call-based clone
+          substitution is treated as not useful in this workflow.
+        </p>
+
+        <p>
+          To detect this category, the checker relies on PSI-based delegation and callee analysis. First, it checks
+          whether both clone sides become delegate methods after refactoring. A delegate method is a method whose body
+          mainly consists of method calls rather than original logic. Second, it collects the resolved callee methods for
+          each clone side and computes their intersection. If both sides delegate to at least one common callee, this
+          indicates that the duplicated logic has been substituted by a method call.
+        </p>
+
+        <p>
+          To distinguish this case from a proper Extract Method, the checker then verifies whether the shared callee is
+          a newly added method. If all shared callees already existed in the previous version of the file, the
+          refactoring did not introduce a new abstraction. In that case, it is classified as
+          <span class="mono">DELEGATION_TO_EXISTING</span> and marked as not useful.
+        </p>
+
+        <pre class="code"><code>if (aDel.isDelegate &amp;&amp; bDel.isDelegate) {
+    Set&lt;String&gt; shared = new HashSet&lt;&gt;(aDel.calleeKeys);
+    shared.retainAll(bDel.calleeKeys);
+
+    if (!shared.isEmpty()) {
+        boolean sharedHasNew = shared.stream().anyMatch(addedKeys::contains);
+
+        if (!sharedHasNew) {
+            return new PairOutcome(Strategy.DELEGATION_TO_EXISTING, true);
+        }
+    }
+}</code></pre>
+      </details>
+
+      <details class="details">
+        <summary>Clone removal by delegation</summary>
+
+        <p>
+          Clone removal by delegation describes cases where delegation is applied in an asymmetric or inconsistent way
+          across clone instances. Instead of both clone locations being replaced by calls to the same extracted method,
+          delegation happens only on one side, or the two sides delegate to different helper methods. As a result,
+          duplication is not unified into a single abstraction, and the refactoring does not correspond to a proper
+          Extract Method.
+        </p>
+
+        <p>
+          This pattern is treated as a non-useful refactoring outcome. The key observation is that delegation alone is
+          not sufficient: both clone sides must delegate to the same callee to truly remove duplication through a shared
+          abstraction.
+        </p>
+
+        <p>
+          The implementation relies on PSI-based call resolution. For each clone side in the after version, the checker
+          collects the set of resolved callees appearing in the method body. It then compares the two callee sets to
+          determine whether there exists a shared callee invoked by both sides.
+        </p>
+
+        <p>
+          The condition captures asymmetric or inconsistent delegation. If at least one side is classified as a delegate
+          method and the two clone sides do not share any common callee, the refactoring is classified as clone removal
+          by delegation and marked as not useful.
+        </p>
+
+        <pre class="code"><code>Set&lt;String&gt; sharedCalls = new HashSet&lt;&gt;(aCalls);
+sharedCalls.retainAll(bCalls);
+
+boolean anyDelegate = aDel.isDelegate || bDel.isDelegate;
+boolean noSharedCallee = sharedCalls.isEmpty();
+
+if (anyDelegate &amp;&amp; noSharedCallee) {
+    return new PairOutcome(Strategy.UNKNOWN, false);
+}</code></pre>
+      </details>
+
+      <details class="details">
+        <summary>Fragmentation of logic</summary>
+
+        <p>
+          Fragmentation of logic refers to cases where a duplicated computation is no longer centralized into a single
+          extracted method, but instead scattered across multiple helper calls. Rather than reducing duplication through
+          one clear Extract Method refactoring, the logic is split across several smaller methods, making the refactoring
+          harder to understand and maintain.
+        </p>
+
+        <p>
+          The checker detects fragmentation by analyzing method call structure in the after version. Specifically, it
+          examines which helper methods are called by the two clone locations after refactoring. If both sides invoke
+          multiple shared callees, this indicates that the original duplicated logic has been decomposed into several
+          pieces rather than extracted as a single cohesive unit.
+        </p>
+
+        <p>
+          The first detection path computes the intersection of the resolved callee sets for the two clone sides. If the
+          number of shared callees is at least two and the token-level similarity has been reduced, the refactoring is
+          classified as <span class="mono">FRAGMENTATION</span>. The second path handles the case where both clone sides
+          become delegate methods. If both are delegates and still share two or more callees, the transformation is also
+          classified as fragmentation.
+        </p>
+
+        <p>
+          These cases are marked as not useful because they do not correspond to a standard Extract Method refactoring
+          that introduces a single shared abstraction.
+        </p>
+
+        <pre class="code"><code>Set&lt;String&gt; sharedCalls = new HashSet&lt;&gt;(aCalls);
+sharedCalls.retainAll(bCalls);
+
+if (sharedCalls.size() &gt;= 2 &amp;&amp;
+    simAfter &lt;= cfg.cloneSimilarityAfterReduced) {
+    return new PairOutcome(Strategy.FRAGMENTATION, true);
+}
+
+if (aDel.isDelegate &amp;&amp; bDel.isDelegate) {
+    Set&lt;String&gt; shared = new HashSet&lt;&gt;(aDel.calleeKeys);
+    shared.retainAll(bDel.calleeKeys);
+    if (shared.size() &gt;= 2) {
+        return new PairOutcome(Strategy.FRAGMENTATION, true);
+    }
+}</code></pre>
       </details>
     </section>
 
