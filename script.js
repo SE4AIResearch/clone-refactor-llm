@@ -370,15 +370,13 @@ let jdeoSortKey = null;
 let jdeoSortAsc = true;
 
 const JDEO_COLUMNS = [
-  "Model",
-  "File",
-  "Clone Method",
-  "Clone Type",
-  "Deckard Detect",
-  "Compile",
-  "Test",
-  "Usefulness",
-  "Precondition Violation"
+  "filename",
+  "start line",
+  "end line",
+  "compile",
+  "test",
+  "Correct?",
+  "Precondition violation"
 ];
 
 let jdeoHeaderMap = null;
@@ -394,12 +392,10 @@ function jdeoRowToObj(row){
 
 function applyJdeoFilters(){
   const q = ($("#jdeoSearchInput")?.value || "").trim().toLowerCase();
-  const model = ($("#jdeoModelFilter")?.value || "").trim();
-  const cloneType = ($("#jdeoCloneTypeFilter")?.value || "").trim();
+  const correctness = ($("#jdeoCorrectFilter")?.value || "").trim();
 
   viewJdeoRows = rawJdeoRows.filter(r => {
-    if(model && String(r["Model"] ?? "").trim() !== model) return false;
-    if(cloneType && String(r["Clone Type"] ?? "").trim() !== cloneType) return false;
+    if(correctness && String(r["Correct?"] ?? "").trim() !== correctness) return false;
 
     if(!q) return true;
     const hay = JDEO_COLUMNS.map(c => String(r[c] ?? "")).join(" ").toLowerCase();
@@ -428,29 +424,25 @@ function renderJdeoTable(){
   if(!tbody) return;
 
   tbody.innerHTML = viewJdeoRows.map(r => {
-    const detect = badge(r["Deckard Detect"]);
-    const compile = badge(r["Compile"]);
-    const test = badge(r["Test"]);
-    const useful = badge(r["Usefulness"]);
-    const pcv = badge(r["Precondition Violation"]);
+    const compile = badge(r["compile"]);
+    const test = badge(r["test"]);
+    const correct = badge(r["Correct?"]);
+    const pcv = badge(r["Precondition violation"]);
 
     return `
       <tr>
-        <td>${escapeHtml(r["Model"])}</td>
-        <td>${escapeHtml(r["File"])}</td>
-        <td>${escapeHtml(r["Clone Method"])}</td>
-        <td>${escapeHtml(r["Clone Type"])}</td>
-        <td>${detect}</td>
-        <td>${compile}</td>
-        <td>${test}</td>
-        <td>${useful}</td>
-        <td>${pcv}</td>
+        <td class="filename-cell">${escapeHtml(r["filename"])}</td>
+        <td class="small-cell">${escapeHtml(r["start line"])}</td>
+        <td class="small-cell">${escapeHtml(r["end line"])}</td>
+        <td class="small-cell">${compile}</td>
+        <td class="small-cell">${test}</td>
+        <td class="small-cell">${correct}</td>
+        <td class="precondition-cell">${pcv}</td>
       </tr>
     `;
   }).join("");
 
-  fillSelect($("#jdeoModelFilter"), uniqueValuesFrom(viewJdeoRows, "Model"));
-  fillSelect($("#jdeoCloneTypeFilter"), uniqueValuesFrom(viewJdeoRows, "Clone Type"));
+  fillSelect($("#jdeoCorrectFilter"), uniqueValuesFrom(rawJdeoRows, "Correct?"));
 }
 
 async function loadJdeoCsv(){
@@ -568,8 +560,7 @@ function initControls(){
 
   // JDeodorant controls
   $("#jdeoSearchInput")?.addEventListener("input", applyJdeoFilters);
-  $("#jdeoModelFilter")?.addEventListener("change", applyJdeoFilters);
-  $("#jdeoCloneTypeFilter")?.addEventListener("change", applyJdeoFilters);
+  $("#jdeoCorrectFilter")?.addEventListener("change", applyJdeoFilters);
 
   const jdeoDlBtn = $("#jdeoDownloadCsvBtn");
   if(jdeoDlBtn){

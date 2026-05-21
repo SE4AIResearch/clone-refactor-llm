@@ -821,15 +821,8 @@ You must refactor ALL of these occurrences.
         </label>
 
         <label class="field">
-          <span class="field__label">Model</span>
-          <select id="jdeoModelFilter" class="select">
-            <option value="">All</option>
-          </select>
-        </label>
-
-        <label class="field">
-          <span class="field__label">Clone Type</span>
-          <select id="jdeoCloneTypeFilter" class="select">
+          <span class="field__label">Correct?</span>
+          <select id="jdeoCorrectFilter" class="select">
             <option value="">All</option>
           </select>
         </label>
@@ -837,19 +830,17 @@ You must refactor ALL of these occurrences.
         <button id="jdeoDownloadCsvBtn" class="btn btn--ghost" type="button">Download CSV</button>
       </div>
 
-      <div class="tablewrap" role="region" aria-label="JDeodorant results table" tabindex="0" style="overflow-x:visible; width:100%;">
-        <table id="jdeoTable" class="table" style="width:100%; table-layout:auto;">
+      <div class="tablewrap" role="region" aria-label="JDeodorant results table" tabindex="0">
+        <table id="jdeoTable" class="table jdeo-table">
           <thead>
             <tr>
-              <th data-sort="Model" scope="col">Model</th>
-              <th data-sort="File" scope="col">File</th>
-              <th data-sort="Clone Method" scope="col">Clone Method</th>
-              <th data-sort="Clone Type" scope="col">Clone Type</th>
-              <th data-sort="Deckard Detect" scope="col">Deckard Detect</th>
-              <th data-sort="Compile" scope="col">Compile</th>
-              <th data-sort="Test" scope="col">Test</th>
-              <th data-sort="Usefulness" scope="col">Useful</th>
-              <th data-sort="Precondition Violation" scope="col">Precondition Violation</th>
+              <th data-sort="filename" scope="col">filename</th>
+              <th data-sort="start line" scope="col">start line</th>
+              <th data-sort="end line" scope="col">end line</th>
+              <th data-sort="compile" scope="col">compile</th>
+              <th data-sort="test" scope="col">test</th>
+              <th data-sort="Correct?" scope="col">Correct?</th>
+              <th data-sort="Precondition violation" scope="col">Precondition violation</th>
             </tr>
           </thead>
           <tbody>
@@ -859,7 +850,7 @@ You must refactor ALL of these occurrences.
       </div>
 
       <p class="muted small">
-        Expected CSV columns: Model, File, Clone Method, Clone Type, Deckard Detect, Compile, Test, Usefulness, Precondition Violation.
+        Expected CSV columns: filename, start line, end line, compile, test, Correct?, Precondition violation.
       </p>
     </section>
 

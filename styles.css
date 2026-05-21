@@ -244,6 +244,26 @@ h2{font-size:1.6rem}
   cursor:pointer;
 }
 .table tbody tr:hover{background: color-mix(in srgb, var(--accent) 10%, transparent)}
+.jdeo-table{
+  min-width: 1120px;
+  table-layout:auto;
+}
+.jdeo-table th{
+  white-space:nowrap;
+  overflow-wrap:normal;
+  word-break:normal;
+  hyphens:none;
+}
+.jdeo-table .filename-cell{
+  min-width:340px;
+}
+.jdeo-table .precondition-cell{
+  min-width:460px;
+}
+.jdeo-table .small-cell{
+  min-width:92px;
+  white-space:nowrap;
+}
 .badge{
   padding:3px 8px;
   border-radius:999px;
