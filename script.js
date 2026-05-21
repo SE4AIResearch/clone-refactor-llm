@@ -74,6 +74,25 @@ function badge(value){
   return `<span class="badge">${escapeHtml(value)}</span>`;
 }
 
+function boolBadgeOrDash(value){
+  const s = String(value ?? "").trim();
+  if(!s) return '<span class="empty-cell">-</span>';
+  return badge(s);
+}
+
+function textOrDash(value){
+  const s = String(value ?? "").trim();
+  if(!s) return '<span class="empty-cell">-</span>';
+  return escapeHtml(s);
+}
+
+function compactPath(value){
+  const s = String(value ?? "").trim();
+  if(!s) return "";
+  const parts = s.split(/[\\/]+/).filter(Boolean);
+  return parts.slice(-3).join("/");
+}
+
 function compare(a,b){
   if(a == null && b == null) return 0;
   if(a == null) return -1;
@@ -424,16 +443,18 @@ function renderJdeoTable(){
   if(!tbody) return;
 
   tbody.innerHTML = viewJdeoRows.map(r => {
-    const compile = badge(r["compile"]);
-    const test = badge(r["test"]);
-    const correct = badge(r["Correct?"]);
-    const pcv = badge(r["Precondition violation"]);
+    const fullFilename = String(r["filename"] ?? "").trim();
+    const displayFilename = compactPath(fullFilename);
+    const compile = boolBadgeOrDash(r["compile"]);
+    const test = boolBadgeOrDash(r["test"]);
+    const correct = boolBadgeOrDash(r["Correct?"]);
+    const pcv = textOrDash(r["Precondition violation"]);
 
     return `
       <tr>
-        <td class="filename-cell">${escapeHtml(r["filename"])}</td>
-        <td class="small-cell">${escapeHtml(r["start line"])}</td>
-        <td class="small-cell">${escapeHtml(r["end line"])}</td>
+        <td class="filename-cell" title="${escapeHtml(fullFilename)}">${textOrDash(displayFilename)}</td>
+        <td class="small-cell">${textOrDash(r["start line"])}</td>
+        <td class="small-cell">${textOrDash(r["end line"])}</td>
         <td class="small-cell">${compile}</td>
         <td class="small-cell">${test}</td>
         <td class="small-cell">${correct}</td>

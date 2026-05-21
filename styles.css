@@ -245,8 +245,8 @@ h2{font-size:1.6rem}
 }
 .table tbody tr:hover{background: color-mix(in srgb, var(--accent) 10%, transparent)}
 .jdeo-table{
-  min-width: 1120px;
-  table-layout:auto;
+  min-width: 980px;
+  table-layout:fixed;
 }
 .jdeo-table th{
   white-space:nowrap;
@@ -254,15 +254,35 @@ h2{font-size:1.6rem}
   word-break:normal;
   hyphens:none;
 }
+.jdeo-table .jdeo-col-file{width:34%}
+.jdeo-table .jdeo-col-line{width:7.5%}
+.jdeo-table .jdeo-col-bool{width:8%}
+.jdeo-table .jdeo-col-precondition{width:27%}
 .jdeo-table .filename-cell{
-  min-width:340px;
+  font-weight:600;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  overflow-wrap:normal;
+  word-break:normal;
+  hyphens:none;
 }
 .jdeo-table .precondition-cell{
-  min-width:460px;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  word-break:normal;
+  hyphens:auto;
 }
 .jdeo-table .small-cell{
-  min-width:92px;
   white-space:nowrap;
+  overflow-wrap:normal;
+  word-break:normal;
+  hyphens:none;
+  text-align:center;
+}
+.empty-cell{
+  color:var(--muted);
+  opacity:.65;
 }
 .badge{
   padding:3px 8px;
