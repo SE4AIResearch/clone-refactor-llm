@@ -26,6 +26,7 @@
         <a href="#artifacts">Artifacts</a>
         <a href="#prompts">Prompts</a>
         <a href="#usefulness-psi">PSI Checks</a>
+        <a href="#algorithm">Algorithm</a>
         <a href="#reproduce">Reproduce</a>
         <a href="#results">Results</a>
         <button id="themeToggle" class="btn btn--ghost" type="button" aria-label="Toggle theme">
@@ -1041,6 +1042,276 @@ if (aDel.isDelegate &amp;&amp; bDel.isDelegate) {
         return new PairOutcome(Strategy.FRAGMENTATION, true);
     }
 }</code></pre>
+      </details>
+    </section>
+
+    <section id="algorithm" class="section" aria-labelledby="algorithmTitle">
+      <div class="section__head">
+        <h2 id="algorithmTitle">Algorithm</h2>
+      </div>
+
+      <details class="details" open>
+        <summary>Detection Agent</summary>
+
+        <p>
+          The Detection Agent identifies clone candidates within a single Java file. It first checks whether the pasted
+          snippet is empty and directly returns <span class="mono">no_clones</span> if so. Otherwise, it localizes the
+          pasted snippet within the file and records its approximate line range for subsequent grounding and filtering.
+        </p>
+
+        <p>
+          The agent then invokes three independent LLM detection panelists. Each panelist receives a prompt containing
+          the full file source, the pasted snippet, optional few-shot examples retrieved from the clone database, and
+          instructions to report only clone groups involving the pasted snippet. Each panelist returns a JSON detection
+          result, which is parsed and normalized by grounding the reported clone ranges against the actual source text.
+        </p>
+
+        <p>
+          After collecting the panelist outputs, a detection curator consolidates overlapping clone groups, filters out
+          unconvincing evidence, and produces the final detection result. If the curator output is valid, it is
+          normalized; otherwise, the system falls back to merging the valid panelist outputs.
+        </p>
+
+        <p>
+          Normalization is essential because LLM-reported line numbers are often inaccurate. The framework uses the
+          detected clone code to locate exact or trimmed matches in the source file. When multiple candidate locations
+          exist, the system selects the most appropriate one by penalizing repeated range usage and non-exact matches
+          while favoring overlap with the pasted snippet.
+        </p>
+
+        <p>
+          If LLM-based detection yields no clones, the workflow falls back to a lightweight PSI-based approach. This
+          fallback first searches for repeated instances of the inserted fragment using conservative text comparison. If
+          exact text matching fails, it performs Type-1 token comparison by ignoring whitespace and comments. It then
+          extends the search to Type-2 clones by normalizing identifiers and literals before requiring an exact
+          normalized token-sequence match. Finally, as a conservative Type-3 fallback, it applies approximate
+          normalized-token matching over bounded token windows using an LCS-based similarity threshold.
+        </p>
+
+        <p>
+          Finally, the workflow resolves clone intervals, merges overlapping groups, assigns the status
+          <span class="mono">found_clones</span>, and returns the detection result, which is forwarded to the
+          Refactoring Agent for Extract Method candidate generation.
+        </p>
+
+        <pre class="code"><code>Algorithm: Detection Agent
+
+Input:
+  project context proj
+  file name f
+  file source S
+  pasted snippet S_snip
+  LLM caller L(...)
+
+Output:
+  detection result R with status, file, and clones
+
+if S_snip is empty:
+    return { status: no_clones, file: f, clones: [] }
+
+(l_s, l_e) = findSnippetLineRange(S, S_snip)
+
+PanelistResults = []
+
+for p in {P1, P2, P3}:
+    P_p = buildPanelistDetectionPrompt(p, proj, S, S_snip, f, l_s, l_e)
+    raw_p = L(P_p)
+    R_p = parseDetectionResult(raw_p, f)
+    R_hat_p = normalizeDetectionResult(R_p, f, S, S_snip, l_s, l_e)
+    PanelistResults.add(p, raw_p, R_p, R_hat_p)
+
+P_c = buildDetectionCuratorPrompt(f, S, S_snip, l_s, l_e, PanelistResults)
+raw_c = L(P_c)
+R_c = parseDetectionResult(raw_c, f)
+
+if R_c != null:
+    R = normalizeDetectionResult(R_c, f, S, S_snip, l_s, l_e)
+else:
+    R = mergePanelistResults(PanelistResults, f)
+
+if R == null or R.clones is empty:
+    R = PsiFallbackDetect(proj, S, S_snip, f)
+
+if R == null or R.clones is empty:
+    return { status: no_clones, file: f, clones: [] }
+
+R.clones = resolveCloneRangesWithPsi(proj, f, S, R.clones)
+R.clones = mergeOverlappingCloneGroups(S, R.clones)
+
+R.status = found_clones
+R.file = f
+return R</code></pre>
+      </details>
+
+      <details class="details">
+        <summary>Refactoring with Compilation and Testing Gates</summary>
+
+        <p>
+          This workflow is triggered after clone detection. Its purpose is to iteratively generate, validate, and
+          optionally apply an Extract Method refactoring while preserving program behavior.
+        </p>
+
+        <p>
+          The process begins with an empty feedback message and a retry-mode flag. The feedback message stores
+          information from previous failures, while the retry-mode flag determines whether later attempts should use a
+          feedback-only revision prompt. The workflow also captures snapshots of the source code for methods containing
+          the selected clone occurrences, so it can detect whether the user manually changes those methods while the
+          workflow is running.
+        </p>
+
+        <p>
+          The algorithm then enters an iteration loop. The number of attempts depends on user preferences. At the start
+          of each attempt, the workflow checks for cancellation and for modifications to any monitored clone-containing
+          method. If such a change is detected, the workflow is canceled to avoid refactoring outdated code.
+        </p>
+
+        <p>
+          In each iteration, the Refactoring Agent generates an Extract Method candidate. If the previous failure came
+          from the Usefulness Checker, the agent receives a feedback-only prompt. Otherwise, the prompt includes the
+          current file source, the selected clone, retrieved refactoring examples when available, and feedback from prior
+          failures. Internally, the agent uses three independent panelists to generate candidates and a curator to select
+          the best candidate.
+        </p>
+
+        <p>
+          Instead of returning a whole-file rewrite, the Refactoring Agent generates a partial refactoring proposal that
+          contains the extracted method and the replacement code. The system applies this proposal to the original source
+          by replacing all clone occurrences with helper calls or replacement code and inserting the helper method into
+          the enclosing class. If no suitable candidate source can be constructed, the attempt stops and feedback is
+          recorded.
+        </p>
+
+        <p>
+          Before compilation and testing, the candidate is checked by the Usefulness Checker. The checker first performs
+          an LLM panel-and-curator evaluation on focused before-and-after code contexts. If the LLM decision cannot be
+          obtained or does not approve the candidate, the checker falls back to PSI-based structural analysis. For
+          whole-method clones, it validates that the original target methods remain and delegate to or invoke a newly
+          extracted helper. For fragment clones, it checks that the target fragments have been replaced or substantially
+          reduced.
+        </p>
+
+        <p>
+          Once the usefulness gate passes, the candidate is compiled in isolation into a temporary output directory
+          without changing the original source file. If compilation fails, the workflow may compare the errors against
+          baseline errors from compiling the original source.
+        </p>
+
+        <p>
+          After successful compilation, the workflow resolves the fully qualified name of the primary class and runs the
+          relevant tests against the transformed code. If the target class cannot be resolved or testing fails, the
+          workflow records a summary as feedback for the next attempt.
+        </p>
+
+        <p>
+          If the candidate passes usefulness checking, compilation, and testing, the system shows the diff between the
+          current source and the candidate source. The user can then accept or reject the refactoring. If accepted, the
+          candidate source is saved to the file. If no candidate passes all gates within the allowed attempts, the
+          workflow reports failure.
+        </p>
+
+        <pre class="code"><code>Algorithm: Refactoring Workflow - Generation and Usefulness Gate
+
+Input:
+  project context proj
+  file name f
+  current source S_cur
+  detected clone c
+  RAG guidance E_rag
+  max attempts K
+  LLM caller L(...)
+
+Output:
+  candidate source S_cand and feedback state, or failure
+
+feedback = empty
+useFeedbackOnly = false
+watchedMethods = captureCloneMethodSnapshots(proj, f, c)
+
+for attempt = 1 to K:
+    if workflowCancelled():
+        return failure
+
+    if cloneMethodModified(proj, f, watchedMethods):
+        cancelWorkflow()
+        return failure
+
+    if useFeedbackOnly and feedback is not empty:
+        RR = RefactorWithFeedbackPrompt(f, S_cur, c, feedback, L)
+    else:
+        fb = concat(E_rag, feedback)
+        RR = RefactorWithPanelistsAndCurator(f, S_cur, c, fb, L)
+
+    if RR == null or RR.newSource is empty:
+        feedback = "Refactor produced empty or invalid output."
+        useFeedbackOnly = false
+        continue
+
+    S_cand = RR.newSource
+    saveProposalForInspection(proj, f, S_cand, attempt)
+
+    UR = UsefulnessCheck(proj, f, c, S_cur, S_cand, watchedMethods, L)
+    if UR.isUseful == false:
+        feedback = buildUsefulnessFeedback(UR, S_cand)
+        useFeedbackOnly = true
+        continue
+
+    return (S_cand, feedback, useFeedbackOnly, watchedMethods)
+
+return failure</code></pre>
+
+        <pre class="code"><code>Algorithm: Refactoring Workflow - Compilation, Testing, and Application Gates
+
+Input:
+  project context proj
+  file name f
+  current source S_cur
+  candidate source S_cand
+  feedback state
+  watched methods
+
+Output:
+  success, either applied or verified, or failure
+
+if cloneMethodModified(proj, f, watchedMethods):
+    cancelWorkflow()
+    return failure
+
+log_comp = compileProposedSourceToTemp(proj, f, S_cand)
+CR = analyzeCompileLog(f, log_comp)
+
+if CR.status != compile_ok:
+    CR = ignorePreExistingBaselineErrors(CR, S_cur)
+
+if CR.status != compile_ok:
+    feedback = CR.summary
+    useFeedbackOnly = false
+    return failure
+
+if cloneMethodModified(proj, f, watchedMethods):
+    cancelWorkflow()
+    return failure
+
+targetFqn = resolvePrimaryClassFqn(S_cand, f)
+if targetFqn is empty:
+    feedback = "Test skipped: target class FQN could not be resolved."
+    useFeedbackOnly = false
+    return failure
+
+TR = runAndSummarizeTests(proj, targetFqn, S_cand)
+if TR.status != tests_passed:
+    feedback = TR.summary if exists else TR.raw
+    useFeedbackOnly = false
+    return failure
+
+if cloneMethodModified(proj, f, watchedMethods):
+    cancelWorkflow()
+    return failure
+
+if userConfirmsApplyDiff(S_cur, S_cand):
+    writeSourceToFile(f, S_cand)
+    return success
+else:
+    return success  // verified but not applied</code></pre>
       </details>
     </section>
 
