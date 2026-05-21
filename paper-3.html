@@ -1,0 +1,1051 @@
+<html><head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<meta name="description" content="Do Agents Handle Code Clones Like Humans? An Exploratory
+Study on GitHub Pull Requests">
+	<link href="https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz|Droid+Sans" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" type="text/css" media="all" href="css/inland.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<link rel="stylesheet" type="text/css" href="css/paper.css">
+  <script type="text/javascript" src="js/external.js"></script>
+	<script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
+	<script type="text/javascript" src="js/jquery.scrollTo.js"></script>
+	<script type="text/javascript" src="js/template.js"></script>
+	<script type="text/javascript" src="js/backontop.js"></script>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+
+
+	<title>Do Agents Handle Code Clones Like Humans? An Exploratory
+Study on GitHub Pull Requests</title>
+</head>
+
+<body>
+<div id="wrapper960" class="clearfix">
+	<div id="header" class="clearfix">
+		<div id="sitetitle" class="clearfix">
+			<h1><a href="paper-3.html">Do Agents Handle Code Clones Like Humans? An Exploratory
+Study on GitHub Pull Requests</a></h1>
+		</div>
+
+		<nav2 id="stickynav">
+		<div class="verticalMenu">
+			<ul id="nav2">
+				<li><a href="index.html">Main Page</a></li>
+				<li><a href="#abstract" class="backontop">Abstract</a></li>
+				<li><a href="#rscripts" class="backontop">Python Scripts</a></li>
+				<li><a href="#experimentaldata" class="backontop">Experiment data</a></li>
+				<li><a href="#testresults" class="backontop">Results</a></li>
+			</ul>
+		</div>
+		</nav2>
+	</div>
+
+
+    <div id="content" class="clearfix shadow">
+		<div id="main" class="left">
+			<h2 id="abstract">Abstract</h2>
+			<p>
+Context: Large Language Models (LLMs) and autonomous coding agents are
+increasingly involved in software maintenance tasks, including code refactoring.
+Among these tasks, code clone removal is suited for automation. However, little
+is known about how AI agents actually perform clone refactoring in real-world
+development workflows compared to human developers.
+Objectives: The goal of this paper is to investigate how AI agents per-
+form code clone refactoring through pull requests. We aim to compare the
+efficiency and review dynamics of clone-related PRs authored by pure humans,
+human–created but agent-generated, and fully agents. We also aim to under-
+stand the qualitative differences in the way humans and agents describe, justify,
+and revise their clone refactorings.
+Methods: This paper presents an empirical study of 300 clone-related pull
+requests (PRs) from the AIDev dataset, equally divided into three groups: (1)
+PRs created and written by humans, (2) PRs created by humans but generated
+by agents, and (3) PRs created and written entirely by agents.
+Results: Our quantitative analysis shows that agent-involved PRs are com-
+pleted significantly faster, with smaller change sizes and lower reviewer work-
+load compared to pure human PRs (δ = 0.40–0.59, p < 0.001). Qualitative
+analysis reveals that 42.2% of human-created but agent-generated PRs show a
+comprehensive structure and explicit definition of scope, improving readability
+and review efficiency. In contrast, pure human PRs show more proactive self-
+correction, though at higher cost in time and review effort. A small proportion
+of clones remained unresolved across all PR types (6% in human PRs, 1% in
+human-created but agent-generated PRs, and 5% in agent PRs). Among all
+PRs, none explicitly mentioned clone types such as Type-1 or Type-2 in title,
+description, or inline comments. For refactoring strategies, extraction-based
+refactoring was the most common approach (56%–61%), followed by direct re-
+moval (34%–44%), while pull-up refactoring appeared only in agent PRs.
+Conclusion: Overall, our findings show that AI agents are effective for clone refactoring tasks requiring precision and speed, but they still rely on human
+oversight when refactoring involves multiple files and requires understanding
+the broader project structure.
+			</p>
+
+			<!--div class="bibtex">
+				<pre></pre>
+			</div-->
+			<h2 id="rscripts">Python Scripts</h2>
+			<p>
+			    The scripts are inside the <code>Scripts/</code> folder. And here is our the <a href="https://github.com/byte-shadow37/msr_replication">GitHub repository</a>
+				 <a href="scripts/requirements.txt" class="csv-link" download>Requirements.txt</a> includes the necessary Python packages. It is in the Scripts folder as well. <em>Install:</em> <code>pip install -r requirements.txt</code>
+			</p>
+			<ul>
+			    <li>
+			        <code>get_dataset.py</code> — Download a table from the AIDev dataset and save it as CSV and a SQLite DB.<br>
+			        <em>Run:</em> <code>python get_dataset.py</code> (edit the <code>table</code> variable inside the file to choose the table).
+			    </li>
+			    <li>
+			        <code>get_clone_data.py</code> — Find clone‑related pull requests in a CSV using keyword matching and write matches to <code>review_clone.csv</code> in the output folder.<br>
+			        <em>Run:</em> <code>python get_clone_data.py --file all_pull_request.csv --out_dir out/</code>
+			    </li>
+			    <li>
+			        <code>get_code_human.py</code> — Download code changes for human‑written PRs from GitHub (commits, files, diffs).<br>
+			        <em>Run:</em> <code>python get_code_human.py</code>
+			    </li>
+			    <li>
+			        <code>get_refactor.py</code> — Find refactor‑tagged PRs from <code>pull_request.csv</code> and save subsets as CSV/DB files under <code>refactor_data/curated_agent/</code>.<br>
+			        <em>Run:</em> <code>python get_refactor.py</code>
+			    </li>
+			    <li>
+			        <code>pr_code_scraper.py</code> — Helper to fetch code artifacts for PRs via the GitHub API (used by other scripts or standalone).<br>
+			        <em>Run:</em> <code>python pr_code_scraper.py</code> or import it in Python.
+			    </li>
+			    <li>
+			        <code>merge_sqlite_dbs.py</code> — Merge many SQLite DBs in a folder into a single database.<br>
+			        <em>Run:</em> set <code>source_folder</code> and <code>output_database</code> at the top of the file, then run <code>python merge_sqlite_dbs.py</code>.
+			    </li>
+			    <li>
+			        <code>run_rminer.py</code> — Generate or execute RefactoringMiner commands for selected PR IDs.<br>
+			        <em>Run (print commands):</em> <code>python run_rminer.py --csv human_pull_request.csv --ids 2625652637,2474497456 --out /tmp/rminer.tsv</code><br>
+			        <em>Run (execute):</em> <code>python run_rminer.py --csv human_pull_request.csv --ids-file pr_ids.txt --rminer /path/to/RefactoringMiner --results-dir rminer_results</code>
+			    </li>
+                <li>
+                    <code>get_pr_metrics.py</code> — Calculate quantitative metrics for pull requests, including size, time to close, comments, and churn, from raw PR data. Outputs full metrics and summary metrics CSV files.<br>
+                    <em>Run:</em> <code>python get_pr_metrics.py --csv pull_request.csv --out_full metrics_full.csv --out_summary metrics_summary.csv</code><br>
+                    You can run this script multiple times with different input CSVs or output file names to generate separate metrics files for each group (e.g., curated_human_created_metrics.csv and pure_human_metrics.csv).
+                </li>
+                <li>
+                    <code>compare_pr_metrics.py</code> — Compare PR metrics between human, hybrid, and agent groups using Mann–Whitney U tests and effect size calculations. Generates comparison tables, summary CSVs, and plots for statistical analysis.<br>
+                    First, run <code>get_pr_metrics.py</code> twice (once for each PR group) to generate two metrics files. Then use those files as inputs:<br>
+                    <em>Run:</em> <code>python compare_pr_metrics.py --file-a curated_human_created_metrics.csv --file-b pure_human_metrics.csv --label-a Curated_pr --label-b Pure_human</code>
+                </li>
+                <li>
+                  <code>get_number_reviewer.py</code> - Calculate the number of unique reviewers for each PR and add it as a metric to the metrics CSV files.<br>
+                  <em>Run:</em> <code>Get the github api key and set the path to the csv files that have PR urls</code><br>
+                </li>
+			</ul>
+
+
+<h2 id="experimentaldata">Experimental Data</h2>
+<p>
+    The experimental data used in this study are derived from the AIDev dataset and its related GitHub mining results. The data can be downloaded <a href="https://figshare.com/s/26360f3f1c8e76feb9cf" class="csv-link" download>here</a>.
+    Below are brief descriptions of each dataset:
+</p>
+<ul>
+    <li>
+        <code>all_pull_requests</code> — A large master dataset containing metadata for all pull requests across repositories, including IDs, descriptions, timestamps, and repository links.
+    </li>
+    <li>
+        <code>all_repositories</code> — Contains metadata about all repositories in the dataset, including repository ID, name, owner, and project language.
+    </li>
+    <li>
+        <code>all_user</code> — Includes detailed user information such as user ID, username, and account type (human or agent).
+    </li>
+    <li>
+        <code>human_pull_request</code> — The main dataset of pull requests created by humans. Each record includes PR ID, title, description, timestamps, and repository linkage.
+    </li>
+    <li>
+        <code>human_pr_task_type</code> — Provides task classification for each human PR, such as bug fix, refactor, or feature addition.
+    </li>
+    <li>
+        <code>issue</code> — Lists issues linked to PRs, including issue titles, descriptions, and repository references.
+    </li>
+    <li>
+        <code>pr_comments</code> — Contains textual comments left by contributors and reviewers within PR discussions.
+    </li>
+    <li>
+        <code>pr_commits</code> — Includes commit-level details for each PR, such as commit IDs, timestamps, and commit messages.
+    </li>
+    <li>
+        <code>pr_review_comments</code> — Contains review comments made for curated PRs during code review.
+    </li>
+    <li>
+        <code>pr_reviews</code> — Contains general review metadata for each pull request, including reviewer IDs, states, and timestamps.
+    </li>
+    <li>
+        <code>pr_task_type</code> — Lists task categories of pull requests, such as feature, bug fix, or refactor.
+    </li>
+    <li>
+        <code>pr_timeline.csv</code> — Records key timeline events for each pull request, including creation, first review, and merge times.
+    </li>
+    <li>
+        <code>curated_pull_request</code> — Includes all pull request metadata across the dataset, such as ID, title, author, and status.
+    </li>
+    <li>
+        <code>related_issue</code> — Maps curated pull requests to their related issues, linking their respective IDs.
+    </li>
+    <li>
+        <code>repository</code> — Contains detailed curated repository-level information including names, languages, and creation times.
+    </li>
+    <li>
+        <code>user</code> — Provides user information for curated PRs such as user IDs, usernames, and account attributes.
+    </li>
+    <li>
+        <code>mined_code</code> - Includes the code artifacts (commits, files, diffs) for related human PRs and curated PRs.
+    </li>
+    <li>
+        <code>clone_related_data</code> - Includes the clone-related PRs for title, body and both identified from the AIDev dataset using keyword matching.
+    </li>
+</ul>
+
+
+<h2 id="testresults">Results</h2>
+
+<div class="tables-wrap">
+
+<style>
+.tables-wrap { max-width: 100%; margin: 20px 0; }
+.dataframe { width: 100%; border-collapse: collapse; font-size: 11px; background-color: white; margin-bottom: 30px; }
+.dataframe thead th { background-color: #f5f5f5; border: 1px solid #ddd; padding: 6px 3px; text-align: center; font-weight: bold; font-size: 10px; }
+.dataframe thead tr:first-child th { background-color: #e0e0e0; font-size: 11px; font-weight: bold; }
+.dataframe tbody td:first-child { font-weight: 600; background-color: #f9f9f9; text-align: left; padding: 6px; white-space: nowrap; font-size: 10px; }
+.dataframe tbody td { border: 1px solid #ddd; padding: 5px 3px; text-align: right; font-size: 10px; }
+.dataframe tbody tr:nth-child(even) { background-color: #fafafa; }
+.dataframe tbody tr:hover { background-color: #f0f0f0; }
+.table-scroll { overflow-x: auto; margin: 15px 0; border: 1px solid #ddd; border-radius: 4px; }
+h3 { color: #333; font-size: 20px; margin: 20px 0 10px 0; }
+h4 { color: #555; font-size: 15px; margin: 25px 0 10px 0; font-weight: 600; }
+.label-large { color: #d32f2f; font-weight: bold; }
+.label-medium { color: #f57c00; font-weight: bold; }
+.label-small { color: #388e3c; font-weight: bold; }
+.label-negligible { color: #757575; }
+.csv-link { 
+  font-size: 12px; 
+  color: #1976d2; 
+  text-decoration: none; 
+  margin-left: 15px;
+  padding: 4px 10px;
+  border: 1px solid #1976d2;
+  border-radius: 4px;
+  display: inline-block;
+  transition: all 0.3s;
+}
+.csv-link:hover { 
+  background-color: #1976d2; 
+  color: white; 
+  text-decoration: none;
+}
+</style>
+
+<h3>Quantitative Analysis Results</h3>
+
+<h4>Metric Definitions</h4>
+<p>
+  We report the following quantitative metrics for each curated group. All metrics are computed from the AIDev pull request data and GitHub mining results.
+</p>
+<ul>
+  <li><code>time_to_close_hours</code> — Time between PR creation and closing (merged or closed) measured in hours.</li>
+  <li><code>time_to_close_days</code> — The same closing time interval expressed in days.</li>
+  <li><code>body_length</code> — Length of the PR description body, measured as the number of characters in the text.</li>
+  <li><code>commits</code> — Total number of commits associated with the pull request.</li>
+  <li><code>changed_files</code> — Number of files that were changed (added, modified, or deleted) in the PR.</li>
+  <li><code>additions</code> — Total number of added lines across all changed files in the PR.</li>
+  <li><code>deletions</code> — Total number of removed lines across all changed files in the PR.</li>
+  <li><code>code_churn</code> — Sum of <code>additions</code> and <code>deletions</code>, used for overall change size.</li>
+  <li><code>review_iterations</code> — Number of distinct review rounds for the PR, approximated from the sequence of review events and states.</li>
+  <li><code>total_comments</code> — Total count of review comments and general PR comments linked to the pull request.</li>
+  <li><code>reviewer_workload_hours</code> — Approximate reviewer response time, measured as the average number of hours between when reviewers are requested to review a PR and when they submit their reviews.</li>
+  <li><code>Number_of_Reviewers</code> — The count of unique reviewers who participated in the review process for the PR.</li>
+</ul>
+
+<div class="tables-wrap">
+
+  <h4>Human-created Curated PRs vs. Purely Human PRs <a href="Data/Quantitative analysis results/curated_human_created_purely_human.csv" class="csv-link" download>📥 Download CSV</a></h4>
+  <div class="table-scroll">
+    <table id="table-curated-human" class="dataframe compact">
+      <thead>
+        <tr>
+          <th rowspan="2">Metric</th>
+          <th colspan="6">Human-created Curated (n=100)</th>
+          <th colspan="6">Pure Human (n=100)</th>
+          <th colspan="3">Statistical Analysis</th>
+        </tr>
+        <tr>
+          <th>Min</th>
+          <th>Q1</th>
+          <th>Median</th>
+          <th>Mean</th>
+          <th>Q3</th>
+          <th>Max</th>
+          <th>Min</th>
+          <th>Q1</th>
+          <th>Median</th>
+          <th>Mean</th>
+          <th>Q3</th>
+          <th>Max</th>
+          <th>P-value</th>
+          <th>δ</th>
+          <th>Label</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>time_to_close_hours</td>
+          <td>0.0022</td>
+          <td>0.0494</td>
+          <td>0.2883</td>
+          <td>3.0405</td>
+          <td>10.6376</td>
+          <td>823.5272</td>
+          <td>0.0036</td>
+          <td>2.5775</td>
+          <td>19.3750</td>
+          <td>42.7214</td>
+          <td>116.2144</td>
+          <td>2638.2289</td>
+          <td>0.0000</td>
+          <td>-0.5348</td>
+          <td class="label-large">Large</td>
+        </tr>
+        <tr>
+          <td>time_to_close_days</td>
+          <td>0.0001</td>
+          <td>0.0021</td>
+          <td>0.0120</td>
+          <td>0.1267</td>
+          <td>0.4432</td>
+          <td>34.3136</td>
+          <td>0.0002</td>
+          <td>0.1074</td>
+          <td>0.8073</td>
+          <td>1.7801</td>
+          <td>4.8423</td>
+          <td>109.9262</td>
+          <td>0.0000</td>
+          <td>-0.5348</td>
+          <td class="label-large">Large</td>
+        </tr>
+        <tr>
+          <td>body_length</td>
+          <td>44.00</td>
+          <td>418.25</td>
+          <td>1640</td>
+          <td>2156.23</td>
+          <td>3822</td>
+          <td>18243</td>
+          <td>0</td>
+          <td>327</td>
+          <td>835</td>
+          <td>1097.05</td>
+          <td>1695</td>
+          <td>15083</td>
+          <td>0.0008</td>
+          <td>0.2775</td>
+          <td class="label-small">Small</td>
+        </tr>
+        <tr>
+          <td>commits</td>
+          <td>1.00</td>
+          <td>1.00</td>
+          <td>2</td>
+          <td>3.1481</td>
+          <td>6</td>
+          <td>59</td>
+          <td>1.00</td>
+          <td>1</td>
+          <td>3</td>
+          <td>4.5444</td>
+          <td>8.5</td>
+          <td>51</td>
+          <td>0.2270</td>
+          <td>-0.0991</td>
+          <td class="label-negligible">Negligible</td>
+        </tr>
+        <tr>
+          <td>changed_files</td>
+          <td>1.00</td>
+          <td>2.25</td>
+          <td>4.5</td>
+          <td>9.0833</td>
+          <td>18</td>
+          <td>993</td>
+          <td>1.00</td>
+          <td>3</td>
+          <td>5.00</td>
+          <td>8.1977</td>
+          <td>17</td>
+          <td>1003</td>
+          <td>0.6602</td>
+          <td>-0.0366</td>
+          <td class="label-negligible">Negligible</td>
+        </tr>
+        <tr>
+          <td>additions</td>
+          <td>0.0000</td>
+          <td>41</td>
+          <td>129</td>
+          <td>649.9877</td>
+          <td>1722</td>
+          <td>107663</td>
+          <td>0.0000</td>
+          <td>26.5</td>
+          <td>98.5</td>
+          <td>220.7273</td>
+          <td>491</td>
+          <td>359420</td>
+          <td>0.1018</td>
+          <td>0.1365</td>
+          <td class="label-negligible">Negligible</td>
+        </tr>
+        <tr>
+          <td>deletions</td>
+          <td>0.0000</td>
+          <td>24.5</td>
+          <td>59</td>
+          <td>136.6914</td>
+          <td>335.25</td>
+          <td>72083</td>
+          <td>0.0000</td>
+          <td>23.5</td>
+          <td>80</td>
+          <td>128.5238</td>
+          <td>304.5</td>
+          <td>116298</td>
+          <td>0.8265</td>
+          <td>-0.0184</td>
+          <td class="label-negligible">Negligible</td>
+        </tr>
+        <tr>
+          <td>code_churn</td>
+          <td>1</td>
+          <td>90.75</td>
+          <td>307</td>
+          <td>1086.3765</td>
+          <td>2563.75</td>
+          <td>179746</td>
+          <td>1.00</td>
+          <td>69</td>
+          <td>245</td>
+          <td>351.2143</td>
+          <td>847.5</td>
+          <td>418116</td>
+          <td>0.1543</td>
+          <td>0.1188</td>
+          <td class="label-negligible">Negligible</td>
+        </tr>
+        <tr>
+          <td>review_iterations</td>
+          <td>0.0000</td>
+          <td>0.0000</td>
+          <td>0.0000</td>
+          <td>0.2405</td>
+          <td>1</td>
+          <td>26.00</td>
+          <td>0.0000</td>
+          <td>1</td>
+          <td>2</td>
+          <td>2.5393</td>
+          <td>5</td>
+          <td>30</td>
+          <td>0.0000</td>
+          <td>-0.5073</td>
+          <td class="label-large">Large</td>
+        </tr>
+        <tr>
+          <td>total_comments</td>
+          <td>0.0000</td>
+          <td>0.0000</td>
+          <td>0</td>
+          <td>1.0854</td>
+          <td>3</td>
+          <td>34</td>
+          <td>0.0000</td>
+          <td>1</td>
+          <td>2.50</td>
+          <td>4.3</td>
+          <td>8</td>
+          <td>46</td>
+          <td>0.0001</td>
+          <td>-0.3098</td>
+          <td class="label-small">Small</td>
+        </tr>
+        <tr>
+          <td>reviewer_workload_hours</td>
+          <td>0.0106</td>
+          <td>0.1179</td>
+          <td>0.6883</td>
+          <td>1.6676</td>
+          <td>4.5698</td>
+          <td>398.0088</td>
+          <td>0.0150</td>
+          <td>1.2981</td>
+          <td>12.0256</td>
+          <td>27.9524</td>
+          <td>66.0208</td>
+          <td>1144.1686</td>
+          <td>0.0001</td>
+          <td>-0.4501</td>
+          <td class="label-medium">Medium</td>
+        </tr>
+        <tr>
+          <td>Number_of_Reviewers</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0.7204</td>
+          <td>1.75</td>
+          <td>6</td>
+          <td>0</td>
+          <td>1</td>
+          <td>3</td>
+          <td>3.3093</td>
+          <td>5</td>
+          <td>17</td>
+          <td>0.0000</td>
+          <td>-0.5880</td>
+          <td class="label-large">Large</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>Pure Agent PRs vs. Pure Human PRs <a href="Data/Quantitative analysis results/pure_agent_pure_human.csv" class="csv-link" download>📥 Download CSV</a></h4>
+  <div class="table-scroll">
+    <table id="table-pure-agent" class="dataframe compact">
+      <thead>
+        <tr>
+          <th rowspan="2">Metric</th>
+          <th colspan="6">Pure Agent (n=100)</th>
+          <th colspan="6">Pure Human (n=100)</th>
+          <th colspan="3">Statistical Analysis</th>
+        </tr>
+        <tr>
+          <th>Min</th>
+          <th>Q1</th>
+          <th>Median</th>
+          <th>Mean</th>
+          <th>Q3</th>
+          <th>Max</th>
+          <th>Min</th>
+          <th>Q1</th>
+          <th>Median</th>
+          <th>Mean</th>
+          <th>Q3</th>
+          <th>Max</th>
+          <th>P-value</th>
+          <th>δ</th>
+          <th>Label</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>time_to_close_hours</td>
+          <td>0.0153</td>
+          <td>0.3304</td>
+          <td>0.6181</td>
+          <td>1.9114</td>
+          <td>5.7707</td>
+          <td>225.8039</td>
+          <td>0.0036</td>
+          <td>2.5775</td>
+          <td>19.3750</td>
+          <td>42.7214</td>
+          <td>116.2144</td>
+          <td>2638.2289</td>
+          <td>0.0000</td>
+          <td>-0.5292</td>
+          <td class="label-large">Large</td>
+        </tr>
+        <tr>
+          <td>time_to_close_days</td>
+          <td>0.0006</td>
+          <td>0.0138</td>
+          <td>0.0258</td>
+          <td>0.0796</td>
+          <td>0.2404</td>
+          <td>9.4085</td>
+          <td>0.0002</td>
+          <td>0.1074</td>
+          <td>0.8073</td>
+          <td>1.7801</td>
+          <td>4.8423</td>
+          <td>109.9262</td>
+          <td>0.0000</td>
+          <td>-0.5292</td>
+          <td class="label-large">Large</td>
+        </tr>
+        <tr>
+          <td>body_length</td>
+          <td>320</td>
+          <td>1982.75</td>
+          <td>2558</td>
+          <td>2649.92</td>
+          <td>3725.25</td>
+          <td>9754</td>
+          <td>0</td>
+          <td>327</td>
+          <td>835</td>
+          <td>1097.05</td>
+          <td>1695</td>
+          <td>15083</td>
+          <td>0.0000</td>
+          <td>0.6284</td>
+          <td class="label-large">Large</td>
+        </tr>
+        <tr>
+          <td>commits</td>
+          <td>1</td>
+          <td>2</td>
+          <td>3</td>
+          <td>3.5844</td>
+          <td>5</td>
+          <td>16</td>
+          <td>1</td>
+          <td>1</td>
+          <td>3</td>
+          <td>4.5444</td>
+          <td>8.5</td>
+          <td>51</td>
+          <td>0.9653</td>
+          <td>0.0038</td>
+          <td class="label-negligible">Negligible</td>
+        </tr>
+        <tr>
+          <td>changed_files</td>
+          <td>0</td>
+          <td>2</td>
+          <td>5</td>
+          <td>5.9744</td>
+          <td>10</td>
+          <td>183</td>
+          <td>1</td>
+          <td>3</td>
+          <td>5</td>
+          <td>8.1977</td>
+          <td>17</td>
+          <td>1003</td>
+          <td>0.0852</td>
+          <td>-0.1470</td>
+          <td class="label-negligible">Negligible</td>
+        </tr>
+        <tr>
+          <td>additions</td>
+          <td>0</td>
+          <td>29</td>
+          <td>66</td>
+          <td>142.9467</td>
+          <td>334</td>
+          <td>7207</td>
+          <td>0</td>
+          <td>26.5</td>
+          <td>98.5</td>
+          <td>220.7273</td>
+          <td>491</td>
+          <td>359420</td>
+          <td>0.2727</td>
+          <td>-0.0940</td>
+          <td class="label-negligible">Negligible</td>
+        </tr>
+        <tr>
+          <td>deletions</td>
+          <td>0</td>
+          <td>14</td>
+          <td>45</td>
+          <td>98.5696</td>
+          <td>229</td>
+          <td>2280</td>
+          <td>0</td>
+          <td>23.5</td>
+          <td>80</td>
+          <td>128.5238</td>
+          <td>304.5</td>
+          <td>116298</td>
+          <td>0.0694</td>
+          <td>-0.1556</td>
+          <td class="label-small">Small</td>
+        </tr>
+        <tr>
+          <td>code_churn</td>
+          <td>0</td>
+          <td>56</td>
+          <td>144.5</td>
+          <td>232.1757</td>
+          <td>532</td>
+          <td>7252</td>
+          <td>1</td>
+          <td>69</td>
+          <td>245</td>
+          <td>351.2143</td>
+          <td>847.5</td>
+          <td>418116</td>
+          <td>0.1020</td>
+          <td>-0.1401</td>
+          <td class="label-negligible">Negligible</td>
+        </tr>
+        <tr>
+          <td>review_iterations</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0.9326</td>
+          <td>2</td>
+          <td>11</td>
+          <td>0</td>
+          <td>1</td>
+          <td>2</td>
+          <td>2.5393</td>
+          <td>5</td>
+          <td>30</td>
+          <td>0.0000</td>
+          <td>-0.4123</td>
+          <td class="label-medium">Medium</td>
+        </tr>
+        <tr>
+          <td>Number_of_Reviewers</td>
+          <td>0</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1.5745</td>
+          <td>3</td>
+          <td>9</td>
+          <td>0</td>
+          <td>1</td>
+          <td>3</td>
+          <td>3.3093</td>
+          <td>5</td>
+          <td>17</td>
+          <td>0.0000</td>
+          <td>-0.3479</td>
+          <td class="label-medium">Medium</td>
+        </tr>
+        <tr>
+          <td>total_comments</td>
+          <td>0</td>
+          <td>0</td>
+          <td>1</td>
+          <td>2.3736</td>
+          <td>4.75</td>
+          <td>30</td>
+          <td>0</td>
+          <td>1</td>
+          <td>2.5</td>
+          <td>4.3</td>
+          <td>8</td>
+          <td>46</td>
+          <td>0.0044</td>
+          <td>-0.2321</td>
+          <td class="label-small">Small</td>
+        </tr>
+        <tr>
+          <td>reviewer_workload_hours</td>
+          <td>0.0094</td>
+          <td>0.1676</td>
+          <td>0.3303</td>
+          <td>2.2663</td>
+          <td>6.7288</td>
+          <td>397.1739</td>
+          <td>0.0150</td>
+          <td>1.2981</td>
+          <td>12.0256</td>
+          <td>27.9524</td>
+          <td>66.0208</td>
+          <td>1144.1686</td>
+          <td>0.0000</td>
+          <td>-0.4252</td>
+          <td class="label-medium">Medium</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>Curated Mixed PRs vs. Purely Human PRs <a href="Data/Quantitative analysis results/mixed_pure_human.csv" class="csv-link" download>📥 Download CSV</a></h4>
+  <div class="table-scroll">
+    <table id="table-mixed" class="dataframe compact">
+      <thead>
+        <tr>
+          <th rowspan="2">Metric</th>
+          <th colspan="6">Curated Mixed (n=100)</th>
+          <th colspan="6">Pure Human (n=100)</th>
+          <th colspan="3">Statistical Analysis</th>
+        </tr>
+        <tr>
+          <th>Min</th>
+          <th>Q1</th>
+          <th>Median</th>
+          <th>Mean</th>
+          <th>Q3</th>
+          <th>Max</th>
+          <th>Min</th>
+          <th>Q1</th>
+          <th>Median</th>
+          <th>Mean</th>
+          <th>Q3</th>
+          <th>Max</th>
+          <th>P-value</th>
+          <th>δ</th>
+          <th>Label</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>time_to_close_hours</td>
+          <td>0.0042</td>
+          <td>0.1566</td>
+          <td>0.4347</td>
+          <td>1.9782</td>
+          <td>7.4785</td>
+          <td>823.5272</td>
+          <td>0.0036</td>
+          <td>2.5775</td>
+          <td>19.3750</td>
+          <td>42.7214</td>
+          <td>116.2144</td>
+          <td>2638.2289</td>
+          <td>8.1061e-10</td>
+          <td>-0.5094</td>
+          <td class="label-large">Large</td>
+        </tr>
+        <tr>
+          <td>time_to_close_days</td>
+          <td>0.0002</td>
+          <td>0.0065</td>
+          <td>0.0181</td>
+          <td>0.0824</td>
+          <td>0.3116</td>
+          <td>34.3136</td>
+          <td>0.0002</td>
+          <td>0.1074</td>
+          <td>0.8073</td>
+          <td>1.7801</td>
+          <td>4.8423</td>
+          <td>109.9262</td>
+          <td>8.1061e-10</td>
+          <td>-0.5094</td>
+          <td class="label-large">Large</td>
+        </tr>
+        <tr>
+          <td>body_length</td>
+          <td>202</td>
+          <td>1526.75</td>
+          <td>2432</td>
+          <td>2652.20</td>
+          <td>3984.75</td>
+          <td>18243</td>
+          <td>0</td>
+          <td>327</td>
+          <td>835</td>
+          <td>1097.05</td>
+          <td>1695</td>
+          <td>15083</td>
+          <td>1.3779e-11</td>
+          <td>0.5548</td>
+          <td class="label-large">Large</td>
+        </tr>
+        <tr>
+          <td>commits</td>
+          <td>1</td>
+          <td>2</td>
+          <td>3</td>
+          <td>4.2625</td>
+          <td>7</td>
+          <td>54</td>
+          <td>1</td>
+          <td>1</td>
+          <td>3</td>
+          <td>4.5444</td>
+          <td>8.5</td>
+          <td>51</td>
+          <td>0.6900</td>
+          <td>0.0336</td>
+          <td class="label-negligible">Negligible</td>
+        </tr>
+        <tr>
+          <td>changed_files</td>
+          <td>1</td>
+          <td>4</td>
+          <td>7</td>
+          <td>11.0875</td>
+          <td>21</td>
+          <td>993</td>
+          <td>1</td>
+          <td>3</td>
+          <td>5</td>
+          <td>8.1977</td>
+          <td>17</td>
+          <td>1003</td>
+          <td>0.2015</td>
+          <td>0.1082</td>
+          <td class="label-negligible">Negligible</td>
+        </tr>
+        <tr>
+          <td>additions</td>
+          <td>0</td>
+          <td>57.5</td>
+          <td>129</td>
+          <td>481.5270</td>
+          <td>1452.75</td>
+          <td>40361</td>
+          <td>0</td>
+          <td>26.5</td>
+          <td>98.5</td>
+          <td>220.7273</td>
+          <td>491</td>
+          <td>359420</td>
+          <td>0.0390</td>
+          <td>0.1752</td>
+          <td class="label-small">Small</td>
+        </tr>
+        <tr>
+          <td>deletions</td>
+          <td>0</td>
+          <td>23.75</td>
+          <td>56</td>
+          <td>143.4079</td>
+          <td>339.25</td>
+          <td>29019</td>
+          <td>0</td>
+          <td>23.5</td>
+          <td>80</td>
+          <td>128.5238</td>
+          <td>304.5</td>
+          <td>116298</td>
+          <td>0.8582</td>
+          <td>-0.0153</td>
+          <td class="label-negligible">Negligible</td>
+        </tr>
+        <tr>
+          <td>code_churn</td>
+          <td>2</td>
+          <td>95.5</td>
+          <td>293</td>
+          <td>844.7013</td>
+          <td>1923.5</td>
+          <td>69380</td>
+          <td>1</td>
+          <td>69</td>
+          <td>245</td>
+          <td>351.2143</td>
+          <td>847.5</td>
+          <td>418116</td>
+          <td>0.1145</td>
+          <td>0.1340</td>
+          <td class="label-negligible">Negligible</td>
+        </tr>
+        <tr>
+          <td>review_iterations</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0.7527</td>
+          <td>2</td>
+          <td>15</td>
+          <td>0</td>
+          <td>1</td>
+          <td>2</td>
+          <td>2.5393</td>
+          <td>5</td>
+          <td>30</td>
+          <td>4.7707e-10</td>
+          <td>-0.4940</td>
+          <td class="label-large">Large</td>
+        </tr>
+        <tr>
+          <td>total_comments</td>
+          <td>0</td>
+          <td>0</td>
+          <td>1</td>
+          <td>1.7753</td>
+          <td>4</td>
+          <td>34</td>
+          <td>0</td>
+          <td>1</td>
+          <td>2.5</td>
+          <td>4.3</td>
+          <td>8</td>
+          <td>46</td>
+          <td>0.0007</td>
+          <td>-0.2731</td>
+          <td class="label-small">Small</td>
+        </tr>
+        <tr>
+          <td>reviewer_workload_hours</td>
+          <td>0.0106</td>
+          <td>0.2961</td>
+          <td>0.5256</td>
+          <td>3.5803</td>
+          <td>9.7089</td>
+          <td>398.0088</td>
+          <td>0.0150</td>
+          <td>1.2981</td>
+          <td>12.0256</td>
+          <td>27.9524</td>
+          <td>66.0208</td>
+          <td>1144.1686</td>
+          <td>0.0010</td>
+          <td>-0.3721</td>
+          <td class="label-medium">Medium</td>
+        </tr>
+        <tr>
+          <td>Number_of_Reviewers</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>1.0309</td>
+          <td>2</td>
+          <td>7</td>
+          <td>0</td>
+          <td>1</td>
+          <td>3</td>
+          <td>3.3093</td>
+          <td>5</td>
+          <td>17</td>
+          <td>5.3436e-11</td>
+          <td>-0.5255</td>
+          <td class="label-large">Large</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+ 
+
+<h3>Qualitative Analysis Results 
+  <div style="margin-bottom: 10px;">
+  <a href="Data/Qualitative analysis results/Pure human.xlsx" class="csv-link" download>📥 Download Pure Human csv</a>
+  <a href="Data/Qualitative analysis results/curated human.xlsx" class="csv-link" download>📥 Download Curated Human csv</a>
+  <a href="Data/Qualitative analysis results/curated agent.xlsx" class="csv-link" download>📥 Download Pure Agent csv</a>
+</div>
+</h3>
+<p>
+  We manually coded PR descriptions and diffs across five dimensions: <em>Clarity of Rationale</em>, <em>Ease of Review</em>, <em>Actionability of Feedback</em>, <em>Collaboration Dynamics</em>, and <em>Error Patterns</em>. Below we summarize the distributions (percentages) for each curated group.
+</p>
+
+<style>
+.csv-link { 
+  font-size: 12px; 
+  color: #1976d2; 
+  text-decoration: none; 
+  margin-left: 15px;
+  padding: 4px 10px;
+  border: 1px solid #1976d2;
+  border-radius: 4px;
+  display: inline-block;
+  transition: all 0.3s;
+  vertical-align: middle;
+}
+.csv-link:hover { 
+  background-color: #1976d2; 
+  color: white; 
+  text-decoration: none;
+}
+</style>
+
+
+	<div id="footer" class="shadow">
+		<!-- <script type="text/javascript">footer();</script>		 -->
+		<p>Copyright is hidden due to the double-blind review| <a href="http://andreasviklund.com/templates/inland/">Template design</a> by <a href="http://andreasviklund.com/">andreasviklund.com</a></p>
+	</div>
+</div>
+
+
+
+</body></html>

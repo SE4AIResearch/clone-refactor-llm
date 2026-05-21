@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Replication Package — Beyond Prompting: An LLM-Driven Workflow for Code Clone Refactoring</title>
+  <meta name="description" content="Replication package website: code, datasets, and instructions to reproduce results for the beyond prompting paper." />
+  <link rel="stylesheet" href="./styles.css" />
+  <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="topbar" role="banner">
+    <div class="container topbar__inner">
+      <div class="brand">
+        <div class="brand__mark" aria-hidden="true">⧉</div>
+        <div class="brand__text">
+          <div class="brand__title">Replication Package</div>
+          <div class="brand__subtitle">Beyond Prompting: An LLM-Driven Workflow for Code Clone Refactoring</div>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="#artifacts">Artifacts</a>
+        <a href="#reproduce">Reproduce</a>
+        <a href="#results">Results</a>
+        <button id="themeToggle" class="btn btn--ghost" type="button" aria-label="Toggle theme">
+          <span class="btn__icon" aria-hidden="true">◐</span>
+          <span class="btn__label">Theme</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="container" role="main">
+    <section id="artifacts" class="hero" aria-labelledby="heroTitle">
+      <div class="hero__left">
+        <h1 id="heroTitle">Replication package for Beyond Prompting: An LLM-Driven Workflow for Code
+Clone Refactoring</h1>
+        <p class="lead">
+          This website hosts the artifacts to reproduce the experiments in
+          <span class="mono">“Beyond Prompting: An LLM-Driven Workflow for Code
+Clone Refactoring”</span>.
+        </p>
+
+        <div class="cta">
+          <a class="btn btn--primary" href="https://osf.io/tjd38/files/osfstorage/6a0e547ee40bfda5a156800d" download>Download code (zip)</a>
+          <a class="btn" href="./downloads/results.zip" download>Download results (zip)</a>
+          <a class="btn" href="./downloads/argouml.zip" download>Download ArgoUML (zip)</a>
+          <a class="btn" href="https://osf.io/tjd38/files/osfstorage/6a0e538ee40bfda5a1567f39" download>Download RQ1 logs (zip)</a>
+           <a class="btn" href="https://osf.io/tjd38/files/osfstorage/6a0e525b9fc2cb685e4fb49c" download>Download RQ2 logs (zip)</a>
+        </div>
+      </div>
+
+      <aside class="hero__right" aria-label="Quick links">
+        <div class="card">
+          <div class="card__title">Paper PDF</div>
+          <p class="card__desc">The paper associated with this replication package.</p>
+          <a class="btn btn--small" href="./paper.pdf" download>Download paper</a>
+        </div>
+      </aside>
+    </section>
+
+    <section id="abstract" class="section" aria-labelledby="abstractTitle">
+      <div class="section__head">
+        <h2 id="abstractTitle">Abstract</h2>
+      </div>
+
+      <p>
+        Code clones are common in software systems and often lead to maintenance and bug-related issues. Extract Method is a standard refactoring technique to remove duplication, but applying it correctly requires preserving behavior, compiling successfully, and satisfying structural constraints. Recent studies show that single-prompt Large Language Models (LLMs) can generate syntactically correct refactorings, yet they frequently produce incomplete or structurally invalid transformations, especially for Type-2 and Type-3 clones.
+      </p>
+
+      <p>
+        In this paper, we present a LLM-driven workflow for clone refactoring. The workflow decomposes the task into structured stages, including clone detection, refactoring generation, structural usefulness checking, compilation validation, and test-based behavioral verification. Across the detection, refactoring, and usefulness-checking stages, we employ multiple LLM-based agents to evaluate candidate outputs before proceeding to the next stage. We also incorporate retrieval-augmented generation (RAG) to guide the agents with curated Extract Method examples, while a PSI-based usefulness checker further enforces structural correctness beyond compilation and testing.
+      </p>
+
+      <p>
+        We evaluate the workflow on real-world clone instances collected from the ArgoUML project using Deckard. Results show that the workflow achieves 93.1% detection, 90.0% usefulness, 80.0% compilation success, and 69.2% test success overall on real-world clones. The results also show that clone size has a noticeable impact on refactoring stability. Medium-sized clones generally achieve the best balance between extraction context and structural manageability, while large clones remain more challenging due to increased dependency interactions and structural complexity.
+      </p>
+
+      <p>
+        Our ablation study further shows that retrieval-augmented generation (RAG) plays an important role in improving behavioral stability during refactoring. Removing RAG causes the largest decrease in overall test success, reducing the success rate from 70.0% to 30.8%. In contrast, removing the usefulness checker, feedback loop, or collaborative panelist architecture leads to smaller but still noticeable reductions in structural correctness and overall workflow reliability.
+      </p>
+
+      <p>
+        Our findings suggest that reliable LLM-based refactoring requires structured decomposition, explicit structural validation, and iterative feedback, rather than relying on one-shot code generation.
+      </p>
+    </section>
+
+    <section id="reproduce" class="section" aria-labelledby="reproduceTitle">
+      <div class="section__head">
+        <h2 id="compileArgoumlTitle">How to compile ArgoUML</h2>
+      </div>
+      <div class="subsection" aria-labelledby="compileArgoumlTitle">
+        <h3 id="compileArgoumlTitle">How to compile ArgoUML (IntelliJ IDEA)</h3>
+        <ol class="steps">
+          <li class="step">
+            <div class="step__title">Download and open ArgoUML</div>
+            <p class="muted">Extract the ArgoUML source package and open the project folder in IntelliJ IDEA.</p>
+          </li>
+
+          <li class="step">
+            <div class="step__title">Install Java 8 (Temurin)</div>
+            <p class="muted">ArgoUML is compatible with Java 8. Download and install Java 8 from <a href="https://adoptium.net" target="_blank" rel="noreferrer">Adoptium</a> if it is not already installed.</p>
+          </li>
+
+          <li class="step">
+            <div class="step__title">Set the project SDK and language level</div>
+            <p class="muted">Go to <span class="mono">File → Project Structure</span> and configure:</p>
+            <ul class="bullets">
+              <li><b>Project Settings → Project</b>: set <b>Project SDK</b> to your installed Java 8 SDK and <b>Project language level</b> to 8.</li>
+              <li><b>Project Settings → Modules → Dependencies</b>: ensure each module uses the Project SDK.</li>
+            </ul>
+          </li>
+
+          <li class="step">
+            <div class="step__title">Mark source directories</div>
+            <p class="muted">In the Project view, right click the main source folders (for example <span class="mono">src</span> and <span class="mono">resources</span>) and choose <span class="mono">Mark Directory as → Sources Root</span> if needed.</p>
+          </li>
+
+          <li class="step">
+            <div class="step__title">Add required libraries</div>
+            <p class="muted">If ArgoUML includes a <span class="mono">lib</span> folder, add the JAR files from that folder as libraries in IntelliJ:</p>
+            <ul class="bullets">
+              <li>Add each required JAR via <span class="mono">File → Project Structure → Libraries → + → Java</span>.</li>
+              <li>Alternatively, use Maven or Gradle dependencies if the project includes a build descriptor.</li>
+            </ul>
+          </li>
+
+          <li class="step">
+            <div class="step__title">Build the project</div>
+            <p class="muted">Run <span class="mono">Build → Build Project</span> in IntelliJ to compile ArgoUML. Fix any missing dependency warnings by adding the referenced JARs or updating the module configuration.</p>
+          </li>
+        </ol>
+      </div>
+
+    </section>
+
+    <section id="results" class="section" aria-labelledby="resultsTitle">
+      <div class="section__head">
+        <h2 id="resultsTitle">Results</h2>
+      </div>
+
+      <div class="toolbar" role="region" aria-label="Results table controls">
+        <label class="field">
+          <span class="field__label">Search</span>
+          <input id="searchInput" class="input" type="search" placeholder="filter rows…" />
+        </label>
+
+        <label class="field">
+          <span class="field__label">Model</span>
+          <select id="modelFilter" class="select">
+            <option value="">All</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span class="field__label">Scenario</span>
+          <select id="scenarioFilter" class="select">
+            <option value="">All</option>
+            <option value="Claude">Claude</option>
+            <option value="Deepseek">Deepseek</option>
+            <option value="GPT">GPT</option>
+            <option value="Gemini">Gemini</option>
+            <option value="No Feedback Loop">No Feedback Loop</option>
+            <option value="No Panelist">No Panelist</option>
+            <option value="No RAG">No RAG</option>
+            <option value="No Usefulness">No Usefulness</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span class="field__label">Iteration</span>
+          <select id="settingFilter" class="select">
+            <option value="">All</option>
+          </select>
+        </label>
+
+        <button id="downloadCsvBtn" class="btn btn--ghost" type="button">Download Zip</button>
+      </div>
+
+      <div class="tablewrap" role="region" aria-label="Results preview table" tabindex="0" style="overflow-x:visible; width:100%;">
+        <table id="resultsTable" class="table" style="width:100%; table-layout:auto;">
+          <thead>
+            <tr>
+              <th data-sort="Model" scope="col">Model</th>
+              <th data-sort="File" scope="col">File</th>
+              <th data-sort="Start Line" scope="col">Start Line</th>
+              <th data-sort="End Line" scope="col">End Line</th>
+              <th data-sort="Detect" scope="col">Detect</th>
+              <th data-sort="Use Fallback" scope="col">Fallback</th>
+              <th data-sort="Iteration" scope="col">Iteration</th>
+              <th data-sort="Compile" scope="col">Compile</th>
+              <th data-sort="Test" scope="col">Test</th>
+              <th data-sort="Usefulness" scope="col">Usefulness</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Filled by script.js -->
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <section id="jdeodorant" class="section" aria-labelledby="jdeoTitle">
+      <div class="section__head">
+        <h2 id="jdeoTitle">Results: JDeodorant</h2>
+      </div>
+
+      <div id="jdeoBanner" class="banner" aria-live="polite" hidden></div>
+
+      <div class="toolbar" role="region" aria-label="JDeodorant table controls">
+        <label class="field">
+          <span class="field__label">Search</span>
+          <input id="jdeoSearchInput" class="input" type="search" placeholder="filter rows…" />
+        </label>
+
+        <label class="field">
+          <span class="field__label">Model</span>
+          <select id="jdeoModelFilter" class="select">
+            <option value="">All</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span class="field__label">Clone Type</span>
+          <select id="jdeoCloneTypeFilter" class="select">
+            <option value="">All</option>
+          </select>
+        </label>
+
+        <button id="jdeoDownloadCsvBtn" class="btn btn--ghost" type="button">Download CSV</button>
+      </div>
+
+      <div class="tablewrap" role="region" aria-label="JDeodorant results table" tabindex="0" style="overflow-x:visible; width:100%;">
+        <table id="jdeoTable" class="table" style="width:100%; table-layout:auto;">
+          <thead>
+            <tr>
+              <th data-sort="Model" scope="col">Model</th>
+              <th data-sort="File" scope="col">File</th>
+              <th data-sort="Clone Method" scope="col">Clone Method</th>
+              <th data-sort="Clone Type" scope="col">Clone Type</th>
+              <th data-sort="Deckard Detect" scope="col">Deckard Detect</th>
+              <th data-sort="Compile" scope="col">Compile</th>
+              <th data-sort="Test" scope="col">Test</th>
+              <th data-sort="Usefulness" scope="col">Useful</th>
+              <th data-sort="Precondition Violation" scope="col">Precondition Violation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Filled by script.js -->
+          </tbody>
+        </table>
+      </div>
+
+      <p class="muted small">
+        Expected CSV columns: Model, File, Clone Method, Clone Type, Deckard Detect, Compile, Test, Usefulness, Precondition Violation.
+      </p>
+    </section>
+
+    <footer class="footer" role="contentinfo">
+      <div class="footer__inner">
+        <div class="muted small">
+          © <span id="year"></span> Replication package website.
+        </div>
+        <div class="footer__links">
+          <a href="#main">Top</a>
+          <a href="./downloads/">Downloads</a>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script src="./script.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+﻿filename,start line,end line,compile,test,Correct?,Precondition violation
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-euml/src/org/argouml/model/euml/StateMachinesHelperEUMLImpl.java,108,113,,,,not all possible execution flows end in a return statement
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/DataTypesFactoryMDRImpl.java,127,133,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/cognitive/ToDoItem.java,424,430,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/UndoCoreHelperDecorator.java,213,217,,,,"Expression getComponent.setAbstract,  getComponent.setNavigable is a void method call, and thus it cannot be parameterized"
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-euml/src/org/argouml/model/euml/FacadeEUMLImpl.java,766,771,,,,"Expression (Extend)handle cannot be unified with expression (ElementImport) elementImport, because common superclass does not declare members"
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/persistence/ArgoParser.java,410,414,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/ActivityGraphsFactoryMDRImpl.java,88,93,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/ExtensionMechanismsFactoryMDRImpl.java,92,97,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/UseCasesFactoryMDRImpl.java,81,86,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/cognitive/ToDoList.java,698,702,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/ui/explorer/PerspectiveManager.java,200,205,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/CollaborationsFactoryMDRImpl.java,93,98,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/CommonBehaviorFactoryMDRImpl.java,111,116,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/CoreFactoryMDRImpl.java,162,167,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/ModelManagementFactoryMDRImpl.java,128,133,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/StateMachinesFactoryMDRImpl.java,114,118,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/notation/NotationSettings.java,269,274,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/uml/diagram/ui/FigAssociation.java,283,288,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/profile/internal/ocl/OclInterpreter.java,123,127,,,,two clones return variables with different types
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/UndoCoreHelperDecorator.java,231,235,,,,"Expression is a void method call, and thus it cannot be parameterized"
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/CollaborationsHelperMDRImpl.java,376,380,,,,no refactoring oppoturnies were found
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-euml/src/org/argouml/model/euml/UseCasesHelperEUMLImpl.java,138,143,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-euml/src/org/argouml/model/euml/CoreHelperEUMLImpl.java,1134,1138,,,,unmatched return type
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/uml/diagram/ArgoDiagramImpl.java,268,273,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/cognitive/Critic.java,646,651,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/notation/providers/java/NotationUtilityJava.java,144,149,,,,unmatched return
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/notation/NotationSettings.java,380,385,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/notation/NotationSettings.java,233,238,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/persistence/PersistenceManager.java,253,258,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/uml/diagram/static_structure/ui/FigLink.java,163,168,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-euml/src/org/argouml/model/euml/CommandStackImpl.java,39,43,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/uml/diagram/GraphChangeAdapter.java,92,96,,,,"the refactoring of the clones is infeasible, because the number of matched statements is equal to zero"
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/uml/diagram/ui/InitDiagramAppearanceUI.java,61,66,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/notation/providers/java/NotationUtilityJava.java,119,124,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/uml/util/namespace/StringNamespace.java,99,103,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-umlpropertypanels/src/org/argouml/core/propertypanels/ui/UMLExpressionModel.java,106,110,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-euml/src/org/argouml/model/euml/FacadeEUMLImpl.java,872,877,,,,"Expression (Usecase)handle cannot be unified with expression (Element) handle, because common superclass does not declare members"
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/uml/ui/UMLStereotypeListModel.java,520,524,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/uml/ui/UMLModelElementListModel2.java,523,527,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/notation/providers/uml/AttributeNotationUml.java,463,468,,,,"unmatched statement, cannot be moved before the extracted code because it has control dependencies from statements that will be extracted "
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/StateMachinesFactoryMDRImpl.java,332,341,,,,not all possible execution flows end in a return statement
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-umlpropertypanels/src/org/argouml/core/propertypanels/module/XmlPropertyPanelsModule.java,62,71,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/DataTypesHelperMDRImpl.java,76,85,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/cognitive/Critic.java,645,652,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/application/helpers/ResourceLoader.java,189,195,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/ui/explorer/rules/GoSummaryToAssociation.java,79,86,,,,"unmatched statement, cannot be moved before the extracted code because it has control dependencies from statements that will be extracted "
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-diagrams-sequence2/src/org/argouml/sequence2/diagram/SequenceDiagramGraphModel.java,124,133,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/StateMachinesFactoryMDRImpl.java,344,352,,,,not all possible execution flows end in a return statement
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/ui/LookAndFeelMgr.java,284,291,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/uml/ui/UMLExpressionModel2.java,108,116,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/kernel/DefaultUndoManager.java,225,231,,,,"expression cannot be parameterized, because it has dependencies to/from statements that will be extracted"
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/uml/ui/TabStereotype.java,435,442,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/cognitive/critics/ui/CriticBrowserDialog.java,368,374,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-umlpropertypanels/src/org/argouml/core/propertypanels/ui/UMLExpressionModel.java,105,111,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-umlpropertypanels/src/org/argouml/core/propertypanels/ui/UMLValueSpecificationModel.java,80,86,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/cognitive/ui/ToDoPane.java,434,441,,,,"Expression is a void method call, and thus it cannot be parameterized"
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/uml/diagram/static_structure/ui/UMLClassDiagram.java,383,391,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/cognitive/ui/ToDoPane.java,395,403,,,,no refactoring oppoturnies were found
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/profile/internal/ProfileManagerImpl.java,389,398,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/ActivityGraphsHelperMDRImpl.java,165,171,,,,"expression cannot be parameterized, because it has dependencies to/from statements that will be extracted"
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/uml/ui/TabProps.java,401,410,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/uml/ui/TabStyle.java,508,517,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/CollaborationsHelperMDRImpl.java,812,820,,,,no refactoring oppoturnies were found
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/StateMachinesHelperMDRImpl.java,600,608,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/StateMachinesHelperMDRImpl.java,450,458,,,,"Expression (Transition)handle cannot be unified with expression (State) handle, because common superclass does not declare members"
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/CommonBehaviorHelperMDRImpl.java,335,342,,,,"Expression (Instance) handle cannot be unified with expression (Stimulus) handle, because common superclass does not declare members"
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-euml/src/org/argouml/model/euml/FacadeEUMLImpl.java,1217,1225,,,,no refactoring oppoturnies were found
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-euml/src/org/argouml/model/euml/FacadeEUMLImpl.java,1443,1452,,,,unmatched return
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-euml/src/org/argouml/model/euml/CoreHelperEUMLImpl.java,925,933,,,,no refactoring oppoturnies were found
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-umlpropertypanels/src/org/argouml/core/propertypanels/ui/UMLStateVertexIncomingListModel.java,64,74,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-euml/src/org/argouml/model/euml/StateMachinesHelperEUMLImpl.java,61,69,,,,unmatched return
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/ui/cmd/RelationshipActionFactory.java,365,374,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/FacadeMDRImpl.java,4595,4602,,,,unmatched return
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/FacadeMDRImpl.java,918,928,,,,unmatched return
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/FacadeMDRImpl.java,1464,1474,,,,unmatched return
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-euml/src/org/argouml/model/euml/FacadeEUMLImpl.java,1025,1035,,,,no refactoring oppoturnies were found
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/StateMachinesHelperMDRImpl.java,472,480,,,,"Expression (Transition)handle cannot be unified with expression (State) handle, because common superclass does not declare members"
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/StateMachinesHelperMDRImpl.java,426,436,,,,"Expression (Starvertex)handle cannot be unified with expression (State) handle, because common superclass does not declare members"
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/CollaborationsHelperMDRImpl.java,834,842,,,,"Expression (Message)handle cannot be unified with expression (Interaction) handle, because common superclass does not declare members"
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/StateMachinesFactoryMDRImpl.java,678,688,,,,"unmatched statement, cannot be moved before the extracted code because it has control dependencies from statements that will be extracted "
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/ui/ArgoJFontChooser.java,331,345,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/ui/cmd/RelationshipActionFactory.java,190,207,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/ui/ArgoJMenu.java,91,111,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/ui/cmd/RelationshipActionFactory.java,75,104,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/notation/providers/uml/TransitionNotationUml.java,373,395,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/cognitive/ui/GoListToDecisionsToItems.java,66,88,,,,no refactoring oppoturnies were found
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/ui/ProjectSettingsTabProfile.java,388,403,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/ui/explorer/rules/GoClassToSummary.java,123,135,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/moduleloader/ModuleLoader2.java,228,241,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/cognitive/ui/ToDoByOffender.java,76,118,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/ui/cmd/RelationshipActionFactory.java,209,225,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/cognitive/ui/ToDoByPoster.java,76,113,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-euml/src/org/argouml/model/euml/FacadeEUMLImpl.java,879,899,,,,not all possible execution flows end in a return statement
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/ui/LookAndFeelMgr.java,222,237,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-umlpropertypanels/src/org/argouml/core/propertypanels/ui/RowSelector.java,474,491,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/CollaborationsHelperMDRImpl.java,411,434,,,,"expression cannot be parameterized, because it has dependencies to/from statements that will be extracted"
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-umlpropertypanels/src/org/argouml/core/propertypanels/ui/UMLExpressionModel.java,211,232,,,,"expression cannot be parameterized, because it has dependencies to/from statements that will be extracted"
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/util/osdep/OSXAdapter.java,139,153,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-euml/src/org/argouml/model/euml/FacadeEUMLImpl.java,722,740,,,,"expression cannot be parameterized, because it has dependencies to/from statements that will be extracted"
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/notation/NotationSettings.java,244,263,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/FacadeMDRImpl.java,3068,3086,,,,unmatched return
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/FacadeMDRImpl.java,3695,3709,,,,unmatched return
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/CommonBehaviorHelperMDRImpl.java,300,313,,,,"Expression (CallAction)handle cannot be unified with expression (Message) elementImport, because common superclass does not declare members"
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/ui/explorer/ExplorerPopup.java,759,780,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/FacadeMDRImpl.java,1429,1446,,,,unmatched return
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/ui/explorer/ExplorerPopup.java,758,781,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/ui/targetmanager/TargetManager.java,992,1004,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/UseCasesHelperMDRImpl.java,307,318,,,,conditional return
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/FacadeMDRImpl.java,1004,1019,,,,"Expression (attribute)handle cannot be unified with expression tv, because common superclass does not declare members"
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/FacadeMDRImpl.java,1559,1573,,,,no refactoring oppoturnies were found
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/uml/ui/TabConstraints.java,273,285,,,,no refactoring oppoturnies were found
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/CommonBehaviorHelperMDRImpl.java,493,505,,,,no refactoring oppoturnies were found
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/ui/LookAndFeelMgr.java,502,516,,,,"unmatched statement, cannot be moved before the extracted code because it has control dependencies from statements that will be extracted "
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/ui/explorer/PerspectiveConfigurator.java,825,841,,,,unmatched return
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/ui/targetmanager/TargetManager.java,768,787,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/uml/ui/ActionDeploymentDiagram.java,69,84,,,,unmatched return
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-mdr/src/org/argouml/model/mdr/UseCasesHelperMDRImpl.java,333,348,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-core-model-euml/src/org/argouml/model/euml/ExtensionMechanismsHelperEUMLImpl.java,124,141,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/ui/LookAndFeelMgr.java,284,291,yes,yes,yes,
+/Users/xingqian/Downloads/argouml-master/src/argouml-app/src/org/argouml/uml/cognitive/critics/WizManyNames.java,129,151,,,,"unmatched statement, cannot be moved before the extracted code because it has control dependencies from statements that will be extracted "
