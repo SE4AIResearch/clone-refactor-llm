@@ -24,6 +24,7 @@
       <nav class="nav" aria-label="Primary">
         <a href="index.html">Home</a>
         <a href="#artifacts">Artifacts</a>
+        <a href="#prompts">Prompts</a>
         <a href="#reproduce">Reproduce</a>
         <a href="#results">Results</a>
         <button id="themeToggle" class="btn btn--ghost" type="button" aria-label="Toggle theme">
@@ -89,12 +90,613 @@ Clone Refactoring”</span>.
       </p>
     </section>
 
-    <section id="reproduce" class="section" aria-labelledby="reproduceTitle">
+    <section id="prompts" class="section" aria-labelledby="promptsTitle">
+      <div class="section__head">
+        <h2 id="promptsTitle">Workflow Prompts</h2>
+      </div>
+
+      <h3>Detection prompts</h3>
+      <p class="muted">
+        The detection stage uses three independent panelists followed by a curator. The panelists receive the same
+        file and pasted snippet independently; the curator reviews their parsed outputs and produces the final clone
+        detection result by majority vote.
+      </p>
+      <p class="muted small">
+        Placeholders such as <span class="mono">&lt;FILE_SOURCE&gt;</span> and <span class="mono">&lt;SELECTED_SNIPPET&gt;</span>
+        are filled at runtime. If the pasted snippet line range cannot be grounded, the implementation asks the model
+        to locate the snippet occurrence in the file itself. Few-shot examples are included for panelists only when
+        retrieval from the clone database succeeds.
+      </p>
+
+      <details class="details" open>
+        <summary>Detection panelist prompt template</summary>
+        <pre class="code"><code>You are &lt;PANELIST_TITLE&gt; (&lt;PANELIST_ID&gt;).
+You are one of three independent clone-detection panelists.
+All panelists review the same file and pasted snippet independently.
+Return ONLY one JSON object and no extra text.
+
+Analyze the following Java source code from a single file named '&lt;FILE_NAME&gt;'.
+Your task is to exhaustively find every non-trivial clone of the user's pasted snippet within this same file only.
+You MUST focus on the pasted snippet and enumerate all other code regions in the file that are clones of it.
+Do NOT report clones that do not involve the pasted snippet.
+Ignore only truly trivial single-line repetitions.
+Do not reject short, method-level, symmetric, or small-substitution clones merely because only a few identifiers, literals, casts, or method names differ.
+Do not stop after finding the first match. Keep searching until you have listed all relevant matches involving the pasted snippet.
+The pasted snippet is located in this file around lines &lt;SNIPPET_START_LINE&gt; to &lt;SNIPPET_END_LINE&gt;.
+
+=== Few-shot examples (from clone database) ===
+&lt;RAG_FEW_SHOT_EXAMPLES&gt;
+=== End few-shot examples ===
+
+File source:
+'''
+&lt;FILE_SOURCE&gt;
+'''
+
+Selected snippet:
+'''
+&lt;SELECTED_SNIPPET&gt;
+'''
+
+IMPORTANT CONSTRAINTS:
+1) Every clone you report MUST involve the pasted snippet occurrence in this file.
+2) Return ALL non-trivial matching occurrences related to the pasted snippet, not just one example match.
+3) In "ranges", include every matching range for that clone class in this file. One range SHOULD overlap the pasted snippet's approximate location (around lines &lt;SNIPPET_START_LINE&gt; to &lt;SNIPPET_END_LINE&gt;), and all other matching ranges elsewhere in the file SHOULD also be included.
+4) If there are multiple distinct clone classes involving the pasted snippet, return multiple objects in "clones".
+5) Focus on structural similarity, even when a few identifiers, literals, casts, method names, or API calls differ.
+6) Return cloneCodes as an array of verbatim code snippets aligned with ranges. cloneCodes[i] must correspond to ranges[i].
+7) Prefer returning the pasted snippet occurrence as cloneCodeA and one representative matching region as cloneCodeB, but still include ALL occurrence snippets in cloneCodes.
+8) cloneCodes entries do not need to be textually identical. Small substitutions still count as a valid clone.
+9) If no reasonably similar code is found, output status "no_clones" with an empty clones list.
+
+IMPORTANT: For each detected clone, include cloneCodes for ALL listed ranges as verbatim copies from the provided fileSource when possible.
+- startLine/endLine are 1-based inclusive line numbers in fileSource, and each range must tightly cover its matching cloneCodes entry.
+- If a cloneCodes entry and its line numbers disagree, prioritize making cloneCodes verbatim from fileSource and make the line numbers match that exact text.
+- Do NOT rewrite, reformat, rename variables, or add missing context when copying cloneCodes from fileSource.
+- A clone may still be valid even when the two regions differ slightly in identifiers, literals, casts, or one method call.
+- A single clone object may have more than two ranges, and if so you should include all of them.
+- If you can identify three or more matching occurrences of the same pasted snippet clone class in this file, all of them must appear in "ranges".
+
+Output ONLY a valid JSON object with the following structure:
+{
+  "status": "found_clones" or "no_clones",
+  "file": "&lt;FILE_NAME&gt;",
+  "clones": [
+    {
+      "id": "unique_clone_id",
+      "ranges": [ { "startLine": int, "endLine": int }, ... all matching ranges for this clone class; 1-based inclusive line numbers that match cloneCodes ... ],
+      "cloneCodes": [ "verbatim occurrence code aligned with ranges[0]", "verbatim occurrence code aligned with ranges[1]", ... ],
+      "refactorType": "extracted_method" or "extracted_class" or other string,
+      "reason": "explanation of why this clone was detected and why all listed ranges belong to the same clone class",
+      "cloneCodeA": "pasted-snippet occurrence copied verbatim from fileSource when possible; may differ slightly from cloneCodeB and still be valid",
+      "cloneCodeB": "matching clone region copied verbatim from fileSource when possible; may differ slightly from cloneCodeA and still be valid"
+    },
+    ...
+  ]
+}
+Do not include any text outside the JSON object.</code></pre>
+      </details>
+
+      <details class="details">
+        <summary>Detection curator prompt template</summary>
+        <pre class="code"><code>You are the detection curator.
+You must review three panelist outputs and produce the final clone detection result.
+Apply a majority vote across the three panelists.
+- If 2 or more panelists provide credible evidence of a clone, return found_clones.
+- If 2 or more panelists report no clones or provide weak/unparsed evidence, return no_clones.
+- If exactly one panelist finds a clone, only return found_clones if that panelist's evidence is exceptionally strong: precise line ranges and clear structural similarity. Otherwise return no_clones.
+Merge duplicate or overlapping clone groups when they clearly refer to the same pasted-snippet clone class.
+Return ONLY one JSON object and no extra text.
+
+Analyze the following Java source code from a single file named '&lt;FILE_NAME&gt;'.
+Your task is to exhaustively find every non-trivial clone of the user's pasted snippet within this same file only.
+You MUST focus on the pasted snippet and enumerate all other code regions in the file that are clones of it.
+Do NOT report clones that do not involve the pasted snippet.
+Ignore only truly trivial single-line repetitions.
+Do not reject short, method-level, symmetric, or small-substitution clones merely because only a few identifiers, literals, casts, or method names differ.
+Do not stop after finding the first match. Keep searching until you have listed all relevant matches involving the pasted snippet.
+The pasted snippet is located in this file around lines &lt;SNIPPET_START_LINE&gt; to &lt;SNIPPET_END_LINE&gt;.
+
+File source:
+'''
+&lt;FILE_SOURCE&gt;
+'''
+
+Selected snippet:
+'''
+&lt;SELECTED_SNIPPET&gt;
+'''
+
+IMPORTANT CONSTRAINTS:
+1) Every clone you report MUST involve the pasted snippet occurrence in this file.
+2) Return ALL non-trivial matching occurrences related to the pasted snippet, not just one example match.
+3) In "ranges", include every matching range for that clone class in this file. One range SHOULD overlap the pasted snippet's approximate location (around lines &lt;SNIPPET_START_LINE&gt; to &lt;SNIPPET_END_LINE&gt;), and all other matching ranges elsewhere in the file SHOULD also be included.
+4) If there are multiple distinct clone classes involving the pasted snippet, return multiple objects in "clones".
+5) Focus on structural similarity, even when a few identifiers, literals, casts, method names, or API calls differ.
+6) Return cloneCodes as an array of verbatim code snippets aligned with ranges. cloneCodes[i] must correspond to ranges[i].
+7) Prefer returning the pasted snippet occurrence as cloneCodeA and one representative matching region as cloneCodeB, but still include ALL occurrence snippets in cloneCodes.
+8) cloneCodes entries do not need to be textually identical. Small substitutions still count as a valid clone.
+9) If no reasonably similar code is found, output status "no_clones" with an empty clones list.
+
+IMPORTANT: For each detected clone, include cloneCodes for ALL listed ranges as verbatim copies from the provided fileSource when possible.
+- startLine/endLine are 1-based inclusive line numbers in fileSource, and each range must tightly cover its matching cloneCodes entry.
+- If a cloneCodes entry and its line numbers disagree, prioritize making cloneCodes verbatim from fileSource and make the line numbers match that exact text.
+- Do NOT rewrite, reformat, rename variables, or add missing context when copying cloneCodes from fileSource.
+- A clone may still be valid even when the two regions differ slightly in identifiers, literals, casts, or one method call.
+- A single clone object may have more than two ranges, and if so you should include all of them.
+- If you can identify three or more matching occurrences of the same pasted snippet clone class in this file, all of them must appear in "ranges".
+
+Output ONLY a valid JSON object with the following structure:
+{
+  "status": "found_clones" or "no_clones",
+  "file": "&lt;FILE_NAME&gt;",
+  "clones": [
+    {
+      "id": "unique_clone_id",
+      "ranges": [ { "startLine": int, "endLine": int }, ... all matching ranges for this clone class; 1-based inclusive line numbers that match cloneCodes ... ],
+      "cloneCodes": [ "verbatim occurrence code aligned with ranges[0]", "verbatim occurrence code aligned with ranges[1]", ... ],
+      "refactorType": "extracted_method" or "extracted_class" or other string,
+      "reason": "explanation of why this clone was detected and why all listed ranges belong to the same clone class",
+      "cloneCodeA": "pasted-snippet occurrence copied verbatim from fileSource when possible; may differ slightly from cloneCodeB and still be valid",
+      "cloneCodeB": "matching clone region copied verbatim from fileSource when possible; may differ slightly from cloneCodeA and still be valid"
+    },
+    ...
+  ]
+}
+Do not include any text outside the JSON object.
+
+=== PANELIST OUTPUTS ===
+[P1]
+{
+  "parsed": &lt;true_or_false&gt;,
+  "error": "&lt;P1_PARSE_ERROR_IF_ANY&gt;",
+  "result": &lt;P1_DETECTION_RESULT_JSON&gt;
+}
+
+[P2]
+{
+  "parsed": &lt;true_or_false&gt;,
+  "error": "&lt;P2_PARSE_ERROR_IF_ANY&gt;",
+  "result": &lt;P2_DETECTION_RESULT_JSON&gt;
+}
+
+[P3]
+{
+  "parsed": &lt;true_or_false&gt;,
+  "error": "&lt;P3_PARSE_ERROR_IF_ANY&gt;",
+  "result": &lt;P3_DETECTION_RESULT_JSON&gt;
+}
+
+Rules:
+- The final JSON must follow the exact schema below.
+- Keep only clone groups that involve the pasted snippet occurrence in this file.
+- Preserve all known matching ranges for a clone group when the evidence is strong enough.
+- Use no_clones with an empty clones list when the panelists do not provide convincing clone evidence.
+
+Output ONLY a valid JSON object with the following structure:
+{
+  "status": "found_clones" or "no_clones",
+  "file": "&lt;FILE_NAME&gt;",
+  "clones": [
+    {
+      "id": "unique_clone_id",
+      "ranges": [ { "startLine": int, "endLine": int }, ... all matching ranges for this clone class; 1-based inclusive line numbers that match cloneCodes ... ],
+      "cloneCodes": [ "verbatim occurrence code aligned with ranges[0]", "verbatim occurrence code aligned with ranges[1]", ... ],
+      "refactorType": "extracted_method" or "extracted_class" or other string,
+      "reason": "explanation of why this clone was detected and why all listed ranges belong to the same clone class",
+      "cloneCodeA": "pasted-snippet occurrence copied verbatim from fileSource when possible; may differ slightly from cloneCodeB and still be valid",
+      "cloneCodeB": "matching clone region copied verbatim from fileSource when possible; may differ slightly from cloneCodeA and still be valid"
+    },
+    ...
+  ]
+}
+Do not include any text outside the JSON object.</code></pre>
+      </details>
+
+      <h3>Refactoring prompts</h3>
+      <p class="muted">
+        The refactoring stage uses three independent Java refactoring panelists. Each panelist receives the same
+        Extract Method prompt and returns a structured refactoring plan. A curator then classifies the panelist
+        candidates using usefulness categories and selects the best candidate for downstream validation.
+      </p>
+      <p class="muted small">
+        Placeholders such as <span class="mono">&lt;FILE_SOURCE&gt;</span>, <span class="mono">&lt;CLONE_ID&gt;</span>,
+        <span class="mono">&lt;TARGET_OCCURRENCES&gt;</span>, and <span class="mono">&lt;RAG_EXAMPLES&gt;</span> are
+        filled at runtime. RAG guidance is included only when retrieved examples are available.
+      </p>
+
+      <details class="details">
+        <summary>Refactoring panelist prompt template</summary>
+        <pre class="code"><code>&lt;PANELIST_TITLE&gt; (&lt;PANELIST_ID&gt;)
+You are one of three independent Java refactoring panelists.
+Produce your own best Extract Method candidate for the provided target clone.
+Do not try to match the other panelists. Return the strongest valid candidate you can.
+
+You are an expert Java refactoring agent.
+You specialize in clone removal via Extract Method and improving software quality (readability, maintainability, cohesion, and low coupling).
+Follow the constraints and output format EXACTLY.
+Do not skip the refactoring task. If the target clone can be extracted with parameters, you must still perform Extract Method.
+If anything is unclear, prefer the most conservative valid Extract Method that targets the provided clone rather than leaving the file unchanged.
+
+=== WORKING SET (Single File Only) ===
+File name: &lt;FILE_NAME&gt;
+You are given the FULL file source below. You may ONLY modify this file.
+```
+&lt;FILE_SOURCE&gt;
+```
+
+=== CONTEXT ===
+- Language: Java
+- Goal: Remove duplicated code (clone) with Extract Method if clones are worth refactoring.
+- Constraints: Preserve public API, preserve package/imports, keep semantics.
+
+=== CLONE CONTEXT ===
+Clone ID: &lt;CLONE_ID&gt;
+Approximate target clone ranges (secondary location hints):
+&lt;CLONE_RANGES&gt;
+
+Representative clone snippet (MANDATORY refactoring target):
+The refactoring must focus on occurrences corresponding to this snippet.
+Use the ranges above only as approximate location hints.
+If the snippet and ranges do not align perfectly, prioritize the snippet.
+Do NOT ignore this snippet and do NOT switch to a different duplicated region.
+```
+&lt;REPRESENTATIVE_CLONE_SNIPPET&gt;
+```
+
+=== FEW-SHOT GUIDANCE (RAG) ===
+Use these examples only as guidance for structure and style. Do NOT copy verbatim.
+&lt;RAG_EXAMPLES_IF_AVAILABLE&gt;
+
+=== REFACTORING TASK ===
+Refactoring Pattern: Extract Method (ONLY)
+Intent: To improve maintainability and reduce duplication while preserving behavior.
+Requirements:
+1) Refactor the provided target clone, not some other duplication in the file.
+2) Extract the duplicated logic into one private helper method.
+3) Replace ALL target clone occurrences with calls to the extracted method.
+4) Prefer a parameterized helper method when the clone occurrences have small local differences.
+5) Choose the smallest safe extraction boundary that still removes the target duplication.
+6) Ensure the result compiles as valid Java.
+7) Do not leave the target clone unrefactored unless Extract Method is truly impossible within this file.
+
+=== STEPS TO FOLLOW (DO NOT OUTPUT THESE STEPS) ===
+Step 1: Use the provided clone snippet as the primary target. Use the clone ranges only as approximate hints to locate the snippet in the file.
+Step 2: Locate only the occurrences that correspond to that target clone.
+Step 3: Create a private helper method with a clear name and parameters if needed.
+Step 4: Replace the target clone occurrences with helper calls.
+Step 5: Re-check for compilation issues (imports, generics, visibility, checked exceptions).
+
+=== STRICT CONSTRAINTS (HARD RULES) ===
+- Modify ONLY this file. Do NOT reference or require changes in other files.
+- Preserve the package line and ALL import statements EXACTLY (do not add/remove/reorder).
+- Do NOT change public/protected method signatures or class public API.
+- Do NOT introduce new classes or new files.
+- The provided clone snippet is the mandatory refactoring target.
+- The clone ranges are approximate hints and must not override the snippet.
+- Do NOT refactor unrelated duplicated code elsewhere in the file.
+- Do NOT leave the target clone unchanged if a valid Extract Method can be applied within this file.
+- If exact matching is difficult, prefer the closest valid extraction centered on the target clone.
+- Do NOT change external behavior; keep outputs and side effects the same.
+- Minimize edits outside the target clone regions.
+- Do NOT add explanatory prose outside code.
+
+=== TARGET OCCURRENCES ===
+You must refactor ALL of the following occurrences.
+&lt;TARGET_OCCURRENCES_WITH_IDS_SNIPPETS_AND_APPROXIMATE_RANGES&gt;
+
+=== OUTPUT FORMAT ===
+- Output ONLY a valid JSON object.
+- Do NOT return the whole file.
+- Do NOT use markdown fences.
+- The JSON must have this exact shape:
+{
+  "helper_method": "full private helper method declaration only",
+  "occurrence_replacements": [
+    {
+      "occurrence_id": "OCCURRENCE_1",
+      "replacement_code": "only the code that should replace that occurrence"
+    }
+  ]
+}
+- `helper_method` must contain only the extracted helper method, not the class or file.
+- Each `replacement_code` must contain only the replacement for that occurrence, not the surrounding method or file.
+- If an occurrence snippet includes a full method for location context, prefer returning only the updated cloned statements or helper call for that method body.
+- Include one replacement entry for every listed occurrence.
+- Do NOT omit `occurrence_replacements`, even if all replacements are similar.
+- Do NOT include explanation text before or after the JSON.</code></pre>
+      </details>
+
+      <details class="details">
+        <summary>Refactoring curator prompt template</summary>
+        <pre class="code"><code>You are the refactoring curator.
+You must review three candidate Extract Method refactorings.
+Choose the single best panelist candidate for downstream usefulness validation.
+If no candidate is fully acceptable, still select the least-bad panelist candidate and explain the residual risks in feedback.
+A useful panelist candidate must clearly achieve EXTRACT_METHOD_CONFIRMED and must not trigger any not-useful category.
+
+=== USEFUL CATEGORY DEFINITION ===
+- EXTRACT_METHOD_CONFIRMED: The candidate clearly extracts one helper and replaces all target clone occurrences with calls to it.
+
+=== NOT-USEFUL CATEGORY DEFINITIONS ===
+- EXTRACT_METHOD_NOT_FOUND: No valid Extract Method is visible for the target clone.
+- INCOMPLETE_REFACTORING_DETECTED: Some duplicated logic still remains in the original target methods after refactoring.
+- EXTRACTION_WITHOUT_CLONE_REPLACEMENT_DETECTED: A helper was introduced, but the original duplicate body still remains instead of being replaced.
+- DIRECT_CLONE_REMOVAL_DETECTED: A clone occurrence was deleted directly instead of extracting shared logic.
+- POST_EXTRACTION_CLONE_DELETION_DETECTED: A helper was added, but one target clone was deleted afterward.
+- CALL_BASED_CLONE_SUBSTITUTION_DETECTED: One target clone now calls another existing method instead of using a new shared helper.
+- CLONE_REMOVAL_BY_DELEGATION_DETECTED: The candidate relies on delegation without clearly extracting one shared helper for all target clones.
+- FRAGMENTATION_OF_LOGIC_DETECTED: Shared logic is split across multiple helpers instead of one coherent extraction.
+- NON_TARGET_CLONE_REFACTORING_DETECTED: The candidate seems to refactor some other duplication while the intended target remains unresolved.
+- EXCESSIVE_REFACTORING_DETECTED: The candidate pulls in code beyond the intended cloned fragment.
+
+=== TARGET FILE ===
+File name: &lt;FILE_NAME&gt;
+Full file source (for context only):
+```
+&lt;TRUNCATED_FILE_SOURCE_FOR_CONTEXT&gt;
+```
+
+=== TARGET CLONE ===
+Clone ID: &lt;CLONE_ID&gt;
+Requested refactor type: &lt;REFACTOR_TYPE&gt;
+Detection rationale: &lt;DETECTION_RATIONALE&gt;
+&lt;TARGET_OCCURRENCES_WITH_IDS_AND_SNIPPETS&gt;
+
+=== PANELIST CANDIDATES ===
+[P1]
+{
+  "panelist_id": "P1",
+  "parsed": &lt;true_or_false&gt;,
+  "status": "&lt;P1_STATUS&gt;",
+  "message": "&lt;P1_MESSAGE&gt;",
+  "error": "&lt;P1_ERROR_IF_ANY&gt;",
+  "helper_method": "&lt;P1_HELPER_METHOD&gt;",
+  "occurrence_replacements": &lt;P1_OCCURRENCE_REPLACEMENTS&gt;,
+  "candidate_source_preview": "&lt;P1_CANDIDATE_SOURCE_PREVIEW&gt;",
+  "raw_response_preview": "&lt;P1_RAW_RESPONSE_PREVIEW&gt;"
+}
+
+[P2]
+{
+  "panelist_id": "P2",
+  "parsed": &lt;true_or_false&gt;,
+  "status": "&lt;P2_STATUS&gt;",
+  "message": "&lt;P2_MESSAGE&gt;",
+  "error": "&lt;P2_ERROR_IF_ANY&gt;",
+  "helper_method": "&lt;P2_HELPER_METHOD&gt;",
+  "occurrence_replacements": &lt;P2_OCCURRENCE_REPLACEMENTS&gt;,
+  "candidate_source_preview": "&lt;P2_CANDIDATE_SOURCE_PREVIEW&gt;",
+  "raw_response_preview": "&lt;P2_RAW_RESPONSE_PREVIEW&gt;"
+}
+
+[P3]
+{
+  "panelist_id": "P3",
+  "parsed": &lt;true_or_false&gt;,
+  "status": "&lt;P3_STATUS&gt;",
+  "message": "&lt;P3_MESSAGE&gt;",
+  "error": "&lt;P3_ERROR_IF_ANY&gt;",
+  "helper_method": "&lt;P3_HELPER_METHOD&gt;",
+  "occurrence_replacements": &lt;P3_OCCURRENCE_REPLACEMENTS&gt;,
+  "candidate_source_preview": "&lt;P3_CANDIDATE_SOURCE_PREVIEW&gt;",
+  "raw_response_preview": "&lt;P3_RAW_RESPONSE_PREVIEW&gt;"
+}
+
+=== SELECTION RULES ===
+1) First classify every panelist candidate using the useful and not-useful definitions above.
+2) A panelist candidate is useful only if it clearly triggers EXTRACT_METHOD_CONFIRMED and triggers none of the not-useful categories.
+3) Reject panelist candidates that likely trigger any not-useful category: EXTRACT_METHOD_NOT_FOUND, INCOMPLETE_REFACTORING_DETECTED, EXTRACTION_WITHOUT_CLONE_REPLACEMENT_DETECTED, DIRECT_CLONE_REMOVAL_DETECTED, POST_EXTRACTION_CLONE_DELETION_DETECTED, CALL_BASED_CLONE_SUBSTITUTION_DETECTED, CLONE_REMOVAL_BY_DELEGATION_DETECTED, FRAGMENTATION_OF_LOGIC_DETECTED, NON_TARGET_CLONE_REFACTORING_DETECTED, EXCESSIVE_REFACTORING_DETECTED.
+4) If one or more panelist candidates are useful, choose the best useful candidate. Prefer the most conservative change with the smallest safe extraction boundary.
+5) If no panelist candidate is useful, still choose the least-bad valid panelist candidate; do not generate your own refactoring plan.
+6) If a panelist candidate failed to parse or apply, treat it as not useful.
+
+=== OUTPUT FORMAT ===
+Return ONLY a JSON object with this exact shape.
+{
+  "decision": "select_panelist",
+  "selected_panelist_id": "P1",
+  "matched_categories": ["EXTRACT_METHOD_CONFIRMED"],
+  "summary": "short explanation of why this candidate is best or least-bad",
+  "feedback": "optional short guidance about the remaining risk of the selected candidate",
+  "confidence": 0.85
+}</code></pre>
+      </details>
+
+      <h3>Usefulness prompts</h3>
+      <p class="muted">
+        The LLM usefulness stage uses three independent panelists followed by a curator. Each panelist checks the same
+        category catalog independently against focused before/after code. The curator reviews the three outputs and
+        makes the final useful/not-useful decision by majority vote.
+      </p>
+
+      <details class="details">
+        <summary>Usefulness panelist prompt template</summary>
+        <pre class="code"><code>You are &lt;PANELIST_TITLE&gt; (&lt;PANELIST_ID&gt;).
+Your task is to evaluate whether a proposed Java refactoring is useful.
+You are responsible for the full category catalog listed below.
+All panelists review the same categories independently.
+If none of your assigned categories clearly apply, you must return is_useful=true.
+Return ONLY one JSON object and no extra text.
+
+=== ASSIGNED CATEGORIES ===
+- EXTRACT_METHOD_NOT_FOUND: No valid Extract Method outcome is visible in the refactored code for the target clone.
+- INCOMPLETE_REFACTORING_DETECTED: Some duplicated logic still remains in the original target methods after refactoring.
+- EXTRACTION_WITHOUT_CLONE_REPLACEMENT_DETECTED: A helper was added, but the original duplicated body still remains instead of being replaced.
+- DIRECT_CLONE_REMOVAL_DETECTED: A clone occurrence was removed directly instead of extracting shared logic.
+- POST_EXTRACTION_CLONE_DELETION_DETECTED: A helper was introduced, but one target clone method was deleted afterward.
+- CALL_BASED_CLONE_SUBSTITUTION_DETECTED: One target clone now calls another existing method instead of using a new shared helper.
+- CLONE_REMOVAL_BY_DELEGATION_DETECTED: The change relies on delegation without clearly extracting one shared helper for all target clones.
+- FRAGMENTATION_OF_LOGIC_DETECTED: Shared logic was split across multiple helpers instead of one coherent extraction.
+- NON_TARGET_CLONE_REFACTORING_DETECTED: The refactoring seems to target a different duplication while the intended target remains unresolved.
+- EXCESSIVE_REFACTORING_DETECTED: The extracted helper pulls in code beyond the intended cloned fragment.
+
+=== TARGET CONTEXT ===
+File: &lt;FILE_NAME&gt;
+Clone kind: &lt;WHOLE_METHOD_OR_FRAGMENT&gt;
+&lt;CLONE_CONTEXT&gt;
+
+=== BEFORE (FOCUSED CONTEXT) ===
+```java
+&lt;FOCUSED_BEFORE_CODE&gt;
+```
+
+=== AFTER (FOCUSED CONTEXT) ===
+```java
+&lt;FOCUSED_AFTER_CODE&gt;
+```
+
+=== OUTPUT JSON ===
+{
+  "panelist_id": "&lt;PANELIST_ID&gt;",
+  "is_useful": true,
+  "matched_categories": [],
+  "summary": "short decision summary",
+  "feedback": "specific revision instruction for the refactoring agent if not useful; otherwise empty string"
+}
+Rules:
+- Use ONLY the assigned categories in matched_categories.
+- If you are not confident any assigned category applies, set is_useful=true and matched_categories=[].
+- feedback should be actionable and concise.</code></pre>
+      </details>
+
+      <details class="details">
+        <summary>Usefulness curator prompt template</summary>
+        <pre class="code"><code>You are the usefulness curator.
+You must review three panelist outputs and make the final useful/not-useful decision.
+Apply a majority vote across the three panelists.
+- If 2 or more panelists set is_useful=false with at least one matched category, set is_useful=false.
+- If 2 or more panelists set is_useful=true, set is_useful=true.
+- If there is no majority, use your own judgment based on the strength of the evidence. Prefer is_useful=true unless the flagged category is a critical structural issue such as INCOMPLETE_REFACTORING_DETECTED or EXTRACT_METHOD_NOT_FOUND.
+Return ONLY one JSON object and no extra text.
+
+=== TARGET CONTEXT ===
+File: &lt;FILE_NAME&gt;
+Clone kind: &lt;WHOLE_METHOD_OR_FRAGMENT&gt;
+&lt;CLONE_CONTEXT&gt;
+
+=== BEFORE (FOCUSED CONTEXT) ===
+```java
+&lt;FOCUSED_BEFORE_CODE&gt;
+```
+
+=== AFTER (FOCUSED CONTEXT) ===
+```java
+&lt;FOCUSED_AFTER_CODE&gt;
+```
+
+=== PANELIST OUTPUTS ===
+[P1]
+{
+  "parsed": &lt;true_or_false&gt;,
+  "is_useful": &lt;true_or_false&gt;,
+  "matched_categories": &lt;P1_MATCHED_CATEGORIES&gt;,
+  "summary": "&lt;P1_SUMMARY&gt;",
+  "feedback": "&lt;P1_FEEDBACK&gt;",
+  "error": "&lt;P1_ERROR_IF_ANY&gt;"
+}
+
+[P2]
+{
+  "parsed": &lt;true_or_false&gt;,
+  "is_useful": &lt;true_or_false&gt;,
+  "matched_categories": &lt;P2_MATCHED_CATEGORIES&gt;,
+  "summary": "&lt;P2_SUMMARY&gt;",
+  "feedback": "&lt;P2_FEEDBACK&gt;",
+  "error": "&lt;P2_ERROR_IF_ANY&gt;"
+}
+
+[P3]
+{
+  "parsed": &lt;true_or_false&gt;,
+  "is_useful": &lt;true_or_false&gt;,
+  "matched_categories": &lt;P3_MATCHED_CATEGORIES&gt;,
+  "summary": "&lt;P3_SUMMARY&gt;",
+  "feedback": "&lt;P3_FEEDBACK&gt;",
+  "error": "&lt;P3_ERROR_IF_ANY&gt;"
+}
+
+=== OUTPUT JSON ===
+{
+  "is_useful": false,
+  "reasons": ["CATEGORY_NAME"],
+  "summary": "short final summary",
+  "feedback": "merged revision guidance for the refactoring agent if not useful; otherwise empty string",
+  "confidence": 0.84
+}
+Rules:
+- reasons must use only category names found by panelists.
+- Keep summary short and concrete.
+- feedback should directly tell the refactoring agent how to revise the code.</code></pre>
+      </details>
+
+      <details class="details">
+        <summary>Refactoring feedback revision prompt template</summary>
+        <pre class="code"><code>You are revising a previous Java Extract Method refactoring attempt.
+The previous attempt was rejected by the usefulness checker.
+Use the feedback below as the PRIMARY instruction for the retry.
+Do not explain your reasoning. Do not describe the issue. Output ONLY the required JSON object.
+
+=== FEEDBACK ===
+&lt;USEFULNESS_CHECKER_FEEDBACK&gt;
+
+=== WORKING SET (Single File Only) ===
+File name: &lt;FILE_NAME&gt;
+You may ONLY modify this file.
+```
+&lt;FILE_SOURCE&gt;
+```
+
+=== CLONE CONTEXT ===
+Clone ID: &lt;CLONE_ID&gt;
+Approximate target clone ranges:
+&lt;CLONE_RANGES&gt;
+
+Representative clone snippet:
+```
+&lt;REPRESENTATIVE_CLONE_SNIPPET&gt;
+```
+
+=== TARGET OCCURRENCES ===
+You must refactor ALL of these occurrences.
+&lt;TARGET_OCCURRENCES_WITH_IDS_SNIPPETS_AND_APPROXIMATE_RANGES&gt;
+
+=== STRICT REQUIREMENTS ===
+- Apply Extract Method only.
+- Follow the usefulness feedback above exactly.
+- Modify only this file.
+- Preserve package/imports and public API.
+- Replace all target occurrences with helper calls.
+- Do not return prose, analysis, markdown fences, or partial method sketches.
+
+=== OUTPUT FORMAT ===
+- Output ONLY a valid JSON object.
+- Do NOT return the whole file.
+- Do NOT use markdown fences.
+- The JSON must have this exact shape:
+{
+  "helper_method": "full private helper method declaration only",
+  "occurrence_replacements": [
+    {
+      "occurrence_id": "OCCURRENCE_1",
+      "replacement_code": "only the code that should replace that occurrence"
+    }
+  ]
+}
+- `helper_method` must contain only the extracted helper method, not the class or file.
+- Each `replacement_code` must contain only the replacement for that occurrence.
+- If an occurrence snippet includes a full method for location context, prefer returning only the updated cloned statements or helper call for that method body.
+- Include one replacement entry for every listed occurrence.
+- Do NOT include explanation text before or after the JSON.</code></pre>
+      </details>
+    </section>
+
+    <section id="reproduce" class="section" aria-labelledby="compileArgoumlTitle">
       <div class="section__head">
         <h2 id="compileArgoumlTitle">How to compile ArgoUML</h2>
       </div>
-      <div class="subsection" aria-labelledby="compileArgoumlTitle">
-        <h3 id="compileArgoumlTitle">How to compile ArgoUML (IntelliJ IDEA)</h3>
+      <div class="subsection" aria-labelledby="compileArgoumlIdeaTitle">
+        <h3 id="compileArgoumlIdeaTitle">How to compile ArgoUML (IntelliJ IDEA)</h3>
         <ol class="steps">
           <li class="step">
             <div class="step__title">Download and open ArgoUML</div>
