@@ -1,0 +1,688 @@
+<html><head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="LLM-Based Name Recommendation: An Exploratory Study">
+	<link href="https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz|Droid+Sans" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" type="text/css" media="all" href="paper-4-assets/css/inland.css">
+	<link rel="stylesheet" type="text/css" href="paper-4-assets/css/main.css">
+	<link rel="stylesheet" type="text/css" href="paper-4-assets/css/paper.css">
+  <script type="text/javascript" src="paper-4-assets/js/external.js"></script>
+	<script type="text/javascript" src="paper-4-assets/js/jquery-1.7.1.min.js"></script>
+	<script type="text/javascript" src="paper-4-assets/js/jquery.scrollTo.js"></script>
+	<script type="text/javascript" src="paper-4-assets/js/template.js"></script>
+	<script type="text/javascript" src="paper-4-assets/js/backontop.js"></script>
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+
+
+	<title>LLM-Based Name Recommendation: An Exploratory Study</title>
+</head>
+
+<body>
+<div id="wrapper960" class="clearfix">
+	<div id="header" class="clearfix">
+		<div id="sitetitle" class="clearfix">
+			<h1>
+    LLM-Based Name Recommendation: An Exploratory Study
+</h1>
+		</div>
+		
+
+		<nav2 id="stickynav">
+		<div class="verticalMenu">
+			<ul id="nav2">
+				<li><a href="#abstract" class="backontop">Abstract</a></li>
+				<li><a href="#experimentaldata" class="backontop">Experiment data</a></li>
+				<li><a href="#testresults" class="backontop">Testing results</a></li>
+				<li><a href="#namesgenerated" class="backontop">10 Names Generated</a></li>
+				<li><a href="#tableandlisting" class="backontop">Tables and listings</a></li>
+			</ul>
+		</div>
+		</nav2>
+	</div>
+
+
+    <div id="content" class="clearfix shadow">
+		<div id="main" class="left">
+			<h2 id="abstract">Abstract</h2>
+			<p>
+				Choosing meaningful method names is essential for code readability
+and maintainability. When developers write or refactor code, select-
+ing appropriate names that clearly convey the method’s purpose
+can be challenging and time-consuming. Recently, improvements
+in Artificial Intelligence (AI), especially Large Language Models
+(LLMs), have created new opportunities to assist developers with
+method naming. Building on these improvements, our experiments
+tested LLMs’ ability to suggest good method names on the JHot-
+Draw project using seven LLMs: Gemini 2.5 Pro, GPT-3.5, GPT-4o,
+GPT-5, DeepSeek-R1, Claude 3.7 Sonnet, and Claude Opus 4.1. We
+tested two ways: (1) comparing single method names, and (2) ask-
+ing each model to suggest 10 names for each method. The results
+show that different models perform differently at naming tasks.
+GPT-4o got the highest similarity scores with original methods in
+9 out of 20 cases for single names. GPT-5 also did well, getting the
+highest similarity scores in 6 cases when comparing all 10 names.
+DeepSeek-R1 got the highest similarity scores in 2 cases. Claude
+Opus 4.1 was especially good at naming UI and layout methods,
+with the highest scores in 6 cases. Gemini 2.5 Pro had mixed re-
+sults with highest scores in 2 cases. Claude 3.7 Sonnet created good
+names but never got the highest score. GPT-3.5 had the most prob-
+lems, often creating placeholder names with "temp" in them. All
+models followed Java’s camelCase naming style. No models used
+PascalCase, snake_case, or kebab-case. GPT-4o, GPT-5, and Claude
+Opus 4.1 were the best at creating names that make sense and follow
+naming rules. Overall, advanced LLMs gives developers a choice to
+use them for suggesting names.
+			</p>
+
+			<!--div class="bibtex">
+				<pre></pre>
+			</div-->
+			
+			<h2 id="experimentaldata">Experiment data</h2>
+			<p>
+				The JHotDraw project is used for the experiments in this paper. The project with mimic code clones is available for <a href="paper-4-assets/JHotDraw-v2 (1).zip_expanded.zip">download</a>
+				<br>
+				We mimic 20 clones in JHotDraw project, which can be found in the following table.
+			</p>
+				<table id="clonetbl" style="width: 500px; margin: auto">
+					<colgroup>
+						<col id="cloneid" class="cloneid">
+						<col id="clonetype" class="clonetype">
+						<col id="clonefile" class="clonefile">
+					</colgroup>
+					<thead>
+						<tr>
+							<th>Class</th>
+							<th>Method</th>
+							<th>Clone Type</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr><td>DrawApplet</td><td>createAttributeChoices</td><td>Type 1(a)</td></tr>
+						<tr><td>FigureAttributeConstant</td><td>addConstant</td><td>Type 1(a)</td></tr>
+						<tr><td>DrawApplet</td><td>init</td><td>Type 1(a)</td></tr>
+						<tr><td>NothingApplet</td><td>createTools</td><td>Type 1(a)</td></tr>
+						<tr><td>CompositeFigureCreationTool</td><td>mouseDown</td><td>Type 1(b)</td></tr>
+						<tr><td>ChopDiamondConnector</td><td>chop</td><td>Type 1(b)</td></tr>
+						<tr><td>MiniMapDesktop</td><td>createLeftComponent</td><td>Type 1(b)</td></tr>
+						<tr><td>Animator</td><td>run</td><td>Type 1(b)</td></tr>
+						<tr><td>CTXWindowMenu</td><td>buildChildMenus</td><td>Type 1(c)</td></tr>
+						<tr><td>ColorMap</td><td>colorIndex</td><td>Type 1(c)</td></tr>
+						<tr><td>BouncingDrawing</td><td>animationStep</td><td>Type 1(c)</td></tr>
+						<tr><td>PertDependency</td><td>handleConnect</td><td>Type 1(c)</td></tr>
+						<tr><td>AutoscrollHelper</td><td>getAutoscrollInsets</td><td>Type 2(a)</td></tr>
+						<tr><td>Geom</td><td>direction</td><td>Type 2(a)</td></tr>
+						<tr><td>JHDDropTargetListener</td><td>dragOver</td><td>Type 2(a)</td></tr>
+						<tr><td>StandardLayouter</td><td>layout</td><td>Type 2(a)</td></tr>
+						<tr><td>LineConnection</td><td>basicMoveBy</td><td>Type 2(b)</td></tr>
+						<tr><td>TriangleFigure</td><td>rotate</td><td>Type 2(b)</td></tr>
+						<tr><td>SplitPaneDesktop</td><td>removeFromDesktop</td><td>Type 2(b)</td></tr>
+						<tr><td>Helper</td><td>getDrawingView</td><td>Type 2(b)</td></tr>
+					</tbody>
+				</table>
+			
+			
+	
+		
+			<h2 id="testresults">Testing Results</h2>
+			<p>
+				The results of clone detection and refactoring, name suggestions can be found in the following table.
+			</p>
+			<table id="resultstbl" style="width: 500px; margin: auto">
+				<colgroup>
+					<col id="tool" class="tool">
+					<col id="download">
+				</colgroup>
+				<caption>Testing results for JHotDraw</caption>
+					<tbody><tr>
+						<th width="50%">Models</th>
+						<th>Single name scenario</th>
+						<th>All 10 names suggestions</th>
+					</tr>
+				</tbody>
+				<tbody>
+					<tr>
+						<td><b>Gemini 2.5 pro</b></td>
+						<td><a href="paper-4-assets/detect_refactor_results/Gemini-2.5-pro_results.xlsx">Download</a></td>
+						<td><a href="paper-4-assets/names_generated/Gemini_results.xlsx">Download</a></td>
+					</tr>
+					<tr>
+						<td><b>GPT-3.5</b></td>
+						<td><a href="paper-4-assets/detect_refactor_results/GPT-3.5_results.xlsx">Download</a></td>
+						<td><a href="paper-4-assets/names_generated/gpt_35_results.xlsx">Download</a></td>
+					</tr>
+					<tr>
+						<td><b>GPT-4o</b></td>
+						<td><a href="paper-4-assets/detect_refactor_results/GPT-4o_results.xlsx">Download</a></td>
+						<td><a href="paper-4-assets/names_generated/gpt-4o_results.xlsx">Download</a></td>
+					</tr>
+					<tr>
+						<td><b>GPT-5</b></td>
+						<td><a href="paper-4-assets/detect_refactor_results/GPT-5_results.xlsx">Download</a></td>
+						<td><a href="paper-4-assets/names_generated/gpt_5_results.xlsx">Download</a></td>
+					</tr>
+					<tr>
+						<td><b>DeepSeek-R1</b></td>
+						<td><a href="paper-4-assets/detect_refactor_results/DeepSeek-R1_results.xlsx">Download</a></td>
+						<td><a href="paper-4-assets/names_generated/Deepseek-r1_results.xlsx">Download</a></td>
+					</tr>
+					<tr>
+						<td><b>Claude 3.7 Sonnet</b></td>
+						<td><a href="paper-4-assets/detect_refactor_results/Claude_results.xlsx">Download</a></td>
+						<td><a href="paper-4-assets/names_generated/claude_results.xlsx">Download</a></td>
+					</tr>
+					<tr>
+						<td><b>Claude Opus 4.1</b></td>
+						<td><a href="paper-4-assets/detect_refactor_results/claude_opus_results.xlsx">Download</a></td>
+						<td><a href="paper-4-assets/names_generated/claude_opus_results.xlsx">Download</a></td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h2 id="namesgenerated">10 Names Generated</h2>
+			<p>
+				The table below summarizes Part 1 of the 10-name generation results across all seven models. The downloadable spreadsheets in the testing results section above contain the full raw outputs.
+			</p>
+			<div class="table-scroll">
+				<table id="namesoverview">
+					<caption>Overview of all 10 names suggested (Part 1)</caption>
+					<thead>
+						<tr>
+							<th rowspan="2">Class</th>
+							<th rowspan="2">Function</th>
+							<th rowspan="2">Model</th>
+							<th>name_1</th>
+							<th>score_1</th>
+							<th>name_2</th>
+							<th>score_2</th>
+							<th>name_3</th>
+							<th>score_3</th>
+							<th>name_4</th>
+							<th>score_4</th>
+							<th>name_5</th>
+							<th>score_5</th>
+						</tr>
+						<tr>
+							<th>name_6</th>
+							<th>score_6</th>
+							<th>name_7</th>
+							<th>score_7</th>
+							<th>name_8</th>
+							<th>score_8</th>
+							<th>name_9</th>
+							<th>score_9</th>
+							<th>name_10</th>
+							<th>score_10</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="group-start"><td>DrawApplet</td><td>createAttributeChoices</td><td>Gemini 2.5 Pro</td><td>initializeAttributeControls</td><td>0.5624</td><td>setupAttributePanel</td><td>0.5169</td><td>populateAttributeSelectors</td><td>0.615</td><td>createAttributeChoosers</td><td>0.8995</td><td>buildStyleEditorPanel</td><td>0.199</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>addFormatOptionsToPanel</td><td>0.1834</td><td>configurePropertyInputs</td><td>0.1039</td><td>loadDrawingAttributeControls</td><td>0.3596</td><td>assembleFigureToolPanel</td><td>0.2083</td><td>initPanelWithFigureAttributes</td><td>0.0842</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-3.5</td><td>addFillLabelAndColorChoice</td><td>0.1889</td><td>addTextLabelAndColorChoice</td><td>0.1928</td><td>addPenLabelAndColorChoice</td><td>0.2243</td><td>addArrowLabelAndChoice</td><td>0.2027</td><td>addFontLabelAndChoice</td><td>0.1712</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-4o</td><td>initializeComponentPanel</td><td>0.1735</td><td>setupAttributeComponents</td><td>0.6867</td><td>configurePanelAttributes</td><td>0.2453</td><td>addAttributeComponentsToPanel</td><td>0.6574</td><td>populatePanelWithAttributes</td><td>0.3723</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>setupPanelComponents</td><td>0.1713</td><td>initializeAttributeChoices</td><td>0.7745</td><td>configureComponentChoices</td><td>0.2137</td><td>addComponentsToPanel</td><td>0.2362</td><td>setupPanelWithAttributes</td><td>0.3414</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-5</td><td>populateAttributePanel</td><td>0.505</td><td>buildAttributePanel</td><td>0.5944</td><td>setupAttributePanel</td><td>0.5169</td><td>createAttributeControls</td><td>0.7021</td><td>buildStyleControls</td><td>0.1941</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>populateStyleControls</td><td>0.1222</td><td>createAppearanceControls</td><td>0.2546</td><td>buildAppearancePanel</td><td>0.1747</td><td>populateAppearancePanel</td><td>0.1277</td><td>configureAttributeControls</td><td>0.1995</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>DeepSeek-R1</td><td>setupAttributeComponents</td><td>0.6867</td><td>createAttributeControls</td><td>0.7021</td><td>addAllAttributeComponents</td><td>0.4684</td><td>assembleAttributePanel</td><td>0.5238</td><td>initFigureAttributes</td><td>0.1743</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>buildAttributeComponents</td><td>0.7307</td><td>configureAttributeUI</td><td>0.1809</td><td>addFigurePropertyControls</td><td>0.1896</td><td>createAttributeInputs</td><td>0.7004</td><td>setupPropertySelectionUI</td><td>0.1925</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude 3.7 Sonnet</td><td>setupFigureAttributes</td><td>0.1754</td><td>initializeDrawingControls</td><td>0.1539</td><td>populateAttributePanel</td><td>0.5050</td><td>configureFigureOptions</td><td>0.1493</td><td>setupDrawingComponents</td><td>0.2133</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>initializeStyleControls</td><td>0.1645</td><td>createAttributeComponents</td><td>0.8531</td><td>setupFigureStyleOptions</td><td>0.1615</td><td>buildAttributePanel</td><td>0.5944</td><td>initializeFigureControls</td><td>0.1105</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude Opus 4.1</td><td>addAttributeControls</td><td>0.5912</td><td>setupAttributePanel</td><td>0.5169</td><td>createAttributeControls</td><td>0.7021</td><td>initializeAttributeControls</td><td>0.5624</td><td>addFigureAttributes</td><td>0.2247</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>setupFigureControls</td><td>0.0773</td><td>buildAttributePanel</td><td>0.5944</td><td>addDrawingControls</td><td>0.0966</td><td>configureFigurePanel</td><td>0.0876</td><td>setupDrawingAttributes</td><td>0.4721</td></tr>
+
+						<tr class="group-start"><td>FigureAttributeConstant</td><td>addConstant</td><td>Gemini 2.5 Pro</td><td>addAttributeConstantById</td><td>0.3788</td><td>registerAttributeConstant</td><td>0.1764</td><td>storeUniqueAttributeConstant</td><td>0.155</td><td>assignAttributeConstantToSlot</td><td>0.3022</td><td>insertAttributeConstantExpanding</td><td>0.2924</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>addValidatedAttributeConstant</td><td>0.3145</td><td>mapAttributeConstantById</td><td>0.1875</td><td>ensureAndStoreAttributeConstant</td><td>0.1861</td><td>safelyPlaceAttributeConstant</td><td>0.175</td><td>bindAttributeConstantToId</td><td>0.3131</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-3.5</td><td>addUniqueAttribute</td><td>0.3045</td><td>setUniqueAttribute</td><td>0.1499</td><td>checkAndAddAttribute</td><td>0.2886</td><td>updateAttributeList</td><td>0.2185</td><td>handleNewAttribute</td><td>0.3462</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>insertUniqueAttribute</td><td>0.2298</td><td>validateAndAddAttribute</td><td>0.193</td><td>processNewAttribute</td><td>0.2529</td><td>ensureUniqueAttribute</td><td>0.1465</td><td>modifyAttributeArray</td><td>0.1243</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-4o</td><td>addUniqueAttribute</td><td>0.3045</td><td>ensureUniqueAttributeID</td><td>0.1207</td><td>insertAttributeWithUniqueID</td><td>0.1957</td><td>validateAndAddAttribute</td><td>0.193</td><td>addAttributeIfUnique</td><td>0.2947</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>checkAndInsertAttribute</td><td>0.2334</td><td>addAttributeEnsuringUniqueness</td><td>0.2446</td><td>insertUniqueAttribute</td><td>0.2298</td><td>validateAttributeUniqueness</td><td>0.0474</td><td>addAttributeWithIDCheck</td><td>0.2825</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-5</td><td>registerAttributeById</td><td>0.0788</td><td>addAttributeById</td><td>0.2502</td><td>insertAttributeById</td><td>0.1747</td><td>addUniqueAttribute</td><td>0.3045</td><td>putAttributeById</td><td>0.1315</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>registerAttributeConstant</td><td>0.1764</td><td>addFigureAttribute</td><td>0.3694</td><td>setAttributeById</td><td>0.1189</td><td>assignAttributeById</td><td>0.1168</td><td>storeAttributeById</td><td>0.0495</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>DeepSeek-R1</td><td>registerFigureAttribute</td><td>0.1518</td><td>validateAndAddAttribute</td><td>0.1930</td><td>addAttributeConstant</td><td>0.4409</td><td>registerAttributeConstant</td><td>0.1764</td><td>insertFigureAttribute</td><td>0.2621</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>validateAndRegisterAttribute</td><td>0.1435</td><td>addUniqueAttributeConstant</td><td>0.3932</td><td>registerUniqueAttribute</td><td>0.1224</td><td>ensureAndAddAttribute</td><td>0.3370</td><td>addFigureAttributeWithValidation</td><td>0.3187</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude 3.7 Sonnet</td><td>registerAttributeConstant</td><td>0.1764</td><td>addUniqueAttribute</td><td>0.3045</td><td>ensureUniqueAttributeID</td><td>0.1207</td><td>registerAttribute</td><td>0.1186</td><td>addAttributeConstant</td><td>0.4409</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>storeUniqueAttribute</td><td>0.0882</td><td>insertAttributeConstant</td><td>0.3086</td><td>validateAndAddAttribute</td><td>0.1930</td><td>registerUniqueConstant</td><td>0.4375</td><td>addAttributeWithUniqueID</td><td>0.2309</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude Opus 4.1</td><td>registerAttributeConstant</td><td>0.1764</td><td>addAttributeConstant</td><td>0.4409</td><td>storeAttributeConstant</td><td>0.1457</td><td>insertAttributeConstant</td><td>0.3086</td><td>registerAttribute</td><td>0.1186</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>addUniqueAttribute</td><td>0.3045</td><td>putAttributeConstant</td><td>0.3373</td><td>setAttributeConstant</td><td>0.2681</td><td>installAttributeConstant</td><td>0.18</td><td>placeAttributeConstant</td><td>0.3096</td></tr>
+
+						<tr class="group-start"><td>DrawApplet</td><td>init</td><td>Gemini 2.5 Pro</td><td>initializeEditor</td><td>0.3652</td><td>setupUserInterface</td><td>0.2251</td><td>initComponents</td><td>0.6009</td><td>buildMainView</td><td>0.1282</td><td>configureApplicationLayout</td><td>0.1985</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>initializeWorkspace</td><td>0.2125</td><td>createAndLayoutPanels</td><td>0.0649</td><td>initDrawingEnvironment</td><td>0.491</td><td>setupMainWindowContent</td><td>0.092</td><td>assembleUIAndServices</td><td>0.2428</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-3.5</td><td>createIconkit</td><td>0.2156</td><td>assertVersionControl</td><td>0.0374</td><td>setUndoManager</td><td>0.2691</td><td>setLayout</td><td>0.1787</td><td>createDrawingView</td><td>0.0863</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>createAttributesPanel</td><td>0.0047</td><td>createToolPalette</td><td>0.1708</td><td>createButtonPanel</td><td>0.0831</td><td>initDrawing</td><td>0.6804</td><td>setupAttributes</td><td>0.2049</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-4o</td><td>initializeUIComponents</td><td>0.2344</td><td>setupDrawingEnvironment</td><td>0.2417</td><td>configureMainInterface</td><td>0.3103</td><td>initializeDrawingPanel</td><td>0.2295</td><td>setupUserInterface</td><td>0.2251</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>configureDrawingUI</td><td>0.292</td><td>initializeInterfaceComponents</td><td>0.2056</td><td>setupMainPanel</td><td>0.1958</td><td>configureUIElements</td><td>0.2804</td><td>initializeDrawingInterface</td><td>0.2472</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-5</td><td>initializeDrawingEditor</td><td>0.3193</td><td>buildEditorUI</td><td>0.2561</td><td>setupEditorUI</td><td>0.3238</td><td>configureEditorUI</td><td>0.3246</td><td>initializeUIComponents</td><td>0.2344</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>initApplicationUI</td><td>0.4848</td><td>setupWorkspaceUI</td><td>0.162</td><td>buildMainInterface</td><td>0.1794</td><td>initializeEditorComponents</td><td>0.2151</td><td>setupMainLayout</td><td>0.2162</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>DeepSeek-R1</td><td>initializeUIComponents</td><td>0.2344</td><td>setupMainWindow</td><td>0.1547</td><td>configureLayoutAndComponents</td><td>0.2708</td><td>initializeApplicationFrame</td><td>0.2991</td><td>createAndArrangeComponents</td><td>0.0570</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>setupDrawingEnvironment</td><td>0.2417</td><td>assembleMainInterface</td><td>0.1858</td><td>configureMainContentPane</td><td>0.1510</td><td>initializeWorkspace</td><td>0.2125</td><td>setupEditorComponents</td><td>0.1983</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude 3.7 Sonnet</td><td>initializeUI</td><td>0.3905</td><td>setupDrawingEnvironment</td><td>0.2417</td><td>configureApplicationLayout</td><td>0.1985</td><td>initializeDrawingInterface</td><td>0.2472</td><td>setupApplicationComponents</td><td>0.2208</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>buildUserInterface</td><td>0.1552</td><td>createDrawingWorkspace</td><td>0.1078</td><td>initializeDrawingApplication</td><td>0.3380</td><td>setupDrawingWorkbench</td><td>0.0736</td><td>configureDrawingEditor</td><td>0.2803</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude Opus 4.1</td><td>initializeUI</td><td>0.3905</td><td>setupApplicationUI</td><td>0.3096</td><td>initializeComponents</td><td>0.2231</td><td>createMainInterface</td><td>0.1724</td><td>buildUserInterface</td><td>0.1552</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>setupDrawingEnvironment</td><td>0.2417</td><td>initializeDrawingUI</td><td>0.3628</td><td>constructMainLayout</td><td>0.155</td><td>setupEditorInterface</td><td>0.2698</td><td>initializeEditorComponents</td><td>0.2151</td></tr>
+
+						<tr class="group-start"><td>NothingApplet</td><td>createTools</td><td>Gemini 2.5 Pro</td><td>initializeToolPalette</td><td>0.382</td><td>populatePaletteWithTools</td><td>0.5309</td><td>setupDrawingTools</td><td>0.572</td><td>addDefaultToolsToPalette</td><td>0.4786</td><td>createStandardTools</td><td>0.5919</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>loadDrawingToolButtons</td><td>0.337</td><td>registerFigureTools</td><td>0.3538</td><td>configureToolsPanel</td><td>0.3215</td><td>buildStandardToolSet</td><td>0.4201</td><td>initPaletteTools</td><td>0.5326</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-3.5</td><td>createTextTool</td><td>0.603</td><td>createRectangleTool</td><td>0.4727</td><td>createRoundRectangleTool</td><td>0.3962</td><td>createEllipseTool</td><td>0.4681</td><td>createLineTool</td><td>0.583</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>createPolygonTool</td><td>0.5195</td><td>createLineConnectionTool</td><td>0.446</td><td>createElbowConnectionTool</td><td>0.5161</td><td>addTextToolButton</td><td>0.334</td><td>addRectangleToolButton</td><td>0.2993</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-4o</td><td>initializePaletteTools</td><td>0.6121</td><td>setupDrawingTools</td><td>0.572</td><td>configureToolPalette</td><td>0.1703</td><td>addToolsToPalette</td><td>0.5427</td><td>populatePaletteWithTools</td><td>0.5309</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>createAndAddTools</td><td>0.8571</td><td>setupPaletteComponents</td><td>0.2904</td><td>initializeDrawingComponents</td><td>0.3091</td><td>configurePaletteButtons</td><td>0.1526</td><td>addDrawingToolsToPalette</td><td>0.4632</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-5</td><td>createStandardTools</td><td>0.5919</td><td>buildDefaultTools</td><td>0.7218</td><td>populateToolPalette</td><td>0.3206</td><td>initializePaletteTools</td><td>0.6121</td><td>registerDrawingTools</td><td>0.571</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>assembleToolButtons</td><td>0.4221</td><td>configurePaletteTools</td><td>0.4057</td><td>createAndAddTools</td><td>0.8571</td><td>setupPaletteToolset</td><td>0.5469</td><td>loadDefaultToolButtons</td><td>0.2819</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>DeepSeek-R1</td><td>createDrawingTools</td><td>0.8394</td><td>setupToolPalette</td><td>0.3502</td><td>initializePaletteTools</td><td>0.6121</td><td>createToolButtons</td><td>0.5846</td><td>populateToolsPanel</td><td>0.5863</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>addDefaultTools</td><td>0.6922</td><td>configureToolPalette</td><td>0.1703</td><td>buildDrawingToolbar</td><td>0.4197</td><td>assembleCreationTools</td><td>0.6297</td><td>prepareToolboxComponents</td><td>0.3233</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude 3.7 Sonnet</td><td>createDrawingTools</td><td>0.8394</td><td>initializeToolPalette</td><td>0.3820</td><td>populateToolPalette</td><td>0.3206</td><td>setupDrawingTools</td><td>0.5720</td><td>buildToolPalette</td><td>0.4282</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>createShapeTools</td><td>0.4697</td><td>initializeDrawingTools</td><td>0.6888</td><td>configureToolPalette</td><td>0.1703</td><td>addDrawingToolsToPalette</td><td>0.4632</td><td>setupShapeTools</td><td>0.2524</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude Opus 4.1</td><td>addToolToPalette</td><td>0.275</td><td>registerTool</td><td>0.4485</td><td>addPaletteTool</td><td>0.2902</td><td>installTool</td><td>0.4765</td><td>createAndAddTool</td><td>0.6339</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>configureTool</td><td>0.1704</td><td>setupTool</td><td>0.4733</td><td>appendToolToPalette</td><td>0.2404</td><td>initializeTool</td><td>0.4928</td><td>deployTool</td><td>0.4248</td></tr>
+
+						<tr class="group-start"><td>CompositeFigureCreationTool</td><td>mouseDown</td><td>Gemini 2.5 Pro</td><td>handleAddFigureToComposite</td><td>0.1161</td><td>placeNewFigureInComposite</td><td>0.0546</td><td>tryAddFigureToCompositeAtCoords</td><td>0.1439</td><td>handleFigureNestingAndDisplay</td><td>0.1704</td><td>createAndEmbedFigureUsingEvent</td><td>-0.0099</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>processCompositeFigureInteraction</td><td>0.0746</td><td>onMouseEventUpdateComposite</td><td>0.5372</td><td>addOrFinalizeOnFigureSelection</td><td>0.0459</td><td>initiateFigurePlacementInParent</td><td>0.0684</td><td>displayBoxForNewFigureInComposite</td><td>0.0992</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-3.5</td><td>createAndDisplayFigure</td><td>0.0821</td><td>handleCompositeFigure</td><td>0.1362</td><td>processFigureEvent</td><td>0.0943</td><td>handleFigureInteraction</td><td>0.1225</td><td>addFigureToContainer</td><td>0.1789</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>checkAndDisplayFigure</td><td>0.1654</td><td>finalizeFigureCreation</td><td>0.0564</td><td>handleFigureSelection</td><td>0.0623</td><td>handleFigureCreation</td><td>0.0735</td><td>handleFigureEvent</td><td>0.1713</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-4o</td><td>handleMouseEvent</td><td>0.5962</td><td>processFigureAtCoordinates</td><td>0.0338</td><td>addFigureToContainer</td><td>0.1789</td><td>manageFigureCreation</td><td>0.0729</td><td>executeToolAction</td><td>0.1787</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>updateDrawingView</td><td>0.1684</td><td>processCompositeFigure</td><td>0.0773</td><td>handleFigureSelection</td><td>0.0623</td><td>manageDrawingInteraction</td><td>0.1303</td><td>executeFigureAddition</td><td>0.0634</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-5</td><td>tryCreateChildInComposite</td><td>0.1143</td><td>beginChildCreationAt</td><td>0.1009</td><td>handleMouseChildCreation</td><td>0.5245</td><td>startChildFigureAtPoint</td><td>0.145</td><td>createChildIfComposite</td><td>0.069</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>prepareContainerAndCreateChild</td><td>0.0417</td><td>selectContainerAndCreateChild</td><td>0.1753</td><td>tryBeginChildCreation</td><td>0.086</td><td>handleCreateInComposite</td><td>0.0713</td><td>abortIfInvalidCreationTarget</td><td>0.095</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>DeepSeek-R1</td><td>handleMousePressForFigureAddition</td><td>0.4391</td><td>processFigureCreationMouseEvent</td><td>0.4296</td><td>addFigureToContainerOnMouse</td><td>0.2788</td><td>createAndPositionFigureOnPress</td><td>0.1061</td><td>handleCompositeFigureInsertion</td><td>0.0841</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>initiateFigureAdditionTool</td><td>0.1088</td><td>placeNewFigureInContainer</td><td>0.1264</td><td>handleMouseForNestedFigure</td><td>0.4510</td><td>processContainerFigureAddition</td><td>0.0752</td><td>toolMouseDownForFigureInsert</td><td>0.3831</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude 3.7 Sonnet</td><td>handleFigureCreation</td><td>0.0735</td><td>processMouseEventForFigure</td><td>0.4498</td><td>addFigureAtPosition</td><td>0.0831</td><td>createFigureInContainer</td><td>0.0606</td><td>handleCompositeFigureClick</td><td>0.2908</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>processDrawingClick</td><td>0.3776</td><td>attemptFigureAddition</td><td>0.0729</td><td>placeNewFigureAtPoint</td><td>0.1867</td><td>handleFigureAddition</td><td>0.0740</td><td>tryAddFigureAtLocation</td><td>0.0865</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude Opus 4.1</td><td>addFigureToContainer</td><td>0.1789</td><td>handleContainerClick</td><td>0.3033</td><td>insertFigureAtPoint</td><td>0.0995</td><td>addToCompositeFigure</td><td>0.1219</td><td>createAndAddFigure</td><td>0.0588</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>handleFigureInsertion</td><td>0.0079</td><td>placeNewFigure</td><td>0.1652</td><td>addFigureAtLocation</td><td>0.0245</td><td>insertIntoContainer</td><td>0.0659</td><td>handleCompositeFigureAdd</td><td>0.0908</td></tr>
+
+						<tr class="group-start"><td>ChopDiamondConnector</td><td>chop</td><td>Gemini 2.5 Pro</td><td>calculateConnectorPoint</td><td>-0.0508</td><td>getDockingPoint</td><td>0.0037</td><td>findFigureAnchor</td><td>0.132</td><td>resolveAttachmentPoint</td><td>0.0248</td><td>determineLinkEndpoint</td><td>-0.1257</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>getSmartInterfacePoint</td><td>-0.0165</td><td>computeConnectionHub</td><td>0.1465</td><td>getAdaptiveLinkPoint</td><td>-0.1282</td><td>calculateFigureSnapPoint</td><td>0.0395</td><td>findOptimalRoutePoint</td><td>0.0305</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-3.5</td><td>tempNameAlternative</td><td>0.0057</td><td>determineOppositeCorner</td><td>0.0785</td><td>calculateQuadrantAngle</td><td>0.1096</td><td>determineLinePoints</td><td>0.034</td><td>getEdgeIntersection</td><td>0.2141</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>findProperEdge</td><td>0.1799</td><td>sendCornerIfNotFound</td><td>0.1452</td><td>calculateCenterPoint</td><td>-0.0557</td><td>checkOverlapAndReturn</td><td>0.1681</td><td>determineProperPoint</td><td>-0.0602</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-4o</td><td>calculateIntersectionPoint</td><td>0.0395</td><td>determineEdgeIntersection</td><td>0.2276</td><td>findRectangleIntersection</td><td>0.1165</td><td>computeIntersectionWithEdges</td><td>0.237</td><td>getIntersectionPoint</td><td>0.0498</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>resolveEdgeIntersection</td><td>0.2277</td><td>calculateEdgePoint</td><td>0.118</td><td>determineIntersectionCoordinates</td><td>0.0959</td><td>findEdgeIntersection</td><td>0.2216</td><td>computeRectangleEdgePoint</td><td>0.0945</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-5</td><td>getPerimeterIntersection</td><td>0.0647</td><td>computeConnectionPoint</td><td>0.0254</td><td>getBoundaryAnchor</td><td>0.2012</td><td>findEdgeIntersection</td><td>0.2216</td><td>getConnectorPoint</td><td>-0.0261</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>perimeterPointToward</td><td>0.1545</td><td>boundaryPointToward</td><td>0.1454</td><td>getBoxEdgeIntersection</td><td>0.0991</td><td>edgePointToward</td><td>0.1836</td><td>anchorPointToward</td><td>0.0575</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>DeepSeek-R1</td><td>calculateConnectionAnchorPoint</td><td>0.0524</td><td>determineBoundaryIntersection</td><td>0.1613</td><td>findEdgeConnectionPoint</td><td>0.0872</td><td>getBoundaryAnchor</td><td>0.2012</td><td>computeEdgeIntersection</td><td>0.2654</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>determineAnchorPosition</td><td>0.1576</td><td>calculateBoundaryProjection</td><td>0.1060</td><td>findOptimalConnectionPoint</td><td>-0.0061</td><td>getBoundaryIntersection</td><td>0.1318</td><td>computeConnectionAnchor</td><td>0.1615</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude 3.7 Sonnet</td><td>findConnectionPoint</td><td>-0.0047</td><td>calculateIntersectionPoint</td><td>0.0395</td><td>getConnectionAnchor</td><td>0.1492</td><td>findEdgeIntersection</td><td>0.2216</td><td>determineConnectingPoint</td><td>-0.0456</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>calculateTargetPoint</td><td>-0.0666</td><td>findFigureConnectionPoint</td><td>-0.0402</td><td>computeIntersectionPoint</td><td>0.0951</td><td>getTargetAnchorPoint</td><td>0.1139</td><td>calculateEdgePoint</td><td>0.1180</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude Opus 4.1</td><td>findEdgeIntersection</td><td>0.2216</td><td>calculateBoundaryPoint</td><td>0.0024</td><td>getConnectionPoint</td><td>0.0015</td><td>findBorderIntersection</td><td>0.1509</td><td>computeEdgePoint</td><td>0.1751</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>getBoundaryIntersection</td><td>0.1318</td><td>calculateIntersectionPoint</td><td>0.0395</td><td>findPerimeterPoint</td><td>-0.0285</td><td>getEdgeConnectionPoint</td><td>0.0947</td><td>computeBorderPoint</td><td>0.0211</td></tr>
+					</tbody>
+				</table>
+			</div>
+			<p class="table-note">
+				<strong>Note:</strong> For class DrawApplet, function createAttributeChoices, GPT-3.5 only generated 5 names as shown in the table.
+			</p>
+			<p>
+				The second half of the 10-name generation results is shown below.
+			</p>
+			<div class="table-scroll">
+				<table id="namesoverviewpart2">
+					<caption>Overview of all 10 names suggested (Part 2)</caption>
+					<thead>
+						<tr>
+							<th rowspan="2">Class</th>
+							<th rowspan="2">Function</th>
+							<th rowspan="2">Model</th>
+							<th>name_1</th>
+							<th>score_1</th>
+							<th>name_2</th>
+							<th>score_2</th>
+							<th>name_3</th>
+							<th>score_3</th>
+							<th>name_4</th>
+							<th>score_4</th>
+							<th>name_5</th>
+							<th>score_5</th>
+						</tr>
+						<tr>
+							<th>name_6</th>
+							<th>score_6</th>
+							<th>name_7</th>
+							<th>score_7</th>
+							<th>name_8</th>
+							<th>score_8</th>
+							<th>name_9</th>
+							<th>score_9</th>
+							<th>name_10</th>
+							<th>score_10</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="group-start"><td>MiniMapDesktop</td><td>createLeftComponent</td><td>Gemini 2.5 Pro</td><td>createLeftMiniMapSplitPane</td><td>0.4885</td><td>initializeLeftMiniMapPane</td><td>0.3893</td><td>buildLeftMiniMapSidebar</td><td>0.3075</td><td>setupMiniMapNavigationPane</td><td>0.224</td><td>createMiniMapUtilitySplitPane</td><td>0.3837</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>getLeftMiniMapWithPanel</td><td>0.3481</td><td>assembleMiniMapViewerSplitPane</td><td>0.2501</td><td>configureLeftSplitPaneForMiniMap</td><td>0.3239</td><td>createDrawingViewAuxiliaryPane</td><td>0.3606</td><td>initMiniMapDisplayContainer</td><td>0.2736</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-3.5</td><td>tempName</td><td>0.0309</td><td>setupSplitPane</td><td>0.3473</td><td>configureSplitPane</td><td>0.3405</td><td>buildSplitPane</td><td>0.3564</td><td>generateSplitPane</td><td>0.3687</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>constructSplitPane</td><td>0.4327</td><td>prepareSplitPane</td><td>0.2431</td><td>composeSplitPane</td><td>0.352</td><td>formatSplitPane</td><td>0.3261</td><td></td><td></td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-4o</td><td>createSplitPaneWithMiniMap</td><td>0.3362</td><td>initializeMiniMapSplitPane</td><td>0.2914</td><td>setupMiniMapViewPane</td><td>0.2424</td><td>configureSplitPaneWithView</td><td>0.2347</td><td>buildMiniMapSplitPane</td><td>0.3013</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>constructMiniMapPanel</td><td>0.3418</td><td>setupDrawingViewSplitPane</td><td>0.2111</td><td>createMiniMapPanel</td><td>0.3897</td><td>initializeSplitPaneComponents</td><td>0.4777</td><td>configureViewSplitPane</td><td>0.3686</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-5</td><td>createMiniMapSplitPane</td><td>0.3421</td><td>buildMiniMapSplitPane</td><td>0.3013</td><td>createLeftMiniMapPane</td><td>0.5087</td><td>buildLeftMiniMapPane</td><td>0.3662</td><td>initMiniMapSplitPane</td><td>0.244</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>createNavigationSplitPane</td><td>0.3377</td><td>buildOverviewSplitPane</td><td>0.3103</td><td>createMiniMapPane</td><td>0.3243</td><td>assembleMiniMapSplitPane</td><td>0.2892</td><td>createLeftSplitPane</td><td>0.6485</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>DeepSeek-R1</td><td>createLeftSplitPaneWithMiniMap</td><td>0.4361</td><td>createMiniMapSplitPane</td><td>0.3421</td><td>buildLeftPanelWithMiniMap</td><td>0.4201</td><td>createMainViewSplitPane</td><td>0.4059</td><td>createDrawingViewSidePanel</td><td>0.2870</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>assembleLeftPaneComponents</td><td>0.4673</td><td>createViewerSplitPane</td><td>0.3610</td><td>buildMiniMapContainer</td><td>0.2964</td><td>createViewNavigationPane</td><td>0.3034</td><td>initializeLeftSidePanel</td><td>0.4359</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude 3.7 Sonnet</td><td>createSplitPaneWithMiniMap</td><td>0.3362</td><td>setupMiniMapSplitPane</td><td>0.2589</td><td>createNavigationPanel</td><td>0.3564</td><td>initializeMiniMapView</td><td>0.1437</td><td>createViewerSplitPane</td><td>0.3610</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>setupDrawingNavigator</td><td>0.1344</td><td>createMiniMapPanel</td><td>0.3897</td><td>configureSplitPaneWithMiniMap</td><td>0.2196</td><td>buildNavigationSplitPane</td><td>0.2934</td><td>initializeViewerComponents</td><td>0.5251</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude Opus 4.1</td><td>createLeftSplitPane</td><td>0.6485</td><td>buildLeftSplitPane</td><td>0.5296</td><td>createMiniMapSplitPane</td><td>0.3421</td><td>setupLeftPanel</td><td>0.4964</td><td>initializeLeftSplitPane</td><td>0.5235</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>constructLeftSplitPane</td><td>0.5738</td><td>makeLeftSplitPane</td><td>0.5087</td><td>createSidePanel</td><td>0.5305</td><td>buildSidePanel</td><td>0.4035</td><td>assembleLeftSplitPane</td><td>0.455</td></tr>
+
+						<tr class="group-start"><td>Animator</td><td>run</td><td>Gemini 2.5 Pro</td><td>runAnimationLoop</td><td>0.3342</td><td>processAnimationFrames</td><td>0.0755</td><td>animateDrawingView</td><td>0.0693</td><td>executeAnimationCycle</td><td>0.1208</td><td>renderViewAnimation</td><td>-0.0121</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>updateAnimationWithDelay</td><td>0.0722</td><td>manageDrawingAnimation</td><td>0.07</td><td>stepThroughAnimation</td><td>0.1655</td><td>continuousDrawUpdate</td><td>0.1731</td><td>animationRenderLoop</td><td>0.1001</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-3.5</td><td>tempNameLoop</td><td>0.0749</td><td>updateViewWithAnimation</td><td>0.0112</td><td>checkViewDamage</td><td>0.0871</td><td>delayExecution</td><td>0.1505</td><td>freezeAndUnfreezeView</td><td>0.0685</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>calculateDelayTime</td><td>0.1202</td><td>runAnimationLoop</td><td>0.3342</td><td>handleInterruptedException</td><td>0.1346</td><td>startAnimation</td><td>0.1745</td><td>stopAnimation</td><td>0.148</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-4o</td><td>runAnimationLoop</td><td>0.33423</td><td>executeAnimationCycle</td><td>0.12082</td><td>performAnimationSteps</td><td>0.10572</td><td>animateWithDelay</td><td>0.14499</td><td>processAnimationFrame</td><td>0.0945</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>handleAnimationLoop</td><td>0.05951</td><td>executeFrameUpdates</td><td>0.11757</td><td>runAnimationSequence</td><td>0.27504</td><td>performFrameAnimation</td><td>0.09062</td><td>manageAnimationCycle</td><td>-0.00073</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-5</td><td>runAnimationLoop</td><td>0.3342</td><td>performAnimationLoop</td><td>0.0877</td><td>animateWithDelay</td><td>0.145</td><td>processAnimationFrames</td><td>0.0755</td><td>advanceAnimationLoop</td><td>0.1057</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>driveAnimationFrames</td><td>0.0331</td><td>stepAnimationLoop</td><td>0.1322</td><td>runTimedAnimation</td><td>0.2566</td><td>playAnimationLoop</td><td>0.1761</td><td>updateViewAnimation</td><td>0.0095</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>DeepSeek-R1</td><td>runAnimationLoop</td><td>0.3342</td><td>animateWithFrameSync</td><td>0.0478</td><td>processAnimationFrames</td><td>0.0755</td><td>maintainAnimationTiming</td><td>0.0311</td><td>updateAnimationFrame</td><td>0.0845</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>renderAnimatedFrame</td><td>0.0434</td><td>executeAnimationCycle</td><td>0.1208</td><td>performTimedAnimation</td><td>0.1492</td><td>animateWithFixedDelay</td><td>0.0968</td><td>drawAnimationStep</td><td>0.0731</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude 3.7 Sonnet</td><td>runAnimationLoop</td><td>0.3342</td><td>executeAnimationCycle</td><td>0.1208</td><td>processAnimationFrames</td><td>0.0755</td><td>animateWithTimedDelay</td><td>0.1426</td><td>runTimedAnimation</td><td>0.2566</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>performAnimationSequence</td><td>0.0803</td><td>handleAnimationLoop</td><td>0.0595</td><td>controlAnimationCycle</td><td>-0.0327</td><td>manageAnimationFrames</td><td>-0.0125</td><td>driveAnimationProcess</td><td>0.0741</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude Opus 4.1</td><td>runAnimationLoop</td><td>0.3342</td><td>executeAnimationCycle</td><td>0.1208</td><td>performAnimation</td><td>0.143</td><td>animateWithDelay</td><td>0.145</td><td>processAnimationSteps</td><td>0.0784</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>runAnimationThread</td><td>0.3096</td><td>handleAnimationLoop</td><td>0.0595</td><td>doAnimation</td><td>0.2038</td><td>animationRunner</td><td>0.3808</td><td>cycleAnimation</td><td>0.1355</td></tr>
+
+						<tr class="group-start"><td>CTXWindowMenu</td><td>buildChildMenus</td><td>Gemini 2.5 Pro</td><td>updateWindowMenuItems</td><td>0.391</td><td>refreshMdiWindowMenu</td><td>0.3203</td><td>buildOpenFramesMenu</td><td>0.3595</td><td>populateChildWindowList</td><td>0.3997</td><td>synchronizeFrameMenu</td><td>0.3701</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>updateWindowCommandsAndFrameEntries</td><td>0.1745</td><td>setupDesktopWindowMenu</td><td>0.3891</td><td>configureActiveFrameChoices</td><td>0.2318</td><td>rebuildSelectableFramesMenu</td><td>0.2853</td><td>updateInternalFrameDisplay</td><td>0.0722</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-3.5</td><td>updateWindowOrganizationCommands</td><td>0.242</td><td>checkAndEnableCommands</td><td>0.2355</td><td>addFramesToMenu</td><td>0.4415</td><td>setFirstFrameState</td><td>0.1155</td><td>moveFrameToFront</td><td>0.1179</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>selectFrame</td><td>0.07</td><td>handlePropertyVetoException</td><td>0.1229</td><td>setMenuIcon</td><td>0.5138</td><td>addMenuToUI</td><td>0.4755</td><td>handleActionEvent</td><td>0.1143</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-4o</td><td>updateWindowCommands</td><td>0.2194</td><td>organizeDesktopFrames</td><td>0.2563</td><td>configureFrameMenuItems</td><td>0.2015</td><td>enableWindowCommands</td><td>0.1965</td><td>setupFrameMenu</td><td>0.5002</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>refreshWindowMenu</td><td>0.3355</td><td>initializeFrameMenu</td><td>0.469</td><td>updateFrameActions</td><td>0.139</td><td>manageDesktopFrames</td><td>0.0956</td><td>arrangeWindowFrames</td><td>0.1767</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-5</td><td>updateWindowMenu</td><td>0.3965</td><td>populateWindowMenu</td><td>0.4225</td><td>rebuildWindowMenu</td><td>0.535</td><td>refreshWindowMenuItems</td><td>0.3452</td><td>buildWindowMenu</td><td>0.6077</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>updateWindowArrangementCommands</td><td>0.1644</td><td>populateChildWindowMenuItems</td><td>0.6111</td><td>updateWindowMenuState</td><td>0.2814</td><td>populateWindowsList</td><td>0.1412</td><td>refreshMdiWindowMenu</td><td>0.3203</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>DeepSeek-R1</td><td>updateWindowMenuCommandsAndChildren</td><td>0.5692</td><td>populateWindowMenu</td><td>0.4225</td><td>refreshWindowMenuItems</td><td>0.3452</td><td>buildWindowMenuContent</td><td>0.5521</td><td>updateWindowManagementCommands</td><td>0.2147</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>prepareWindowMenu</td><td>0.4528</td><td>organizeWindowMenu</td><td>0.4880</td><td>setupWindowMenu</td><td>0.4282</td><td>updateDesktopWindowMenu</td><td>0.3739</td><td>arrangeWindowMenuCommands</td><td>0.3958</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude 3.7 Sonnet</td><td>updateWindowMenuItems</td><td>0.391</td><td>populateWindowMenu</td><td>0.4225</td><td>setupFrameMenuItems</td><td>0.5201</td><td>buildWindowMenu</td><td>0.6077</td><td>updateFrameCommands</td><td>0.1924</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>initializeWindowMenu</td><td>0.4309</td><td>configureWindowMenuItems</td><td>0.4106</td><td>prepareWindowSelectionMenu</td><td>0.4516</td><td>refreshWindowMenuOptions</td><td>0.1979</td><td>setupInternalFrameMenu</td><td>0.4884</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude Opus 4.1</td><td>updateWindowMenu</td><td>0.3965</td><td>refreshWindowMenuItems</td><td>0.3452</td><td>populateWindowMenu</td><td>0.4225</td><td>buildWindowMenu</td><td>0.6077</td><td>updateWindowMenuState</td><td>0.2814</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>rebuildWindowMenu</td><td>0.535</td><td>synchronizeWindowMenu</td><td>0.344</td><td>refreshWindowList</td><td>0.0812</td><td>updateMDIWindowMenu</td><td>0.3803</td><td>recreateWindowMenu</td><td>0.456</td></tr>
+
+						<tr class="group-start"><td>ColorMap</td><td>colorIndex</td><td>Gemini 2.5 Pro</td><td>findIndexInFMap</td><td>0.4223</td><td>getColorIndexFromFMap</td><td>0.6658</td><td>findColorEntryIndexInFMap</td><td>0.6749</td><td>indexOfColorInFMap</td><td>0.6704</td><td>lookupColorIndexInFMap</td><td>0.6501</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>searchFMapForColorIndex</td><td>0.6843</td><td>resolveFMapIndexForColor</td><td>0.5915</td><td>getFirstMatchIndexInFMap</td><td>0.1113</td><td>queryFMapForColorIndex</td><td>0.6389</td><td>getFMapIndexOfColor</td><td>0.5863</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-3.5</td><td>tempNameLookup</td><td>0.1017</td><td>findColorIndex</td><td>0.8597</td><td>getColorIndex</td><td>0.8457</td><td>searchColorIndex</td><td>0.8573</td><td>locateColorIndex</td><td>0.8258</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>matchColorIndex</td><td>0.8329</td><td>getColorPosition</td><td>0.4982</td><td>identifyColorIndex</td><td>0.835</td><td>retrieveColorIndex</td><td>0.8125</td><td>detectColorIndex</td><td>0.798</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-4o</td><td>findColorIndex</td><td>0.8597</td><td>getColorIndex</td><td>0.8457</td><td>locateColorIndex</td><td>0.8258</td><td>searchColorIndex</td><td>0.8573</td><td>indexOfColor</td><td>0.7873</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>findMatchingColorIndex</td><td>0.759</td><td>getColorPosition</td><td>0.4982</td><td>locateColorPosition</td><td>0.5161</td><td>searchColorPosition</td><td>0.6074</td><td>indexOfMatchingColor</td><td>0.7432</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-5</td><td>findColorIndex</td><td>0.8597</td><td>getColorIndex</td><td>0.8457</td><td>indexOfColor</td><td>0.7873</td><td>lookupColorIndex</td><td>0.7799</td><td>resolveColorIndex</td><td>0.7777</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>findColorEntryIndex</td><td>0.7656</td><td>getIndexForColor</td><td>0.8071</td><td>colorIndexOf</td><td>0.8578</td><td>indexOfColorInMap</td><td>0.6673</td><td>getColorIndexOrDefault</td><td>0.565</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>DeepSeek-R1</td><td>findColorIndex</td><td>0.8597</td><td>getColorIndex</td><td>0.8457</td><td>indexOfColorInMap</td><td>0.6673</td><td>findColorEntryIndex</td><td>0.7656</td><td>getColorMapIndex</td><td>0.5251</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>findIndexOfColorEntry</td><td>0.7311</td><td>getColorPositionInMap</td><td>0.3979</td><td>findColorInMapIndex</td><td>0.5484</td><td>getIndexOfColorInFMap</td><td>0.6472</td><td>locateColorEntryIndex</td><td>0.7560</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude 3.7 Sonnet</td><td>findColorIndex</td><td>0.8597</td><td>getColorPosition</td><td>0.4982</td><td>indexOfColor</td><td>0.7873</td><td>locateColorInMap</td><td>0.4867</td><td>findColorInEntries</td><td>0.5127</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>searchColorIndex</td><td>0.8573</td><td>getColorEntryIndex</td><td>0.7379</td><td>lookupColorPosition</td><td>0.4980</td><td>retrieveColorIndex</td><td>0.8125</td><td>findMatchingColorIndex</td><td>0.7590</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude Opus 4.1</td><td>findColorIndex</td><td>0.8597</td><td>getColorIndex</td><td>0.8457</td><td>indexOfColor</td><td>0.7873</td><td>findColorPosition</td><td>0.5397</td><td>searchColorIndex</td><td>0.8573</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>locateColorIndex</td><td>0.8258</td><td>getColorPosition</td><td>0.4982</td><td>lookupColorIndex</td><td>0.7799</td><td>resolveColorIndex</td><td>0.7777</td><td>matchColorIndex</td><td>0.8329</td></tr>
+
+						<tr class="group-start"><td>BouncingDrawing</td><td>animationStep</td><td>Gemini 2.5 Pro</td><td>stepFigureAnimations</td><td>0.343</td><td>advanceFigureAnimations</td><td>0.2294</td><td>animateNonConnectionFigures</td><td>0.5234</td><td>updateFigureAnimations</td><td>0.1084</td><td>processFigureAnimationStep</td><td>0.2116</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>runAnimationCycleForFigures</td><td>0.5085</td><td>tickAnimations</td><td>0.3693</td><td>refreshFigureVisuals</td><td>0.225</td><td>progressActiveFigureAnimations</td><td>0.2487</td><td>executeNextFigureFrame</td><td>0.2514</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-3.5</td><td>processNonConnectionFigures</td><td>0.0829</td><td>animateNonConnectionFigures</td><td>0.5234</td><td>iterateAndAnimateNonConnections</td><td>0.097</td><td>handleNonConnectionAnimations</td><td>0.2907</td><td>animateFiguresExcludingConnections</td><td>0.5406</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>executeAnimationForNonConnections</td><td>0.3522</td><td>animateNonConnectionFiguresOnly</td><td>0.5547</td><td>runAnimationOnNonConnectionFigures</td><td>0.3982</td><td>performNonConnectionAnimations</td><td>0.3745</td><td>animateExcludingConnections</td><td>0.566</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-4o</td><td>animateFigures</td><td>0.607</td><td>performAnimationStep</td><td>0.7336</td><td>updateAnimatedFigures</td><td>0.3971</td><td>executeAnimation</td><td>0.5794</td><td>animateNonConnectionFigures</td><td>0.5234</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>processFigureAnimations</td><td>0.1612</td><td>applyAnimationToFigures</td><td>0.4411</td><td>iterateAndAnimateFigures</td><td>0.2683</td><td>animateDrawableFigures</td><td>0.5064</td><td>stepThroughAnimations</td><td>0.4088</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-5</td><td>stepAnimations</td><td>0.6125</td><td>animateFigures</td><td>0.607</td><td>advanceAnimations</td><td>0.5677</td><td>updateAnimations</td><td>0.5354</td><td>tickAnimations</td><td>0.3693</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>stepFigureAnimations</td><td>0.343</td><td>performAnimationStep</td><td>0.7336</td><td>applyAnimationStep</td><td>0.6471</td><td>animateNonConnectionFigures</td><td>0.5234</td><td>animateDecoratedFigures</td><td>0.5679</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>DeepSeek-R1</td><td>animateNonConnectionFigures</td><td>0.5234</td><td>animateAllExceptConnections</td><td>0.5447</td><td>stepNonConnectionAnimations</td><td>0.4406</td><td>updateNonConnectionAnimations</td><td>0.3225</td><td>animateNonConnectionElements</td><td>0.4640</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>processNonConnectionAnimation</td><td>0.3054</td><td>stepFiguresExcludingConnections</td><td>0.2424</td><td>animateFiguresWithoutConnections</td><td>0.5526</td><td>updateAllNonConnectionAnimations</td><td>0.2495</td><td>animateExcludingConnectionFigures</td><td>0.5609</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude 3.7 Sonnet</td><td>animateNonConnectionFigures</td><td>0.5234</td><td>updateFigureAnimations</td><td>0.1084</td><td>stepAnimationForNonConnections</td><td>0.4346</td><td>processNonConnectionAnimations</td><td>0.2982</td><td>advanceNonConnectionAnimations</td><td>0.4063</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>performFigureAnimationSteps</td><td>0.1883</td><td>animateStandardFigures</td><td>0.6047</td><td>executeAnimationCycle</td><td>0.5060</td><td>updateAnimationState</td><td>0.5271</td><td>stepThroughFigureAnimations</td><td>0.2594</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude Opus 4.1</td><td>animateNonConnectionFigures</td><td>0.5234</td><td>updateAnimationFrames</td><td>0.5351</td><td>stepAnimations</td><td>0.6125</td><td>advanceAnimations</td><td>0.5677</td><td>processAnimationStep</td><td>0.6596</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>animateFigures</td><td>0.607</td><td>updateFigureAnimations</td><td>0.1084</td><td>performAnimationStep</td><td>0.7336</td><td>triggerAnimationUpdate</td><td>0.4352</td><td>executeAnimationCycle</td><td>0.506</td></tr>
+
+						<tr class="group-start"><td>PertDependency</td><td>handleConnect</td><td>Gemini 2.5 Pro</td><td>addPredecessor</td><td>0.2034</td><td>setDependency</td><td>0.3253</td><td>linkToPredecessor</td><td>0.2468</td><td>connectToPredecessor</td><td>0.4433</td><td>establishOrder</td><td>0.2388</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>assignPredecessor</td><td>0.2343</td><td>registerPrerequisite</td><td>0.2169</td><td>checkAndSetPredecessor</td><td>0.2312</td><td>bindToPredecessor</td><td>0.4265</td><td>linkToSourceTask</td><td>0.1575</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-3.5</td><td>tempNameWithCycleCheck</td><td>0.1679</td><td>setRedFrameColorIfCycle</td><td>0.0754</td><td>addPreAndPostTasks</td><td>0.027</td><td>notifyPostTasksAfterTaskAddition</td><td>0.0804</td><td>checkAndSetFrameColor</td><td>0.059</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>addTasksAndNotify</td><td>0.182</td><td>handleCycleAndTasks</td><td>0.3962</td><td>processTasksWithCycleCheck</td><td>0.1974</td><td>updateTasksAndNotify</td><td>0.1347</td><td>handleTaskRelationships</td><td>0.3511</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-4o</td><td>checkAndLinkTasks</td><td>0.159</td><td>validateAndLinkFigures</td><td>0.0575</td><td>processTaskLinking</td><td>0.2134</td><td>handleTaskDependencies</td><td>0.369</td><td>manageTaskConnections</td><td>0.445</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>updateTaskRelations</td><td>0.0454</td><td>configureTaskFlow</td><td>0.2555</td><td>establishTaskLinks</td><td>0.2837</td><td>applyTaskDependencies</td><td>0.166</td><td>executeTaskLinking</td><td>0.2435</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-5</td><td>addDependencyWithCycleCheck</td><td>0.3045</td><td>linkTasksWithCycleCheck</td><td>0.2009</td><td>connectTasksOrFlagCycle</td><td>0.4014</td><td>establishDependencyIfAcyclic</td><td>0.2369</td><td>createDependencyOrFlagCycle</td><td>0.2033</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>addLinkIfNoCycle</td><td>0.1477</td><td>handleDependencyCreation</td><td>0.429</td><td>connectIfAcyclic</td><td>0.2552</td><td>attachDependencyWithValidation</td><td>0.2215</td><td>addPrePostLinksWithCycleCheck</td><td>0.1325</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>DeepSeek-R1</td><td>validateAndLinkTasks</td><td>0.088</td><td>checkCycleAndUpdateDependencies</td><td>0.1815</td><td>handleTaskConnection</td><td>0.6288</td><td>updateTaskDependenciesIfValid</td><td>0.0902</td><td>processTaskDependency</td><td>0.2072</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>verifyAndLinkDependencies</td><td>0.2166</td><td>connectTasksSafely</td><td>0.3691</td><td>establishTaskRelationship</td><td>0.1983</td><td>updateDependencyChain</td><td>0.1447</td><td>linkTasksAfterCycleCheck</td><td>0.2227</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude 3.7 Sonnet</td><td>connectTasksIfNoCycle</td><td>0.3803</td><td>linkTasksWithCycleCheck</td><td>0.2009</td><td>establishTaskDependency</td><td>0.2696</td><td>connectPertFigures</td><td>0.3855</td><td>createTaskRelationship</td><td>0.1744</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>linkTasksOrHighlightCycle</td><td>0.1065</td><td>addTaskDependencyIfValid</td><td>0.1763</td><td>connectTasksWithValidation</td><td>0.2731</td><td>setupTaskPrecedence</td><td>0.1931</td><td>joinTasksIfPossible</td><td>0.1741</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude Opus 4.1</td><td>connectTasks</td><td>0.3379</td><td>linkPertFigures</td><td>0.1448</td><td>establishDependency</td><td>0.3113</td><td>addTaskConnection</td><td>0.431</td><td>createTaskLink</td><td>0.151</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>setTaskDependency</td><td>0.2414</td><td>connectPertNodes</td><td>0.3213</td><td>linkTaskNodes</td><td>0.1086</td><td>addDependencyLink</td><td>0.3276</td><td>connectDependentTasks</td><td>0.4074</td></tr>
+					</tbody>
+				</table>
+			</div>
+			<p class="table-note">
+				<strong>Note:</strong> For class MiniMapDesktop, function createLeftComponent, GPT-3.5 only generated 9 names as shown in the table.
+			</p>
+			<p>
+				The third part of the 10-name generation results is shown below.
+			</p>
+			<div class="table-scroll">
+				<table id="namesoverviewpart3">
+					<caption>Overview of all 10 names suggested (Part 3)</caption>
+					<thead>
+						<tr>
+							<th rowspan="2">Class</th>
+							<th rowspan="2">Function</th>
+							<th rowspan="2">Model</th>
+							<th>name_1</th>
+							<th>score_1</th>
+							<th>name_2</th>
+							<th>score_2</th>
+							<th>name_3</th>
+							<th>score_3</th>
+							<th>name_4</th>
+							<th>score_4</th>
+							<th>name_5</th>
+							<th>score_5</th>
+						</tr>
+						<tr>
+							<th>name_6</th>
+							<th>score_6</th>
+							<th>name_7</th>
+							<th>score_7</th>
+							<th>name_8</th>
+							<th>score_8</th>
+							<th>name_9</th>
+							<th>score_9</th>
+							<th>name_10</th>
+							<th>score_10</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="group-start"><td>AutoscrollHelper</td><td>getAutoscrollInsets</td><td>Gemini 2.5 Pro</td><td>calculateAutoscrollInsets</td><td>0.7958</td><td>updateAutoscrollInsets</td><td>0.7927</td><td>computeAutoscrollInsets</td><td>0.8027</td><td>determineAutoscrollInsets</td><td>0.8697</td><td>refreshAutoscrollInsets</td><td>0.7543</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>getAutoscrollInsets</td><td>1.0</td><td>resolveAutoscrollInsets</td><td>0.7589</td><td>generateAutoscrollInsets</td><td>0.8401</td><td>adjustAutoscrollInsets</td><td>0.7472</td><td>calculateEffectiveAutoscrollInsets</td><td>0.6836</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-3.5</td><td>tempName</td><td>0.0175</td><td>calculateTopInset</td><td>0.2706</td><td>calculateLeftInset</td><td>0.2344</td><td>calculateBottomInset</td><td>0.1795</td><td>calculateRightInset</td><td>0.1976</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>getSizeAndVisibleRect</td><td>0.2405</td><td>updateTopInset</td><td>0.2795</td><td>updateLeftInset</td><td>0.26</td><td>updateBottomInset</td><td>0.1738</td><td>updateRightInset</td><td>0.2084</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-4o</td><td>calculateAutoscrollInsets</td><td>0.7958</td><td>updateAutoscrollInsets</td><td>0.7927</td><td>configureAutoscrollInsets</td><td>0.7242</td><td>setAutoscrollMargins</td><td>0.7402</td><td>adjustAutoscrollInsets</td><td>0.7472</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>computeAutoscrollInsets</td><td>0.8697</td><td>determineAutoscrollInsets</td><td>0.8069</td><td>modifyAutoscrollInsets</td><td>0.7543</td><td>refreshAutoscrollInsets</td><td>0.8276</td><td>applyAutoscrollInsets</td><td>0.7543</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-5</td><td>updateAutoscrollInsets</td><td>0.7927</td><td>computeAutoscrollInsets</td><td>0.8027</td><td>calculateAutoscrollInsets</td><td>0.7958</td><td>applyAutoscrollInsets</td><td>0.8276</td><td>refreshAutoscrollInsets</td><td>0.7543</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>configureAutoscrollInsets</td><td>0.7242</td><td>updateScrollInsets</td><td>0.7262</td><td>computeScrollInsets</td><td>0.5024</td><td>calculateScrollInsets</td><td>0.5074</td><td>updateAutoscrollBounds</td><td>0.6642</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>DeepSeek-R1</td><td>calculateAutoscrollInsets</td><td>0.7958</td><td>computeScrollMargins</td><td>0.4204</td><td>updateAutoscrollInsetsUsingFunctions</td><td>0.7529</td><td>adjustAutoscrollBoundaries</td><td>0.6435</td><td>configureScrollInsets</td><td>0.7370</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>determineScrollContainerMargins</td><td>0.5898</td><td>calculateScrollViewportInsets</td><td>0.5099</td><td>updateViewportMargins</td><td>0.2537</td><td>computeAutoscrollPadding</td><td>0.6349</td><td>adjustViewportBoundaryInsets</td><td>0.3342</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude 3.7 Sonnet</td><td>calculateAutoscrollInsets</td><td>0.7958</td><td>computeAutoscrollBoundaries</td><td>0.6844</td><td>updateAutoscrollInsets</td><td>0.7927</td><td>configureAutoscrollMargins</td><td>0.6274</td><td>setupScrollingBoundaries</td><td>0.4149</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>determineScrollInsets</td><td>0.7142</td><td>initializeAutoscrollRegions</td><td>0.6243</td><td>prepareAutoscrollParameters</td><td>0.5916</td><td>defineScrollableAreas</td><td>0.5198</td><td>setAutoscrollBoundaries</td><td>0.7294</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude Opus 4.1</td><td>calculateAutoscrollInsets</td><td>0.7958</td><td>computeAutoscrollInsets</td><td>0.8027</td><td>updateAutoscrollInsets</td><td>0.7927</td><td>setAutoscrollInsets</td><td>0.8609</td><td>buildAutoscrollInsets</td><td>0.8289</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>determineAutoscrollInsets</td><td>0.8697</td><td>configureAutoscrollInsets</td><td>0.7242</td><td>setupAutoscrollInsets</td><td>0.841</td><td>initAutoscrollInsets</td><td>0.565</td><td>prepareAutoscrollInsets</td><td>0.7732</td></tr>
+
+						<tr class="group-start"><td>Geom</td><td>direction</td><td>Gemini 2.5 Pro</td><td>determineProcessedDirection</td><td>0.0368</td><td>calculateDirectionalValue</td><td>0.0833</td><td>applyDirectionLogic</td><td>0.1685</td><td>getMappedDirectionResult</td><td>0.0994</td><td>resolveDirectionAndTransform</td><td>0.1456</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>computeVectorOutcome</td><td>0.0657</td><td>mapCoordsToDirectionalOutput</td><td>0.1891</td><td>deriveTransformedDirection</td><td>0.133</td><td>evaluateDirectionPolicy</td><td>0.1579</td><td>getDirectionalComputation</td><td>0.1066</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-3.5</td><td>tempDirectionBasedOnConditions</td><td>0.1082</td><td>calculateDirectionBasedOnCoordinates</td><td>0.1979</td><td>determineDirectionFromCoordinates</td><td>0.3639</td><td>getDirectionFromPosition</td><td>0.3351</td><td>resolveDirectionFromCoordinates</td><td>0.2776</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>assignDirectionBasedOnCriteria</td><td>0.0586</td><td>deriveDirectionFromCoordinates</td><td>0.332</td><td>setDirectionBasedOnPosition</td><td>0.1665</td><td>findDirectionFromCoordinates</td><td>0.2573</td><td>determineDirectionBasedOnPosition</td><td>0.2479</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-4o</td><td>determineDirection</td><td>0.3544</td><td>calculateDirection</td><td>0.1642</td><td>resolveDirection</td><td>0.2237</td><td>findDirection</td><td>0.2459</td><td>computeDirection</td><td>0.233</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>getDirection</td><td>0.2793</td><td>evaluateDirection</td><td>0.2197</td><td>selectDirection</td><td>0.0931</td><td>identifyDirection</td><td>0.2896</td><td>chooseDirection</td><td>0.3216</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-5</td><td>determineDirectionFromPoints</td><td>0.3711</td><td>determineCardinalDirection</td><td>0.2414</td><td>directionFromPoints</td><td>0.7886</td><td>directionFromVector</td><td>0.6478</td><td>resolveDirectionFromDelta</td><td>0.1307</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>selectDirectionFromDelta</td><td>0.0454</td><td>computeMappedDirection</td><td>0.1101</td><td>mapDirectionValue</td><td>0.101</td><td>chooseDirection</td><td>0.3216</td><td>directionForDelta</td><td>0.6686</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>DeepSeek-R1</td><td>determineDirectionAndApply</td><td>0.3633</td><td>resolveDirectionWithPredicates</td><td>0.1389</td><td>evaluateDirectionConditions</td><td>0.2183</td><td>calculateDirectionMapping</td><td>0.13</td><td>selectDirectionBasedOnVector</td><td>0.0236</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>computeDirectionFromVector</td><td>0.1695</td><td>mapDirectionUsingConditions</td><td>0.1341</td><td>deriveDirectionAndTransform</td><td>0.2052</td><td>getDirectionUsingPredicates</td><td>0.0921</td><td>applyDirectionLogic</td><td>0.1685</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude 3.7 Sonnet</td><td>determineDirectionAndTransform</td><td>0.2386</td><td>calculateDirectionVector</td><td>0.1316</td><td>getTransformedDirection</td><td>0.1572</td><td>computeVectorDirection</td><td>0.13</td><td>resolveDirectionFromVector</td><td>0.1534</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>mapVectorToDirection</td><td>0.1602</td><td>processDirectionalVector</td><td>0.1165</td><td>evaluateDirectionAndApply</td><td>0.207</td><td>convertVectorToDirection</td><td>0.0865</td><td>deriveDirectionFromCoordinates</td><td>0.332</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude Opus 4.1</td><td>calculateDirection</td><td>0.1642</td><td>getDirectionFromVector</td><td>0.1777</td><td>determineDirection</td><td>0.3544</td><td>computeDirectionAndTransform</td><td>0.1694</td><td>vectorToDirection</td><td>0.2859</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>resolveDirection</td><td>0.2237</td><td>findDirectionBetweenPoints</td><td>0.3375</td><td>deriveDirection</td><td>0.2892</td><td>evaluateDirection</td><td>0.2197</td><td>processDirectionFromCoordinates</td><td>0.2303</td></tr>
+
+						<tr class="group-start"><td>JHDDropTargetListener</td><td>dragOver</td><td>Gemini 2.5 Pro</td><td>processDragCoordinates</td><td>0.1038</td><td>handleMappedDragEvent</td><td>0.3557</td><td>updateLastDragPoint</td><td>0.295</td><td>trackDragWithTransforms</td><td>0.3338</td><td>applyDragToPositionState</td><td>0.2423</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>filterDragMovement</td><td>0.2643</td><td>refreshDragLocationCache</td><td>0.2441</td><td>onDragMotionUpdate</td><td>0.2763</td><td>transformAndStoreDragPosition</td><td>0.3056</td><td>updatePositionOnSignificantDrag</td><td>0.2432</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-3.5</td><td>processDragCoordinates</td><td>0.1038</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-4o</td><td>processDragCoordinates</td><td>0.1038</td><td>handleMappedDragEvent</td><td>0.3557</td><td>updateLastDragPoint</td><td>0.295</td><td>trackDragWithTransforms</td><td>0.3338</td><td>applyDragToPositionState</td><td>0.2423</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>filterDragMovement</td><td>0.2643</td><td>refreshDragLocationCache</td><td>0.2441</td><td>onDragMotionUpdate</td><td>0.2763</td><td>transformAndStoreDragPosition</td><td>0.3056</td><td>updatePositionOnSignificantDrag</td><td>0.2432</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-5</td><td>onDragUpdate</td><td>0.3712</td><td>handleDragMotion</td><td>0.3549</td><td>updateDragPosition</td><td>0.1877</td><td>processDragMove</td><td>0.2012</td><td>handleDropTargetDrag</td><td>0.4764</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>onDropTargetDrag</td><td>0.5476</td><td>trackDragMovement</td><td>0.3123</td><td>updateDragState</td><td>0.1549</td><td>applyDragDelta</td><td>0.3813</td><td>syncDragCoordinates</td><td>0.1189</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>DeepSeek-R1</td><td>updatePositionOnSignificantDrag</td><td>0.2432</td><td>processDragCoordinates</td><td>0.1038</td><td>transformAndStoreDragPosition</td><td>0.3056</td><td>filterDragMovement</td><td>0.2643</td><td>handleMappedDragEvent</td><td>0.3557</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>trackDragWithTransforms</td><td>0.3338</td><td>refreshDragLocationCache</td><td>0.2441</td><td>applyDragToPositionState</td><td>0.2423</td><td>updateLastDragPoint</td><td>0.295</td><td>onDragMotionUpdate</td><td>0.2763</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude 3.7 Sonnet</td><td>processDragCoordinates</td><td>0.1038</td><td>handleDragMovement</td><td>0.2849</td><td>updateDragPosition</td><td>0.1877</td><td>trackSignificantDragMovement</td><td>0.1937</td><td>processDragLocationChange</td><td>0.2586</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>handleTransformedDragEvent</td><td>0.3812</td><td>updatePositionIfDragMoved</td><td>0.2054</td><td>processTransformedDragCoordinates</td><td>0.0458</td><td>handleDragCoordinateChange</td><td>0.2453</td><td>updateDragCoordinatesIfMoved</td><td>0.1053</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude Opus 4.1</td><td>updateDragPosition</td><td>0.1877</td><td>handleDragMovement</td><td>0.2849</td><td>processDragEvent</td><td>0.3139</td><td>updateDragCoordinates</td><td>0.1155</td><td>trackDragPosition</td><td>0.3431</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>handleDragPositionChange</td><td>0.2841</td><td>processDragMovement</td><td>0.1814</td><td>updateLastDragPosition</td><td>0.2641</td><td>handleDragUpdate</td><td>0.2029</td><td>recordDragPosition</td><td>0.2428</td></tr>
+
+						<tr class="group-start"><td>StandardLayouter</td><td>layout</td><td>Gemini 2.5 Pro</td><td>calculateLayoutWithFunctions</td><td>0.298</td><td>computeFigureLayoutUsingTransforms</td><td>0.1112</td><td>determineArrangementAndBounds</td><td>0.0567</td><td>generateLayoutFromOperations</td><td>0.4344</td><td>applyLayoutRulesAndGetBounds</td><td>0.3326</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>positionFiguresWithCustomLogic</td><td>0.3109</td><td>resolveFigureLayout</td><td>0.1332</td><td>getLayoutRectangleFromRules</td><td>0.3414</td><td>executeFigurePlacementStrategy</td><td>-0.047</td><td>mapFiguresToDisplayArea</td><td>0.1967</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-3.5</td><td>processLayout</td><td>0.47724</td><td>adjustFigurePositions</td><td>0.35212</td><td>updateFigureDisplay</td><td>0.15185</td><td>calculateTotalHeight</td><td>0.13496</td><td>updateFigureBox</td><td>0.15106</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>calculateNewRectangle</td><td>0.10851</td><td>updateFigureHeight</td><td>0.18917</td><td>calculateNewOrigin</td><td>0.07186</td><td>adjustRectanglePosition</td><td>0.30052</td><td>calculateFinalRectangleSize</td><td>0.07344</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-4o</td><td>layoutFigures</td><td>0.7446</td><td>arrangeFiguresInLayout</td><td>0.5204</td><td>computeFigureLayout</td><td>0.1883</td><td>calculateFigurePositions</td><td>0.2217</td><td>organizeFigures</td><td>0.4319</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>positionFigures</td><td>0.4967</td><td>layoutFiguresWithinBounds</td><td>0.4851</td><td>arrangeFigures</td><td>0.5035</td><td>computeLayoutDimensions</td><td>0.4318</td><td>determineFigureLayout</td><td>0.2502</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-5</td><td>layoutChildrenVertically</td><td>0.6071</td><td>layoutFiguresVertically</td><td>0.584</td><td>arrangeFiguresVertically</td><td>0.3869</td><td>applyVerticalLayout</td><td>0.4437</td><td>computeVerticalLayoutBounds</td><td>0.3493</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>layoutFiguresWithinBounds</td><td>0.4851</td><td>arrangeChildFigures</td><td>0.354</td><td>positionFiguresTopDown</td><td>0.259</td><td>layoutContentArea</td><td>0.6144</td><td>computeAndApplyLayout</td><td>0.4359</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>DeepSeek-R1</td><td>arrangeFiguresWithLayoutTransforms</td><td>0.4442</td><td>computeLayoutDimensions</td><td>0.4318</td><td>applyLayoutFunctionsToFigures</td><td>0.3026</td><td>calculateFigurePositions</td><td>0.2217</td><td>layoutFiguresUsingTransforms</td><td>0.5136</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>transformAndLayoutComponents</td><td>0.3823</td><td>computeVerticalFigureLayout</td><td>0.1532</td><td>applyGeometricAdjustments</td><td>0.1103</td><td>calculateTransformedLayoutBounds</td><td>0.2989</td><td>transformLayoutCoordinates</td><td>0.3581</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude 3.7 Sonnet</td><td>layoutFiguresVertically</td><td>0.584</td><td>arrangeComponentsVertically</td><td>0.3456</td><td>calculateVerticalLayout</td><td>0.425</td><td>positionFiguresInColumn</td><td>0.3195</td><td>computeVerticalFigureLayout</td><td>0.1532</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>stackFiguresVertically</td><td>0.2644</td><td>layoutFiguresSequentially</td><td>0.5313</td><td>applyVerticalLayoutToFigures</td><td>0.378</td><td>arrangeSequentialFigureLayout</td><td>0.3558</td><td>computeStackedFigurePositions</td><td>0.1471</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude Opus 4.1</td><td>layoutFiguresVertically</td><td>0.584</td><td>arrangeVerticalLayout</td><td>0.5727</td><td>performVerticalLayout</td><td>0.4412</td><td>layoutVertically</td><td>0.726</td><td>arrangeFiguresInColumn</td><td>0.3441</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>applyVerticalLayout</td><td>0.4437</td><td>layoutColumnwise</td><td>0.5403</td><td>distributeVertically</td><td>0.216</td><td>stackFiguresVertically</td><td>0.2644</td><td>organizeVerticalLayout</td><td>0.6042</td></tr>
+
+						<tr class="group-start"><td>LineConnection</td><td>basicMoveBy</td><td>Gemini 2.5 Pro</td><td>translatePointsByRuleAndUpdateConnection</td><td>0.1925</td><td>shiftPointsConditionallyAndReconnect</td><td>0.1726</td><td>transformPointsWithStrategyAndUpdateConnection</td><td>0.1126</td><td>repositionPointsIterativelyAndEnsureConnection</td><td>0.1549</td><td>applySelectiveTranslationAndUpdateConnection</td><td>0.1007</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>updatePointsConditionallyAndLink</td><td>0.1055</td><td>movePointsByIndexLogicAndUpdateConnection</td><td>0.1557</td><td>adjustPointsByFunctionsAndReconnect</td><td>0.1769</td><td>processPointTranslationsDynamicallyAndConnect</td><td>0.0507</td><td>translatePointSubsetAndUpdateConnection</td><td>0.0964</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-3.5</td><td>tempNameToTranslatePoints</td><td>0.1007</td><td>updatePointsTranslation</td><td>0.092</td><td>adjustPointsTranslation</td><td>0.119</td><td>translatePoints</td><td>0.1487</td><td>updateConnectionIfConnected</td><td>0.0716</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>updateConnectionStatus</td><td>0.1029</td><td>checkConnectionStatus</td><td>0.1404</td><td>verifyConnection</td><td>0.1369</td><td>ensureConnection</td><td>0.1275</td><td>validateConnection</td><td>0.0927</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-4o</td><td>translatePoints</td><td>0.1487</td><td>applyTranslation</td><td>0.078</td><td>shiftPoints</td><td>0.1633</td><td>movePoints</td><td>0.1958</td><td>adjustPoints</td><td>0.1309</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>updatePointsPosition</td><td>0.1368</td><td>translateAndConnect</td><td>0.2529</td><td>applyPointShift</td><td>0.1539</td><td>moveAndReconnect</td><td>0.2685</td><td>shiftAndUpdateConnection</td><td>0.1406</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-5</td><td>translateIntermediatePoints</td><td>0.0313</td><td>shiftInternalPoints</td><td>0.1108</td><td>applyOffsetToMiddlePoints</td><td>0.1849</td><td>moveNonEndpointPoints</td><td>0.1346</td><td>translatePointsExcludingEnds</td><td>0.0471</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>adjustIntermediatePointPositions</td><td>0.0089</td><td>offsetMiddlePoints</td><td>0.151</td><td>transformInnerPoints</td><td>0.092</td><td>updateMiddlePointPositions</td><td>0.1722</td><td>applyTranslationToInnerPoints</td><td>0.1286</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>DeepSeek-R1</td><td>translatePointsByIndexedOffset</td><td>0.1909</td><td>adjustIndexedPointsWithOffset</td><td>0.0511</td><td>transformPointsUsingIndexFunctions</td><td>0.0384</td><td>shiftPointsWithDynamicIndices</td><td>0.1194</td><td>updatePointsWithIndexedTranslation</td><td>0.0956</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>modifyPointsUsingFunctionIndices</td><td>-0.0246</td><td>applyIndexedPointTranslation</td><td>0.0232</td><td>repositionPointsByFunctionIndices</td><td>0.0649</td><td>translatePointsWithIndexedFunctions</td><td>0.0363</td><td>adjustDynamicIndexPoints</td><td>0.1198</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude 3.7 Sonnet</td><td>translateSelectedPoints</td><td>0.1118</td><td>shiftPointsByPattern</td><td>0.3426</td><td>movePointsWithFunction</td><td>0.1301</td><td>translatePointsConditionally</td><td>0.1487</td><td>applyTranslationToPoints</td><td>0.0028</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>transformPointsAndUpdateConnection</td><td>0.0823</td><td>movePointsAndMaintainConnection</td><td>0.1039</td><td>adjustPointsWithFunctions</td><td>0.0833</td><td>translatePointsSequentially</td><td>0.1074</td><td>repositionPointsAndConnect</td><td>0.1366</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude Opus 4.1</td><td>translatePointsInRange</td><td>0.1375</td><td>shiftPointsByOffset</td><td>0.2229</td><td>movePointsWithFunctions</td><td>0.1214</td><td>translateMappedPoints</td><td>0.0624</td><td>applyTranslationToPoints</td><td>0.0028</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>offsetPointsInBounds</td><td>0.0534</td><td>relocatePointsBy</td><td>0.2352</td><td>transformPointPositions</td><td>0.1048</td><td>adjustPointLocations</td><td>0.1012</td><td>modifyPointCoordinates</td><td>0.0652</td></tr>
+
+						<tr class="group-start"><td>TriangleFigure</td><td>rotate</td><td>Gemini 2.5 Pro</td><td>findAndSetOptimalRotation</td><td>0.1688</td><td>updateRotationToClosestAngle</td><td>0.498</td><td>setRotationToNearestMatch</td><td>0.4984</td><td>determineBestRotationFit</td><td>0.0959</td><td>applyClosestRotationValue</td><td>0.2095</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>adjustRotationToNearestCandidate</td><td>0.4591</td><td>resolveOptimalRotationAngle</td><td>0.3495</td><td>updateRotationFieldToMatchAngle</td><td>0.3896</td><td>setRotationByAngleProximity</td><td>0.471</td><td>searchAndCommitRotation</td><td>0.2903</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-3.5</td><td>tempNameSelection</td><td>0.0431</td><td>findClosestRotation</td><td>0.2242</td><td>calculateBestRotation</td><td>0.2298</td><td>determineNearestRotation</td><td>0.4184</td><td>updateOptimalRotation</td><td>0.4353</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>setOptimalRotation</td><td>0.4644</td><td>chooseBestRotation</td><td>0.2884</td><td>calculateClosestRotation</td><td>0.2299</td><td>setClosestRotation</td><td>0.2609</td><td>determineBestRotation</td><td>0.1892</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-4o</td><td>findClosestRotationIndex</td><td>0.1625</td><td>determineNearestRotation</td><td>0.4184</td><td>calculateBestRotationIndex</td><td>0.1486</td><td>selectClosestRotation</td><td>0.2699</td><td>computeNearestRotationIndex</td><td>0.4035</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>identifyClosestRotation</td><td>0.1746</td><td>getClosestRotationIndex</td><td>0.1829</td><td>evaluateNearestRotation</td><td>0.3968</td><td>chooseBestRotationIndex</td><td>0.1479</td><td>locateClosestRotation</td><td>0.2256</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-5</td><td>findClosestRotationIndex</td><td>0.1625</td><td>calculateNearestRotationIndex</td><td>0.3754</td><td>resolveRotationIndex</td><td>0.356</td><td>computeClosestRotationIndex</td><td>0.177</td><td>selectBestRotationIndex</td><td>0.1153</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>determineNearestRotationIndex</td><td>0.3433</td><td>locateClosestRotationIndex</td><td>0.1394</td><td>getBestRotationIndex</td><td>0.1359</td><td>computeRotationMatchIndex</td><td>0.0251</td><td>findNearestRotation</td><td>0.4034</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>DeepSeek-R1</td><td>updateClosestRotation</td><td>0.2264</td><td>snapToNearestRotation</td><td>0.2942</td><td>selectClosestRotationIndex</td><td>0.165</td><td>findBestRotationMatch</td><td>0.1037</td><td>updateRotationToClosestAngle</td><td>0.498</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>determineClosestRotation</td><td>0.1887</td><td>applyNearestRotationIndex</td><td>0.3549</td><td>setClosestRotationAngle</td><td>0.31</td><td>alignToClosestRotation</td><td>0.4109</td><td>adjustToNearestRotationIndex</td><td>0.246</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude 3.7 Sonnet</td><td>findClosestRotationIndex</td><td>0.1625</td><td>selectNearestRotation</td><td>0.4313</td><td>updateRotationToNearest</td><td>0.434</td><td>findBestRotationMatch</td><td>0.1037</td><td>setRotationToClosestAngle</td><td>0.5344</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>determineClosestRotationIndex</td><td>0.1448</td><td>snapToNearestRotation</td><td>0.2942</td><td>calculateBestRotationFit</td><td>0.1304</td><td>assignClosestRotationValue</td><td>0.1477</td><td>matchNearestAngleRotation</td><td>0.1634</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude Opus 4.1</td><td>findClosestRotationIndex</td><td>0.1625</td><td>findNearestRotationIndex</td><td>0.3328</td><td>getClosestRotationIndex</td><td>0.1829</td><td>findBestRotationIndex</td><td>0.123</td><td>calculateClosestRotationIndex</td><td>0.1797</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>determineRotationIndex</td><td>0.4727</td><td>selectRotationIndex</td><td>0.4742</td><td>computeNearestRotationIndex</td><td>0.4035</td><td>locateClosestRotationIndex</td><td>0.1394</td><td>resolveRotationIndex</td><td>0.356</td></tr>
+
+						<tr class="group-start"><td>SplitPaneDesktop</td><td>removeFromDesktop</td><td>Gemini 2.5 Pro</td><td>removeComponentForDrawingView</td><td>0.5089</td><td>removeComponentByDrawingView</td><td>0.4627</td><td>removeMatchingDrawingViewComponent</td><td>0.4605</td><td>findAndRemoveComponentForDrawingView</td><td>0.3231</td><td>deleteComponentForDrawingView</td><td>0.488</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>removeComponentIfDrawingViewMatches</td><td>0.4587</td><td>purgeComponentForDrawingView</td><td>0.4705</td><td>removeTargetComponentByDrawingView</td><td>0.4932</td><td>applyDrawingViewBasedComponentRemoval</td><td>0.2123</td><td>executeDrawingViewComponentRemoval</td><td>0.2485</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-3.5</td><td>processComponents</td><td>0.1599</td><td>findAndRemoveComponent</td><td>0.3259</td><td>checkDrawingView</td><td>0.1805</td><td>removeComponent</td><td>0.5602</td><td>iterateComponents</td><td>0.1073</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>getComponentArray</td><td>0.0848</td><td>updateDrawingView</td><td>0.1805</td><td>applyFunction</td><td>0.0994</td><td>handleComponentRemoval</td><td>0.2099</td><td>validateDrawingView</td><td>0.2053</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-4o</td><td>removeComponentFromDrawingView</td><td>0.4821</td><td>removeComponentIfInDrawingView</td><td>0.4947</td><td>removeMatchingComponent</td><td>0.5022</td><td>removeComponentByCondition</td><td>0.4636</td><td>removeComponentFromContainer</td><td>0.5678</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>removeComponentUsingFunctions</td><td>0.4519</td><td>removeComponentWithViewCheck</td><td>0.463</td><td>removeComponentBasedOnView</td><td>0.4905</td><td>removeComponentFromView</td><td>0.5574</td><td>removeComponentIfViewMatches</td><td>0.4661</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-5</td><td>removeMatchingDrawingViewComponent</td><td>0.4605</td><td>removeComponentForDrawingView</td><td>0.5089</td><td>findAndRemoveDrawingViewComponent</td><td>0.2994</td><td>removeAssociatedViewComponent</td><td>0.4786</td><td>removeComponentIfMatchesView</td><td>0.5409</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>deleteComponentForDrawingView</td><td>0.488</td><td>detachComponentForDrawingView</td><td>0.4085</td><td>removeViewComponentFromContainer</td><td>0.5196</td><td>removeTargetDrawingViewComponent</td><td>0.4924</td><td>resolveAndRemoveDrawingView</td><td>0.3373</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>DeepSeek-R1</td><td>removeComponentForMatchingDrawingView</td><td>0.4347</td><td>removeComponentByViewCriteria</td><td>0.5458</td><td>removeMatchingDrawingViewComponent</td><td>0.4605</td><td>removeComponentWhenViewMatches</td><td>0.4875</td><td>removeComponentByViewMatch</td><td>0.469</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>removeComponentByDrawingViewEquality</td><td>0.3654</td><td>removeComponentWithViewCheck</td><td>0.463</td><td>iterateAndRemoveComponentByView</td><td>0.27</td><td>removeComponentByViewComparison</td><td>0.502</td><td>removeComponentOnDrawingViewMatch</td><td>0.4955</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude 3.7 Sonnet</td><td>removeComponentByDrawingView</td><td>0.4627</td><td>removeComponentMatchingDrawingView</td><td>0.4551</td><td>findAndRemoveComponentByView</td><td>0.3112</td><td>deleteComponentWithMatchingView</td><td>0.4347</td><td>removeComponentForDrawingView</td><td>0.5089</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>locateAndRemoveViewComponent</td><td>0.2734</td><td>purgeComponentByDrawingView</td><td>0.4218</td><td>detachComponentWithView</td><td>0.3541</td><td>cleanupComponentByView</td><td>0.4232</td><td>extractAndRemoveViewComponent</td><td>0.3376</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude Opus 4.1</td><td>removeDrawingViewComponent</td><td>0.4952</td><td>removeComponentForView</td><td>0.5265</td><td>detachDrawingViewComponent</td><td>0.3724</td><td>removeViewComponent</td><td>0.5046</td><td>removeMatchingViewComponent</td><td>0.4773</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>deleteDrawingViewComponent</td><td>0.434</td><td>removeComponentByView</td><td>0.5087</td><td>detachComponentForView</td><td>0.403</td><td>removeAssociatedComponent</td><td>0.5231</td><td>removeViewRelatedComponent</td><td>0.4593</td></tr>
+					</tbody>
+				</table>
+			</div>
+			<p class="table-note">
+				<strong>Note:</strong> For class JHDDropTargetListener, function dragOver, GPT-3.5 only generated 1 name as shown in the table.
+			</p>
+			<p>
+				The fourth part of the 10-name generation results is shown below.
+			</p>
+			<div class="table-scroll">
+				<table id="namesoverviewpart4">
+					<caption>Overview of all 10 names suggested (Part 4)</caption>
+					<thead>
+						<tr>
+							<th rowspan="2">Class</th>
+							<th rowspan="2">Function</th>
+							<th rowspan="2">Model</th>
+							<th>name_1</th>
+							<th>score_1</th>
+							<th>name_2</th>
+							<th>score_2</th>
+							<th>name_3</th>
+							<th>score_3</th>
+							<th>name_4</th>
+							<th>score_4</th>
+							<th>name_5</th>
+							<th>score_5</th>
+						</tr>
+						<tr>
+							<th>name_6</th>
+							<th>score_6</th>
+							<th>name_7</th>
+							<th>score_7</th>
+							<th>name_8</th>
+							<th>score_8</th>
+							<th>name_9</th>
+							<th>score_9</th>
+							<th>name_10</th>
+							<th>score_10</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="group-start"><td>Helper</td><td>getDrawingView</td><td>Gemini 2.5 Pro</td><td>getDrawingView</td><td>1.0</td><td>findDrawingView</td><td>0.8933</td><td>findDrawingViewInContainer</td><td>0.7583</td><td>searchDrawingViewRecursive</td><td>0.6435</td><td>locateDrawingView</td><td>0.6004</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>getDrawingViewFromHierarchy</td><td>0.7248</td><td>retrieveDrawingView</td><td>0.7319</td><td>findNestedDrawingView</td><td>0.8478</td><td>extractDrawingView</td><td>0.8683</td><td>queryDrawingViewInContainer</td><td>0.6967</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-3.5</td><td>findDrawingView</td><td>0.8933</td><td>getDrawingViewFromComponents</td><td>0.8402</td><td>searchDrawingViewInComponents</td><td>0.6118</td><td>retrieveDrawingView</td><td>0.7319</td><td>checkAndReturnDrawingView</td><td>0.7539</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>locateDrawingView</td><td>0.6004</td><td>fetchDrawingView</td><td>0.8743</td><td>obtainDrawingView</td><td>0.9355</td><td>identifyDrawingView</td><td>0.793</td><td>processDrawingView</td><td>0.7655</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-4o</td><td>findDrawingViewInContainer</td><td>0.7583</td><td>locateDrawingView</td><td>0.6004</td><td>searchForDrawingView</td><td>0.5272</td><td>retrieveDrawingView</td><td>0.7319</td><td>getDrawingViewFromComponents</td><td>0.8402</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>extractDrawingView</td><td>0.8683</td><td>identifyDrawingView</td><td>0.793</td><td>fetchDrawingView</td><td>0.8743</td><td>obtainDrawingView</td><td>0.9355</td><td>resolveDrawingViewInContainer</td><td>0.4072</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>GPT-5</td><td>findDrawingView</td><td>0.8933</td><td>getDrawingViewFromContainer</td><td>0.8415</td><td>findDrawingViewInContainer</td><td>0.7583</td><td>locateDrawingView</td><td>0.6004</td><td>searchContainerForDrawingView</td><td>0.4291</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>findNestedDrawingView</td><td>0.8478</td><td>resolveDrawingView</td><td>0.5706</td><td>traverseForDrawingView</td><td>0.5795</td><td>lookupDrawingView</td><td>0.7451</td><td>fetchDrawingView</td><td>0.8743</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>DeepSeek-R1</td><td>findDrawingViewWithFunctionalStrategy</td><td>0.7822</td><td>searchForDrawingViewCustom</td><td>0.4818</td><td>retrieveDrawingViewParametric</td><td>0.6148</td><td>traverseComponentsForDrawingView</td><td>0.5126</td><td>getCustomDrawingView</td><td>0.9103</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>resolveDrawingViewWithCallbacks</td><td>0.4894</td><td>locateDrawingViewFunctional</td><td>0.5076</td><td>processContainerForDrawingView</td><td>0.4398</td><td>navigateComponentsForDrawingView</td><td>0.4449</td><td>extractDrawingViewUsingFunctions</td><td>0.7626</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude 3.7 Sonnet</td><td>findDrawingViewInContainer</td><td>0.7583</td><td>searchContainerForDrawingView</td><td>0.4291</td><td>locateDrawingViewComponent</td><td>0.514</td><td>retrieveDrawingViewFromContainer</td><td>0.5835</td><td>extractDrawingViewFromComponents</td><td>0.696</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>traverseContainerForDrawingView</td><td>0.5148</td><td>getNestedDrawingView</td><td>0.9117</td><td>findDrawingViewRecursively</td><td>0.7983</td><td>lookupDrawingViewInComponentTree</td><td>0.5881</td><td>scanContainerComponentsForDrawingView</td><td>0.4333</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>Claude Opus 4.1</td><td>findDrawingView</td><td>0.8933</td><td>searchForDrawingView</td><td>0.5272</td><td>locateDrawingView</td><td>0.6004</td><td>getDrawingViewFromContainer</td><td>0.8415</td><td>extractDrawingView</td><td>0.8683</td></tr>
+						<tr><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td class="repeat-marker">~</td><td>retrieveDrawingView</td><td>0.7319</td><td>discoverDrawingView</td><td>0.8136</td><td>findDrawingViewRecursively</td><td>0.7983</td><td>scanForDrawingView</td><td>0.5761</td><td>lookupDrawingView</td><td>0.7451</td></tr>
+					</tbody>
+				</table>
+			</div>
+			<h2 id="tableandlisting">Tables and listings</h2>
+			<h4 style="text-align: center;">Figure: Overview of methodology</h4>
+			<img src="paper-4-assets/figures/workflow_aider.png" alt="" style="display: block; margin: 0 auto; width: 100%;">
+			<h3>Listings</h3>
+			<h4>Prompt template for method name suggestions</h4>
+			<pre><code class="language-bash">Suggest {count} concise and meaningful Java method names for the following extracted method:
+
+{codeSnippet}
+
+List only the method names, no method bodies. Use valid Java identifiers and place each name on a new line, ranked from most to least confident.
+
+Output the name suggestion in this format: rank method_name_1, for example, 1 name_1</code></pre>
+		<h4>Unnamed extracted method</h4>
+		<pre class="line-numbers"><code class="language-java">private void tempName(int n) {
+    if (n &lt; 0) {
+        throw new IllegalArgumentException("Factorial is not defined for negative numbers.")
+    }
+    long retult = 1;
+    for (int i = 2; i &lt;= n; i++) {
+        result *= i;
+    }
+    return result;
+}</code></pre>
+		<h4>Unexpected name suggestion output</h4>
+		<pre class="line-numbers"><code class="language-java">private void calculateFactorial(int n) {
+    if (n &lt; 0) {
+        throw new IllegalArgumentException("Factorial is not defined for negative numbers.")
+    }
+    long retult = 1;
+    for (int i = 2; i &lt;= n; i++) {</code></pre>
+		</div>
+	</div>
+
+	<div id="footer" class="shadow">
+		<!-- <script type="text/javascript">footer();</script>		 -->
+		<p>Copyright is hidden due to the double-blind review| <a href="http://andreasviklund.com/templates/inland/">Template design</a> by <a href="http://andreasviklund.com/">andreasviklund.com</a></p>
+	</div>
+</div>
+
+
+
+</body></html>

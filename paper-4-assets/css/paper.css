@@ -1,0 +1,335 @@
+.thumbnail {
+	height: 64px;
+	width: 64px;
+	overflow: hidden;
+	display: inline-block;
+	vertical-align: middle;
+	background-size:64px auto;
+	background-position: center;
+	margin: 0 ;
+	border-radius: 50%;
+}
+
+#main /* Overridden */ {
+	width: 100%;
+}
+
+table {
+    margin: auto;
+    border-collapse: collapse;
+  }
+
+body{counter-reset: section}
+h2{counter-reset: sub-section}
+h3{counter-reset: composite}
+h4{counter-reset: detail}
+
+ h2:before{
+     counter-increment: section;
+     content: counter(section) " ";
+ }
+ h3:before{
+     counter-increment: sub-section;
+     content: counter(section) "." counter(sub-section) " ";
+ }
+ h4:before{
+	counter-increment: composite;
+     content: counter(section) "." counter(sub-section) "." counter(composite) " ";
+ }
+ h5:before{
+     counter-increment: detail;
+     content: counter(section) "." counter(sub-section) "." counter(composite) "." counter(detail) " ";
+ }
+
+h3 {
+	font-size: 220%
+}
+h4  {
+	font-size: 200%
+}
+
+h5 {
+	margin: .6em 0;
+	clear: left;
+	color: #5c5a5a;
+	font-weight: 400;
+	font-family: 'Yanone Kaffeesatz';
+	font-size: 180%
+}
+
+
+abbr {
+	border-bottom: dotted 1px #ccc;
+	cursor: pointer
+}
+
+#authors {
+	margin-top: 20px;
+}
+
+#authors span {
+	margin-right: 20px;
+}
+
+.toolinfo {
+	width: 100%
+}
+
+table {
+	border-collapse: collapse;
+	width: 100%
+}
+
+thead {
+	font-weight: bold
+}
+
+th {
+	border-bottom: solid 1px #ccc;
+	border-top: solid 1px #ccc;
+	background-color: #efefef;
+	vertical-align: middle;
+	font-weight: bold
+}
+	
+td, th {
+	border-bottom: solid 1px #dfdfdf;
+	padding: 2px 5px;
+}
+
+ul , ol{
+	margin-left: 17px;
+	padding-left: 0
+}
+
+tfoot td {
+	border-bottom: solid 1px #ccc;
+	background-color: #efefef;
+}
+
+/*td.rotate {
+	vertical-align: middle
+}
+td.rotate  div {
+	transform: rotate(270deg);
+}*/
+
+.toolinfo tr:first-child td {
+	border-top: solid 1px #dfdfdf
+}
+
+.toolinfo  .firstcol {
+	width: 180px;
+}
+
+.toolinfo td:first-child {
+	font-weight: bold;
+	background-color: #efefef
+}
+
+code {
+	background-color: #dedede;
+	font: 10pt consolas; 
+	border: solid 1px #ccc
+}
+
+
+
+#args td:nth-child(3), #args td:nth-child(4) {
+	text-align: center
+}
+
+table {
+	counter-increment: Serial;
+}
+table caption:before {
+  content: "Table " counter(Serial) " - ";
+}
+ 
+#resultstbl tbody td {
+	text-align: center
+ }
+#resultstbl tbody td:hover {
+	background-color: #eee;
+	 
+}
+
+.table-scroll {
+	width: 100%;
+	overflow-x: auto;
+	margin: 20px 0;
+}
+
+#namesoverview,
+#namesoverviewpart2,
+#namesoverviewpart3,
+#namesoverviewpart4 {
+	width: max-content;
+	min-width: 100%;
+}
+
+#namesoverview caption,
+#namesoverviewpart2 caption,
+#namesoverviewpart3 caption,
+#namesoverviewpart4 caption {
+	text-align: left;
+	margin-bottom: 8px;
+	font-weight: bold;
+}
+
+#namesoverview th,
+#namesoverview td,
+#namesoverviewpart2 th,
+#namesoverviewpart2 td,
+#namesoverviewpart3 th,
+#namesoverviewpart3 td,
+#namesoverviewpart4 th,
+#namesoverviewpart4 td {
+	font-size: 0.9em;
+	white-space: nowrap;
+	vertical-align: top;
+}
+
+#namesoverview th:nth-child(1),
+#namesoverview td:nth-child(1),
+#namesoverviewpart2 th:nth-child(1),
+#namesoverviewpart2 td:nth-child(1),
+#namesoverviewpart3 th:nth-child(1),
+#namesoverviewpart3 td:nth-child(1),
+#namesoverviewpart4 th:nth-child(1),
+#namesoverviewpart4 td:nth-child(1) {
+	min-width: 170px;
+}
+
+#namesoverview th:nth-child(2),
+#namesoverview td:nth-child(2),
+#namesoverviewpart2 th:nth-child(2),
+#namesoverviewpart2 td:nth-child(2),
+#namesoverviewpart3 th:nth-child(2),
+#namesoverviewpart3 td:nth-child(2),
+#namesoverviewpart4 th:nth-child(2),
+#namesoverviewpart4 td:nth-child(2) {
+	min-width: 190px;
+}
+
+#namesoverview th:nth-child(3),
+#namesoverview td:nth-child(3),
+#namesoverviewpart2 th:nth-child(3),
+#namesoverviewpart2 td:nth-child(3),
+#namesoverviewpart3 th:nth-child(3),
+#namesoverviewpart3 td:nth-child(3),
+#namesoverviewpart4 th:nth-child(3),
+#namesoverviewpart4 td:nth-child(3) {
+	min-width: 150px;
+}
+
+#namesoverview th:nth-child(4),
+#namesoverview td:nth-child(4),
+#namesoverviewpart2 th:nth-child(4),
+#namesoverviewpart2 td:nth-child(4),
+#namesoverviewpart3 th:nth-child(4),
+#namesoverviewpart3 td:nth-child(4),
+#namesoverviewpart4 th:nth-child(4),
+#namesoverviewpart4 td:nth-child(4),
+#namesoverview th:nth-child(6),
+#namesoverview td:nth-child(6),
+#namesoverviewpart2 th:nth-child(6),
+#namesoverviewpart2 td:nth-child(6),
+#namesoverviewpart3 th:nth-child(6),
+#namesoverviewpart3 td:nth-child(6),
+#namesoverviewpart4 th:nth-child(6),
+#namesoverviewpart4 td:nth-child(6),
+#namesoverview th:nth-child(8),
+#namesoverview td:nth-child(8),
+#namesoverviewpart2 th:nth-child(8),
+#namesoverviewpart2 td:nth-child(8),
+#namesoverviewpart3 th:nth-child(8),
+#namesoverviewpart3 td:nth-child(8),
+#namesoverviewpart4 th:nth-child(8),
+#namesoverviewpart4 td:nth-child(8),
+#namesoverview th:nth-child(10),
+#namesoverview td:nth-child(10),
+#namesoverviewpart2 th:nth-child(10),
+#namesoverviewpart2 td:nth-child(10),
+#namesoverviewpart3 th:nth-child(10),
+#namesoverviewpart3 td:nth-child(10),
+#namesoverviewpart4 th:nth-child(10),
+#namesoverviewpart4 td:nth-child(10),
+#namesoverview th:nth-child(12),
+#namesoverview td:nth-child(12),
+#namesoverviewpart2 th:nth-child(12),
+#namesoverviewpart2 td:nth-child(12),
+#namesoverviewpart3 th:nth-child(12),
+#namesoverviewpart3 td:nth-child(12),
+#namesoverviewpart4 th:nth-child(12),
+#namesoverviewpart4 td:nth-child(12) {
+	min-width: 220px;
+}
+
+#namesoverview td:nth-child(5),
+#namesoverview td:nth-child(7),
+#namesoverview td:nth-child(9),
+#namesoverview td:nth-child(11),
+#namesoverview td:nth-child(13),
+#namesoverviewpart2 td:nth-child(5),
+#namesoverviewpart2 td:nth-child(7),
+#namesoverviewpart2 td:nth-child(9),
+#namesoverviewpart2 td:nth-child(11),
+#namesoverviewpart2 td:nth-child(13),
+#namesoverviewpart3 td:nth-child(5),
+#namesoverviewpart3 td:nth-child(7),
+#namesoverviewpart3 td:nth-child(9),
+#namesoverviewpart3 td:nth-child(11),
+#namesoverviewpart3 td:nth-child(13),
+#namesoverviewpart4 td:nth-child(5),
+#namesoverviewpart4 td:nth-child(7),
+#namesoverviewpart4 td:nth-child(9),
+#namesoverviewpart4 td:nth-child(11),
+#namesoverviewpart4 td:nth-child(13) {
+	text-align: right;
+	min-width: 70px;
+}
+
+#namesoverview tbody tr.group-start td,
+#namesoverviewpart2 tbody tr.group-start td,
+#namesoverviewpart3 tbody tr.group-start td,
+#namesoverviewpart4 tbody tr.group-start td {
+	border-top: solid 2px #bfbfbf;
+}
+
+#namesoverview .repeat-marker,
+#namesoverviewpart2 .repeat-marker,
+#namesoverviewpart3 .repeat-marker,
+#namesoverviewpart4 .repeat-marker {
+	text-align: center;
+	color: #666;
+	font-weight: normal;
+}
+
+.table-note {
+	margin-top: 8px;
+	font-size: 0.95em;
+}
+
+col#projects {
+	width: 150px;
+	/*background-color: #efefef*/
+	border-right: solid 1px #dedede;
+	color: black
+}
+col.tool {
+	width: 120px
+}
+
+.bibtex {
+	border: solid 1px #ccc;
+	background: #F2F2F2;
+	padding: 5px 15px;
+	border-radius: 2px;
+	font-family: consolas, monospace;
+	margin: 10px 0 20px;
+}
+.bibtex pre {
+	margin: 0;
+	padding: 0
+}

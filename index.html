@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Research papers and artifacts on software engineering, code clones, refactoring, and large language models.">
+  <meta name="description" content="Research papers and artifacts on software engineering, code clones, refactoring, AI agents, and method name recommendation.">
   <title>Research Papers</title>
   <style>
     :root {
@@ -256,7 +256,7 @@
 
     .paper-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 18px;
     }
 
@@ -485,6 +485,7 @@
         <a href="paper-clone-refactor-llm.html">Clone Study</a>
         <a href="paper-2.html">Workflow</a>
         <a href="paper-3.html">PR Study</a>
+        <a href="paper-4.html">Name Recommendation</a>
       </nav>
     </div>
   </header>
@@ -496,8 +497,8 @@
           <p class="eyebrow">Software Engineering Research</p>
           <h1>Research artifacts on code clones, refactoring, and AI agents.</h1>
           <p class="intro">
-            A compact index for three artifact sites covering LLM-based clone classification,
-            structured clone refactoring workflows, and clone-related pull requests authored by humans and agents.
+            A compact index for four artifact sites covering LLM-based clone classification,
+            structured clone refactoring workflows, clone-related pull requests, and method name recommendation.
           </p>
           <div class="hero-actions" aria-label="Primary links">
             <a class="button" href="#papers">View Papers</a>
@@ -509,7 +510,7 @@
           <img src="figures/Overflow chart.png" alt="Methodology overview chart preview">
           <figcaption class="visual-caption">
             <span class="stat">
-              <strong>3</strong>
+              <strong>4</strong>
               <span>Studies</span>
             </span>
             <span class="stat">
@@ -529,7 +530,7 @@
       <div class="site-shell">
         <div class="section-heading">
           <h2>Paper Collection</h2>
-          <p>Three related artifact pages for datasets, scripts, evaluation results, and reproduction materials.</p>
+          <p>Four related artifact pages for datasets, scripts, evaluation results, and reproduction materials.</p>
         </div>
 
         <div class="paper-grid">
@@ -604,6 +605,27 @@
               </div>
             </div>
           </a>
+
+          <a class="paper-card" href="paper-4.html">
+            <div class="paper-media">
+              <img src="paper-4-assets/figures/workflow_aider.png" alt="LLM-based method name recommendation methodology">
+            </div>
+            <div class="paper-body">
+              <div class="paper-kicker">
+                <span>Paper 04</span>
+                <span class="paper-tag">Name Recommendation</span>
+              </div>
+              <h3>LLM-Based Name Recommendation: An Exploratory Study</h3>
+              <p>
+                Exploratory study of seven LLMs recommending meaningful Java method names across single-name
+                and ten-name suggestion scenarios.
+              </p>
+              <div class="paper-footer">
+                <span>Open name recommendation study</span>
+                <span aria-hidden="true">&rarr;</span>
+              </div>
+            </div>
+          </a>
         </div>
       </div>
     </section>
@@ -611,7 +633,7 @@
 
   <footer class="site-footer">
     <div class="site-shell">
-      Research artifact index for software engineering papers on code clones and AI-assisted refactoring.
+      Research artifact index for software engineering papers on code clones, AI-assisted refactoring, and method name recommendation.
     </div>
   </footer>
 </body>
